@@ -1,0 +1,904 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/xiaoxin.png">
+  <link rel="icon" href="/img/xiaoxin.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="ECNU_zhy">
+  <meta name="keywords" content="关系数据库设计">
+  
+    <meta name="description" content="5.分解 规范化的目标 分解是一个无损连接的分解 依赖保持（dependency preservation） 每一个分解后的关系Ri满足BCNF或3NF范式   分解应有的特性 R中所有的属性应该在R1，R2中拥有  无损连接：  $r&#x3D;\prod_{R_1}(r)\bowtie \prod_{R_2}(r)$  判断标准：如果R分解成R1，R2是一个无损分解，那么至少有如下一个函数依赖">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据库系统概念 第八章 关系数据库设计 第二部分">
+<meta property="og:url" content="http://example.com/2022/07/21/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/index.html">
+<meta property="og:site_name" content="zhy-blog">
+<meta property="og:description" content="5.分解 规范化的目标 分解是一个无损连接的分解 依赖保持（dependency preservation） 每一个分解后的关系Ri满足BCNF或3NF范式   分解应有的特性 R中所有的属性应该在R1，R2中拥有  无损连接：  $r&#x3D;\prod_{R_1}(r)\bowtie \prod_{R_2}(r)$  判断标准：如果R分解成R1，R2是一个无损分解，那么至少有如下一个函数依赖">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220720132633377.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220720133040055.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220720135122577.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220720135930488.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220721002627846.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220721010409674.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220721010525142.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220721011153034.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220723105234393.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220723105633931.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220723110702119.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220802102906187.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220802103249791.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220802103353682.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220802103750213.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220802104254425.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220802104320384.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220802104710370.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220802105842153.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220802105909972.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220802110555144.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220802112029369.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220802112041996.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220802115756283.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220802141030320.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220802143637556.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220802180156797.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220802180834991.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220802180947452.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220802182403665.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220802184519721.png">
+<meta property="article:published_time" content="2022-07-20T16:26:26.000Z">
+<meta property="article:modified_time" content="2022-08-02T10:46:26.211Z">
+<meta property="article:author" content="ECNU_zhy">
+<meta property="article:tag" content="数据库">
+<meta property="article:tag" content="数据库系统概念">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220720132633377.png">
+  
+  
+  
+  <title>数据库系统概念 第八章 关系数据库设计 第二部分 - zhy-blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ECNU-zhy</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                Links
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="数据库系统概念 第八章 关系数据库设计 第二部分"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-07-21 00:26" pubdate>
+          July 21, 2022 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.9k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          24 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">数据库系统概念 第八章 关系数据库设计 第二部分</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="5-分解"><a href="#5-分解" class="headerlink" title="5.分解"></a>5.分解</h1><ol>
+<li><h2 id="规范化的目标"><a href="#规范化的目标" class="headerlink" title="规范化的目标"></a>规范化的目标</h2><ol>
+<li>分解是一个无损连接的分解</li>
+<li>依赖保持（dependency preservation）</li>
+<li>每一个分解后的关系Ri满足BCNF或3NF范式</li>
+</ol>
+</li>
+<li><h2 id="分解应有的特性"><a href="#分解应有的特性" class="headerlink" title="分解应有的特性"></a>分解应有的特性</h2><ol>
+<li><p>R中所有的属性应该在R1，R2中拥有</p>
+</li>
+<li><p>无损连接：</p>
+<ul>
+<li><p>$r&#x3D;\prod_{R_1}(r)\bowtie \prod_{R_2}(r)$</p>
+</li>
+<li><p>判断标准：如果R分解成R1，R2是一个无损分解，那么至少有如下一个函数依赖在闭包$F^+$中:</p>
+<ol>
+<li>{$R_1 \cap R_2$} $\rightarrow  R_1$</li>
+<li>{$R_1 \cap R_2$} $\rightarrow  R_2$</li>
+</ol>
+<p>即，分解后两个子模式的共同属性必须是R1或R2的码（适用于一分为二的分解）</p>
+</li>
+</ul>
+</li>
+<li><p><u>依赖保持：</u></p>
+<p>如何判断函数依赖保持？</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220720132633377.png" srcset="/img/loading.gif" lazyload alt="image-20220720132633377"></p>
+<p><u>第一个例子：</u></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220720133040055.png" srcset="/img/loading.gif" lazyload alt="image-20220720133040055"></p>
+<p><strong>第一种分解方法：</strong></p>
+<p>R1&#x3D;(A,B),R2&#x3D;(B,C)</p>
+<ul>
+<li><p>无损分解的满足：</p>
+<p>$R_1 \cap R_2&#x3D;${B}   ， 又因为$B\rightarrow C$因此$B^+$&#x3D;{BC},而判断无损分解的条件是R1与R2 的∩是R2或R1的码，如何判断某属性是否为超码？是利用了属性集的闭包，若R2中所有属性都在B的闭包中，则说明B是R2 的码，由此可知，B是R2的码，因此满足无损分解。</p>
+</li>
+<li><p>依赖保持的满足：</p>
+<ol>
+<li><p>对于A$\rightarrow$B:   </p>
+<p>result:&#x3D;A</p>
+<p>$(A\cap R_1)^+ \cap R_1$&#x3D;AB</p>
+<p>result:&#x3D;A∪AB&#x3D;AB</p>
+<p>$(A\cap R_2)^+ \cap R_2$&#x3D;$\phi$</p>
+<p>result:&#x3D;AB$\cup \phi$&#x3D;AB</p>
+<p>result&#x3D;AB contains B,then A→B is preserved</p>
+</li>
+<li><p>对于B$\rightarrow$C:</p>
+<p>result:&#x3D;B</p>
+<p>$(B\cap R_1)^+ \cap R_1$&#x3D;AB</p>
+<p>result:&#x3D;B∪AB&#x3D;AB</p>
+<p>$(B\cap R_2)^+ \cap R_2$&#x3D;BC</p>
+<p>result:&#x3D;AB∪BC&#x3D;ABC</p>
+<p>result&#x3D;ABC contains C,then B→C is preserved</p>
+</li>
+</ol>
+</li>
+</ul>
+<p><strong>第二种分解方法：</strong></p>
+<p>R1&#x3D;(A,B)  R2&#x3D;(A,C)</p>
+<ul>
+<li><p>无损分解的满足：</p>
+<p>$R_1 \cap R_2&#x3D;${A}   ， 又因为$A\rightarrow C$因此$A^+$&#x3D;{AC},而判断无损分解的条件是R1与R2 的∩是R2或R1的码，如何判断某属性是否为超码？是利用了属性集的闭包，若R2中所有属性都在A的闭包中，则说明A是R2 的码，由此可知，A是R2的码，因此满足无损分解。</p>
+</li>
+<li><p>依赖保持的满足：</p>
+<ol>
+<li><p>对于A$\rightarrow$B:   </p>
+<p>result:&#x3D;A</p>
+<p>$(A\cap R_1)^+ \cap R_1$&#x3D;AB</p>
+<p>result:&#x3D;A∪AB&#x3D;AB</p>
+<p>$(A\cap R_2)^+ \cap R_2$&#x3D;A</p>
+<p>result:&#x3D;AB$\cup A$&#x3D;AB</p>
+<p>result&#x3D;AB contains B,then A→B is preserved</p>
+</li>
+<li><p>对于B$\rightarrow$C:</p>
+<p>result:&#x3D;B</p>
+<p>$(B\cap R_1)^+ \cap R_1$&#x3D;B</p>
+<p>result:&#x3D;B∪B&#x3D;B</p>
+<p>$(B\cap R_2)^+ \cap R_2$&#x3D;$\phi$</p>
+<p>result:&#x3D;B∪$\phi$&#x3D;B</p>
+<p><u>result&#x3D;B not contains C,then B→C is  not preserved</u></p>
+</li>
+</ol>
+</li>
+</ul>
+<p><u>第二个例子</u></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220720135122577.png" srcset="/img/loading.gif" lazyload alt="image-20220720135122577"></p>
+</li>
+</ol>
+</li>
+</ol>
+<h1 id="6-Boyce-Codd-Normal-form"><a href="#6-Boyce-Codd-Normal-form" class="headerlink" title="6.Boyce-Codd Normal form"></a>6.Boyce-Codd Normal form</h1><ol>
+<li><p><strong>定义：</strong></p>
+<p>关于函数依赖集F的关系模式R属于BCNF的条件是，对于$F^+$中所有形如$\alpha \rightarrow \beta$的函数依赖，其中($\alpha \subseteq R且\beta \subseteq R$)，下面至少有一项成立：</p>
+<ul>
+<li><p>$\alpha \rightarrow \beta$是平凡的函数依赖（即$\beta \subseteq \alpha$）</p>
+</li>
+<li><p>$\alpha是模式R的一个超码$</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220720135930488.png" srcset="/img/loading.gif" lazyload alt="image-20220720135930488"></p>
+<p>注意：对于任何有两个属性的关系模式一定满足BCNF。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>验证BCNF：</strong></p>
+<ul>
+<li>为了验证一个非平凡的函数依赖$\alpha \rightarrow \beta$是否违反BCNF：<ol>
+<li>计算属性$\alpha$的闭包</li>
+<li>看它是否包含R的所有属性，若包含，则$\alpha$是R的一个superkey</li>
+</ol>
+</li>
+<li>简单的test：为了验证R是否满足BCNF，只需要证明F中的函数依赖不违背BCNF而不是$F^+$中的，因为如果F中没有违反BCNF的FD，则$F^+$也不会</li>
+<li>但是，可以在F下判别R是否违反BCNF，但必须在$F^+$下判别R的<u>分解式</u>是否违反BCNF。</li>
+</ul>
+</li>
+<li><p><strong>BCNF分解算法：</strong></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220721002627846.png" srcset="/img/loading.gif" lazyload alt="image-20220721002627846"></p>
+<p>一个例子：</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220721010409674.png" srcset="/img/loading.gif" lazyload alt="image-20220721010409674"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220721010525142.png" srcset="/img/loading.gif" lazyload alt="image-20220721010525142"></p>
+</li>
+<li><p><strong>BCNF和依赖保持：</strong></p>
+<p>得到的BCNF分解不一定满足依赖保持</p>
+<p>一个例子：</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220721011153034.png" srcset="/img/loading.gif" lazyload alt="image-20220721011153034"></p>
+<p>因此，我们并不总是能够满足所有的三个设计目标</p>
+<ol>
+<li>无损连接</li>
+<li>BCNF</li>
+<li>依赖保持</li>
+</ol>
+</li>
+</ol>
+<h1 id="7-第三范式"><a href="#7-第三范式" class="headerlink" title="7.第三范式"></a>7.第三范式</h1><ol>
+<li><p>总有一些情况使得</p>
+<ul>
+<li>BCNF分解不能满足依赖保持</li>
+<li>但是这是重要的</li>
+<li>解决办法：定义一个更弱的范式，叫做第三范式，<ul>
+<li>它允许一些冗余</li>
+<li>但是可以满足依赖保持</li>
+<li>总是有一个满足3NF的无损连接，依赖保持的分解</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>第三范式的定义：</p>
+<p>关系模式R是关于函数依赖集F的第三范式的条件是，对于$F^+$中所有形如$\alpha \rightarrow \beta$的函数依赖，以下至少有一项成立：</p>
+<ul>
+<li><p>$\alpha \rightarrow \beta$是平凡的函数依赖</p>
+</li>
+<li><p>$\alpha$是R的一个超码（要求$\alpha$的闭包）</p>
+</li>
+<li><p>$\beta-\alpha$中的每个属性A都<strong>被包含于</strong>R的一个候选码中（即，$A ∈\beta-\alpha$是主属性，若$\alpha \cap\beta&#x3D;\phi$，则A&#x3D;$\beta$是主属性）</p>
+<p>注意第三个条件不是说单个候选码必须包含$\beta-\alpha$中的所有属性；$\beta-\alpha$中的每个属性A可能被包含于不同的候选码中</p>
+</li>
+</ul>
+<p>如：<img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220723105234393.png" srcset="/img/loading.gif" lazyload alt="image-20220723105234393"></p>
+<p>L→K,使得R不满足BCNF，但是K被包含在一个candidate key中，因此满足3NF。</p>
+</li>
+<li><p>BCNF和3NF的比较：</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220723105633931.png" srcset="/img/loading.gif" lazyload alt="image-20220723105633931"></p>
+<ul>
+<li><p>3NF的不足之处在于数据冗余</p>
+<p>（the relationship l1,k1)</p>
+</li>
+<li><p>可能需要使用null</p>
+<p>(当表达L和K的关系时，相应的J没有对应的值)</p>
+</li>
+</ul>
+</li>
+<li><p>3NF分解算法</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220723110702119.png" srcset="/img/loading.gif" lazyload alt="image-20220723110702119"></p>
+<p>一个例子：</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220802102906187.png" srcset="/img/loading.gif" lazyload alt="image-20220802102906187"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220802103249791.png" srcset="/img/loading.gif" lazyload alt="image-20220802103249791"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220802103353682.png" srcset="/img/loading.gif" lazyload alt="image-20220802103353682"></p>
+</li>
+<li><p>例子</p>
+<ol>
+<li><p>Armstrong axiom</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220802103750213.png" srcset="/img/loading.gif" lazyload alt="image-20220802103750213"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220802104254425.png" srcset="/img/loading.gif" lazyload alt="image-20220802104254425"></p>
+</li>
+<li><p>BCNF</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220802104320384.png" srcset="/img/loading.gif" lazyload alt="image-20220802104320384"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220802104710370.png" srcset="/img/loading.gif" lazyload alt="image-20220802104710370"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220802105842153.png" srcset="/img/loading.gif" lazyload alt="image-20220802105842153"></p>
+<p>(分解以后要看函数依赖的闭包！)</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220802105909972.png" srcset="/img/loading.gif" lazyload alt="image-20220802105909972"></p>
+</li>
+<li><p>3NF&amp;BCNF</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220802110555144.png" srcset="/img/loading.gif" lazyload alt="image-20220802110555144"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220802112029369.png" srcset="/img/loading.gif" lazyload alt="image-20220802112029369"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220802112041996.png" srcset="/img/loading.gif" lazyload alt="image-20220802112041996"></p>
+</li>
+<li><p>3NF&amp;BCNF</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220802115756283.png" srcset="/img/loading.gif" lazyload alt="image-20220802115756283"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220802141030320.png" srcset="/img/loading.gif" lazyload alt="image-20220802141030320"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220802143637556.png" srcset="/img/loading.gif" lazyload alt="image-20220802143637556"></p>
+</li>
+</ol>
+</li>
+</ol>
+<h1 id="8-多值依赖和第四范式"><a href="#8-多值依赖和第四范式" class="headerlink" title="8.多值依赖和第四范式"></a>8.多值依赖和第四范式</h1><ol>
+<li><h2 id="什么是多值依赖？"><a href="#什么是多值依赖？" class="headerlink" title="什么是多值依赖？"></a>什么是多值依赖？</h2><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220802180156797.png" srcset="/img/loading.gif" lazyload alt="image-20220802180156797"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220802180834991.png" srcset="/img/loading.gif" lazyload alt="image-20220802180834991"></p>
+<p>因此，可以将classes进行拆分以减少数据冗余：</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220802180947452.png" srcset="/img/loading.gif" lazyload alt="image-20220802180947452"></p>
+<p>$if\ \  \alpha\ \rightarrow \ \beta，then\  \alpha \ \rightarrow \rightarrow \beta$</p>
+</li>
+<li><p>第四范式</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220802182403665.png" srcset="/img/loading.gif" lazyload alt="image-20220802182403665"></p>
+<p>4NF&gt;BCNF&gt;3NF</p>
+<p>4NF的一个例子：</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20220802184519721.png" srcset="/img/loading.gif" lazyload alt="image-20220802184519721"></p>
+<p>由于4NF我实在理解不了，所以先不管了。</p>
+<p>这些箭头和字母在支离破碎我的灵魂……</p>
+</li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5/" class="category-chain-item">数据库系统概念</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">#数据库</a>
+      
+        <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5/">#数据库系统概念</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>数据库系统概念 第八章 关系数据库设计 第二部分</div>
+      <div>http://example.com/2022/07/21/数据库系统概念第八章 关系数据库设计 第二部分/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>ECNU_zhy</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>July 21, 2022</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>Licensed under</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/08/02/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%E9%A2%98%E7%9B%AE/" title="数据库系统概念 第八章 关系数据库设计 题目">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">数据库系统概念 第八章 关系数据库设计 题目</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/07/16/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/" title="数据库系统概念 第八章 关系数据库设计 第一部分">
+                        <span class="hidden-mobile">数据库系统概念 第八章 关系数据库设计 第一部分</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.1/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

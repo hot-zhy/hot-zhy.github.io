@@ -1,0 +1,685 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/xiaoxin.png">
+  <link rel="icon" href="/img/xiaoxin.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="ECNU_zhy">
+  <meta name="keywords" content="Android">
+  
+    <meta name="description" content="android-32.2-选择图片交互功能使用第三方框架: 选择图片和压缩图片 12345&#x2F;&#x2F;图片选择&#x2F;&#x2F;https:&#x2F;&#x2F;github.com&#x2F;LuckSiege&#x2F;PictureSelectorimplementation &amp;#x27;io.github.lucksiege:pictureselector:v3.0.9&amp;#x27;implementation &amp;#x27;io.github.luc">
+<meta property="og:type" content="article">
+<meta property="og:title" content="android-32.2- 选择图片交互功能">
+<meta property="og:url" content="http://example.com/2022/11/28/android-32.2--%E9%80%89%E6%8B%A9%E5%9B%BE%E7%89%87%E4%BA%A4%E4%BA%92%E5%8A%9F%E8%83%BD/index.html">
+<meta property="og:site_name" content="zhy-blog">
+<meta property="og:description" content="android-32.2-选择图片交互功能使用第三方框架: 选择图片和压缩图片 12345&#x2F;&#x2F;图片选择&#x2F;&#x2F;https:&#x2F;&#x2F;github.com&#x2F;LuckSiege&#x2F;PictureSelectorimplementation &amp;#x27;io.github.lucksiege:pictureselector:v3.0.9&amp;#x27;implementation &amp;#x27;io.github.luc">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-11-28T13:18:23.130Z">
+<meta property="article:modified_time" content="2022-11-28T14:40:34.001Z">
+<meta property="article:author" content="ECNU_zhy">
+<meta property="article:tag" content="Android">
+<meta property="article:tag" content="选择图片交互功能">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>android-32.2- 选择图片交互功能 - zhy-blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ECNU-zhy</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                Links
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="android-32.2- 选择图片交互功能"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-11-28 21:18" pubdate>
+          November 28, 2022 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.9k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          33 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">android-32.2- 选择图片交互功能</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="android-32-2-选择图片交互功能"><a href="#android-32-2-选择图片交互功能" class="headerlink" title="android-32.2-选择图片交互功能"></a>android-32.2-选择图片交互功能</h1><p>使用第三方框架:</p>
+<p>选择图片和压缩图片</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-regexp">//</span>图片选择<br><span class="hljs-regexp">//</span>https:<span class="hljs-regexp">//gi</span>thub.com<span class="hljs-regexp">/LuckSiege/</span>PictureSelector<br>implementation <span class="hljs-string">&#x27;io.github.lucksiege:pictureselector:v3.0.9&#x27;</span><br>implementation <span class="hljs-string">&#x27;io.github.lucksiege:compress:v3.0.9&#x27;</span><br><br></code></pre></td></tr></table></figure>
+
+<p>九宫格图片是RecyclerView</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-comment">&lt;!--        图片列表控件--&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">androidx.recyclerview.widget.RecyclerView</span></span><br><span class="hljs-tag">            <span class="hljs-attr">android:id</span>=<span class="hljs-string">&quot;@+id/list&quot;</span></span><br><span class="hljs-tag">            <span class="hljs-attr">android:layout_width</span>=<span class="hljs-string">&quot;match_parent&quot;</span></span><br><span class="hljs-tag">            <span class="hljs-attr">android:layout_height</span>=<span class="hljs-string">&quot;wrap_content&quot;</span></span><br><span class="hljs-tag">            <span class="hljs-attr">android:layout_marginHorizontal</span>=<span class="hljs-string">&quot;@dimen/d16&quot;</span></span><br><span class="hljs-tag">            <span class="hljs-attr">android:layout_marginVertical</span>=<span class="hljs-string">&quot;@dimen/d16&quot;</span>&gt;</span><br>            <br>        <span class="hljs-tag">&lt;/<span class="hljs-name">androidx.recyclerview.widget.RecyclerView</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>设置默认加号图片</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs xml">    @Override<br>    protected void initDatum() &#123;<br>        super.initDatum();<br>        imageAdapter = new ImageAdapter(R.layout.item_image);<br>        binding.list.setAdapter(imageAdapter);<br>//        为adapter填数据<br>        setData(new ArrayList<span class="hljs-tag">&lt;&gt;</span>());<br>    &#125;<br><br>    private void setData(List<span class="hljs-tag">&lt;<span class="hljs-name">Object</span>&gt;</span> data) &#123;<br>        if(data.size()&lt;9)&#123;<br>//            添加一个加号<br>            data.add(R.drawable.add_fill);<br>        &#125;<br>        imageAdapter.setNewInstance(data);<br>    &#125;<br><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java">&#125;<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (o <span class="hljs-keyword">instanceof</span> Integer)&#123;<br>           <span class="hljs-comment">//本地图片</span><br>           iconView.setImageResource((<span class="hljs-type">int</span>)o);<br>       &#125;<br></code></pre></td></tr></table></figure>
+
+<p>设置layoutManager,在PublishFeedActivity中</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Override</span><br><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">initViews</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-built_in">super</span>.initViews();<br>    GridLayoutManager layoutManager=<span class="hljs-keyword">new</span> <span class="hljs-title class_">GridLayoutManager</span>(getHostActivity(),<span class="hljs-number">4</span>);<br>    binding.list.setLayoutManager(layoutManager);<br>&#125;<br>   <span class="hljs-comment">//添加分割线</span><br>    <span class="hljs-type">GridDividerItemDecoration</span> <span class="hljs-variable">divider</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">GridDividerItemDecoration</span>(getHostActivity(), (<span class="hljs-type">int</span>) DensityUtil.dip2px(getHostActivity(), <span class="hljs-number">5</span>));<br>    binding.list.addItemDecoration(divider);<br><br></code></pre></td></tr></table></figure>
+
+<p>监听加号点击事件</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java">imageAdapter.setOnItemClickListener(<span class="hljs-keyword">new</span> <span class="hljs-title class_">OnItemClickListener</span>() &#123;<br>            <span class="hljs-meta">@Override</span><br>            <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">onItemClick</span><span class="hljs-params">(<span class="hljs-meta">@NonNull</span> BaseQuickAdapter&lt;?, ?&gt; adapter, <span class="hljs-meta">@NonNull</span> View view, <span class="hljs-type">int</span> position)</span> &#123;<br>                <span class="hljs-keyword">if</span>(imageAdapter.getItem(position) <span class="hljs-keyword">instanceof</span> Integer)&#123;<br>                    <span class="hljs-comment">//点击的是按钮</span><br>                    selectImage();<br>                &#125;<br>            &#125;<br>        &#125;);<br></code></pre></td></tr></table></figure>
+
+<p>选择图片,使用GlideEngine加载图片</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">selectImage</span><span class="hljs-params">()</span> &#123;<br>    PictureSelector.create(<span class="hljs-built_in">this</span>)<br>            .openGallery(SelectMimeType.ofImage())<br>        <br>        <br>            .setImageEngine(GlideEngine.createGlideEngine())<br>        <br>        <br>            .setMaxSelectNum(<span class="hljs-number">9</span>)<span class="hljs-comment">// 最大图片选择数量 int</span><br>            .setMinSelectNum(<span class="hljs-number">1</span>)<span class="hljs-comment">// 最小选择数量 int</span><br>            .setImageSpanCount(<span class="hljs-number">3</span>)<span class="hljs-comment">// 每行显示个数 int</span><br>            .setSelectionMode(SelectModeConfig.MULTIPLE)<span class="hljs-comment">// 多选 or 单选 MULTIPLE or SINGLE</span><br>            .isPreviewImage(<span class="hljs-literal">true</span>)<span class="hljs-comment">// 是否可预览图片 true or false</span><br>            .isDisplayCamera(<span class="hljs-literal">true</span>)<span class="hljs-comment">// 是否显示拍照按钮 true or false</span><br>            .setCameraImageFormat(PictureMimeType.JPEG)<span class="hljs-comment">// 拍照保存图片格式后缀,默认jpeg</span><br>            <span class="hljs-comment">//压缩</span><br>            .setCompressEngine(<span class="hljs-keyword">new</span> <span class="hljs-title class_">CompressFileEngine</span>() &#123;<br>                <span class="hljs-meta">@Override</span><br>                <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">onStartCompress</span><span class="hljs-params">(Context context, ArrayList&lt;Uri&gt; source, OnKeyValueResultCallbackListener call)</span> &#123;<br>                    Luban.with(context).load(source).ignoreBy(<span class="hljs-number">100</span>)<br>                            .setCompressListener(<span class="hljs-keyword">new</span> <span class="hljs-title class_">OnNewCompressListener</span>() &#123;<br>                                <span class="hljs-meta">@Override</span><br>                                <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">onStart</span><span class="hljs-params">()</span> &#123;<br><br>                                &#125;<br><br>                                <span class="hljs-meta">@Override</span><br>                                <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">onSuccess</span><span class="hljs-params">(String source, File compressFile)</span> &#123;<br>                                    <span class="hljs-keyword">if</span> (call != <span class="hljs-literal">null</span>) &#123;<br>                                        call.onCallback(source, compressFile.getAbsolutePath());<br>                                    &#125;<br>                                &#125;<br><br>                                <span class="hljs-meta">@Override</span><br>                                <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">onError</span><span class="hljs-params">(String source, Throwable e)</span> &#123;<br>                                    <span class="hljs-keyword">if</span> (call != <span class="hljs-literal">null</span>) &#123;<br>                                        call.onCallback(source, <span class="hljs-literal">null</span>);<br>                                    &#125;<br>                                &#125;<br>                            &#125;).launch();<br>                &#125;<br>            &#125;)<br>            .forResult(<span class="hljs-keyword">new</span> <span class="hljs-title class_">OnResultCallbackListener</span>&lt;LocalMedia&gt;() &#123;<br>                <span class="hljs-meta">@Override</span><br>                <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">onResult</span><span class="hljs-params">(ArrayList&lt;LocalMedia&gt; result)</span> &#123;<br>                    setData(Lists.newArrayList(result));<br>                &#125;<br><br>                <span class="hljs-meta">@Override</span><br>                <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">onCancel</span><span class="hljs-params">()</span> &#123;<br><br>                &#125;<br>            &#125;);<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<p>在imageAdapter中,为了显示选择的图片，:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java">&#125;<span class="hljs-keyword">else</span>&#123;<br>            <span class="hljs-comment">//选择的图片</span><br>            LocalMedia data=(LocalMedia) o;<br>            ImageUtil.showLocalImage(iconView,data.getCompressPath());<br>            holder.setGone(R.id.close,<span class="hljs-literal">false</span>);<span class="hljs-comment">//设置该属性可选择是否显示删除图片按钮</span><br>        &#125;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">showLocalImage</span><span class="hljs-params">(ImageView view, String data)</span> &#123;<br>    RequestOptions options=getCommonRequestOptions();<br>    <span class="hljs-comment">//使用Glide加载图片</span><br>    Glide.with(view.getContext())<br>            .load(data)<br>            .apply(options)<br>            .into(view);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>实现删除图片，子控件的点击事件:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java">imageAdapter.addChildClickViewIds(R.id.close);<br>imageAdapter.setOnItemChildClickListener(<span class="hljs-keyword">new</span> <span class="hljs-title class_">OnItemChildClickListener</span>() &#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">onItemChildClick</span><span class="hljs-params">(<span class="hljs-meta">@NonNull</span> BaseQuickAdapter&lt;?, ?&gt; adapter, <span class="hljs-meta">@NonNull</span> View view, <span class="hljs-type">int</span> position)</span> &#123;<br>        imageAdapter.removeAt(position);<br>    &#125;<br>&#125;);<br></code></pre></td></tr></table></figure>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Android/" class="category-chain-item">Android</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Android/">#Android</a>
+      
+        <a href="/tags/%E9%80%89%E6%8B%A9%E5%9B%BE%E7%89%87%E4%BA%A4%E4%BA%92%E5%8A%9F%E8%83%BD/">#选择图片交互功能</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>android-32.2- 选择图片交互功能</div>
+      <div>http://example.com/2022/11/28/android-32.2--选择图片交互功能/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>ECNU_zhy</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>November 28, 2022</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>Licensed under</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/11/28/32.3---android-%E6%89%B9%E9%87%8F%E4%B8%8A%E4%BC%A0%E5%9B%BE%E7%89%87/" title="32.3 - android-批量上传图片">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">32.3 - android-批量上传图片</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/11/28/android-32.1--%E5%8F%91%E5%B8%83%E6%96%87%E6%9C%AC%E5%8A%A8%E6%80%81/" title="android-32.1- 发布文本动态">
+                        <span class="hidden-mobile">android-32.1- 发布文本动态</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.1/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

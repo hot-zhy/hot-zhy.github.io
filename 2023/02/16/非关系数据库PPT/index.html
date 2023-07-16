@@ -1,0 +1,2294 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/xiaoxin.png">
+  <link rel="icon" href="/img/xiaoxin.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="ECNU_zhy">
+  <meta name="keywords" content="非关系数据库">
+  
+    <meta name="description" content="概述非关系型数据库产生的背景大数据管理及应用需求大数据特征 Volume（大量）：数据量大TB-&gt;PB Velocity（高速）：数据被创建、移动和处理的速度  Variety（多样）：文字、图像、图片、地理位置等 Value（价值）：具有价值，但价值密度低  新型应用的数据存储与管理需求 全球数据规模不断增大  数据类型不断多样：   开发数据管理应用考虑的问题 用户量：用户量预估多少？几">
+<meta property="og:type" content="article">
+<meta property="og:title" content="非关系数据库PPT">
+<meta property="og:url" content="http://example.com/2023/02/16/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/index.html">
+<meta property="og:site_name" content="zhy-blog">
+<meta property="og:description" content="概述非关系型数据库产生的背景大数据管理及应用需求大数据特征 Volume（大量）：数据量大TB-&gt;PB Velocity（高速）：数据被创建、移动和处理的速度  Variety（多样）：文字、图像、图片、地理位置等 Value（价值）：具有价值，但价值密度低  新型应用的数据存储与管理需求 全球数据规模不断增大  数据类型不断多样：   开发数据管理应用考虑的问题 用户量：用户量预估多少？几">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216133801382.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216134627605.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216134829315.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216135027732.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216135728120.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216140857129.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216142121807.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216143634341.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216143828768.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216144316280.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216144458438.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216145226985.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216150303919.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216151630821.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216152051075.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216154220679.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216154330503.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216154758778.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216155930387.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216160354950.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216161404872.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216163720905.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216163819950.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216163837412.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216163852921.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216163909299.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216163927831.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216163947386.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216162600345.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216163205801.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216163533367.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216163556696.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216163619959.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216170249457.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216170846694.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216170958612.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216172218794.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216172234107.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216172637127.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216172949303.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216173134970.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216174120767.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216175257945.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216175316227.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216213320641.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216213958715.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216214104438.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216214241187.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216214853631.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216223305130.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216225507736.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216225716406.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216225741320.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216225759919.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216225858662.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216230132572.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216230142131.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216230229654.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216230508159.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216230520217.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216230919967.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216230934660.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216230948704.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216231002847.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216231016433.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216231025516.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216231036258.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216231051791.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216231401893.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216231416292.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216231440204.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216231505542.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216231941551.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216231950572.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216232102170.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216232141989.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216232950377.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216233018177.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216233102205.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216233354153.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216233509200.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216233652433.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216234136714.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216234156953.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216234332100.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216234513903.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216234547171.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216234752641.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216234820700.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216234835007.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216235235490.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216235544574.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216235625229.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216235843665.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216235859538.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230217000033263.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230217000548509.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230217000619603.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230217000636607.png">
+<meta property="article:published_time" content="2023-02-16T05:28:13.430Z">
+<meta property="article:modified_time" content="2023-02-16T16:07:06.791Z">
+<meta property="article:author" content="ECNU_zhy">
+<meta property="article:tag" content="非关系数据库">
+<meta property="article:tag" content="PPT">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216133801382.png">
+  
+  
+  
+  <title>非关系数据库PPT - zhy-blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ECNU-zhy</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                Links
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="非关系数据库PPT"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-02-16 13:28" pubdate>
+          February 16, 2023 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          32k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          269 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">非关系数据库PPT</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><h2 id="非关系型数据库产生的背景"><a href="#非关系型数据库产生的背景" class="headerlink" title="非关系型数据库产生的背景"></a>非关系型数据库产生的背景</h2><h3 id="大数据管理及应用需求"><a href="#大数据管理及应用需求" class="headerlink" title="大数据管理及应用需求"></a>大数据管理及应用需求</h3><h4 id="大数据特征"><a href="#大数据特征" class="headerlink" title="大数据特征"></a>大数据特征</h4><ul>
+<li>Volume（大量）：数据量大TB-&gt;PB</li>
+<li>Velocity（高速）：数据被创建、移动和处理的速度 </li>
+<li>Variety（多样）：文字、图像、图片、地理位置等</li>
+<li>Value（价值）：具有价值，但价值密度低</li>
+</ul>
+<h4 id="新型应用的数据存储与管理需求"><a href="#新型应用的数据存储与管理需求" class="headerlink" title="新型应用的数据存储与管理需求"></a>新型应用的数据存储与管理需求</h4><ul>
+<li><p>全球数据规模不断增大</p>
+</li>
+<li><p>数据类型不断多样：</p>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216133801382.png" srcset="/img/loading.gif" lazyload alt="image-20230216133801382" style="zoom:50%;" /></li>
+</ul>
+<h2 id="开发数据管理应用考虑的问题"><a href="#开发数据管理应用考虑的问题" class="headerlink" title="开发数据管理应用考虑的问题"></a>开发数据管理应用考虑的问题</h2><ul>
+<li>用户量：用户量预估多少？几百？几万？还是几亿？</li>
+<li>数据量：数据量预估多少？日均增量能有多少？</li>
+<li>数据访问模式：读密集型？还是写密集型？</li>
+<li>数据场景：强事务型？还是分析型需求？</li>
+<li>运行性能：并发量是多少？高峰、平均、低谷分别预估是多少？</li>
+</ul>
+<h2 id="数据模型"><a href="#数据模型" class="headerlink" title="数据模型"></a>数据模型</h2><h3 id="描述以下信息的工具集合"><a href="#描述以下信息的工具集合" class="headerlink" title="描述以下信息的工具集合"></a>描述以下信息的工具集合</h3><ul>
+<li>数据</li>
+<li>数据之间的关系</li>
+<li>数据语义</li>
+<li>数据约束</li>
+</ul>
+<h3 id="传统的数据模型"><a href="#传统的数据模型" class="headerlink" title="传统的数据模型"></a>传统的数据模型</h3><ul>
+<li>关系数据模型</li>
+<li>E-R数据模型</li>
+<li>基于对象的数据模型</li>
+<li>XML&#x2F;JSON</li>
+<li>网状模型</li>
+<li>层次模型</li>
+</ul>
+<h2 id="关系数据库的特点"><a href="#关系数据库的特点" class="headerlink" title="关系数据库的特点"></a>关系数据库的特点</h2><ul>
+<li><strong>数据模型简单：</strong>二维表结构，数据以行为单位，每行表示一个记录，每行数据的属性都相同。</li>
+<li><strong>事务管理机制完善：</strong>支持 ACID 特性，维护数据的一致性，关系数据库非常重要的特性。</li>
+<li><strong>SQL 语言使用方便，</strong>支持 join 等复杂操作</li>
+<li><strong>成熟的产品提供良好的服务</strong>：MySql、Oracle、SQL Server、PostgreSQL等</li>
+<li><strong>高并发下数据库存在瓶颈</strong>：数据按行存储，针对某一列的运算，IO代价较高；</li>
+<li><strong>维护数据一致性代价大：</strong>为了保证事务ACID特性，数据库提供并发控制与故障恢复机制，事务的隔离级别越高，读写性能会受影响。</li>
+<li><strong>维护索引代价大</strong>：数据更新必然导致索引更新，降低了关系型数据库的读写能力；索引占存储的空间。</li>
+<li><strong>水平扩展带来的问题</strong>：应对业务规模扩大，数据库分库是常用的方法，分库之后，数据迁移、跨库 join、分布式事务处理都是需要考虑的问题。</li>
+<li><strong>数据库schema结构不易扩展</strong>：如果需要修改表结构，需要执行 DDL语句，修改期间会锁表，部分服务不可用。</li>
+</ul>
+<h2 id="单节点关系数据库的性能压力"><a href="#单节点关系数据库的性能压力" class="headerlink" title="单节点关系数据库的性能压力"></a>单节点关系数据库的性能压力</h2><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216134627605.png" srcset="/img/loading.gif" lazyload alt="image-20230216134627605" style="zoom:50%;" />
+
+<h2 id="传统数据管理方法存在的问题及解决方法"><a href="#传统数据管理方法存在的问题及解决方法" class="headerlink" title="传统数据管理方法存在的问题及解决方法"></a>传统数据管理方法存在的问题及解决方法</h2><ul>
+<li><p>不擅长<strong>：大量数据的写入操作</strong></p>
+<ol>
+<li><p>solution1：读写分离&#x3D;&gt;问题:更新的数据在两台服务器上，出现数据一致性问题<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216134829315.png" srcset="/img/loading.gif" lazyload alt="image-20230216134829315" style="zoom:50%;" /></p>
+</li>
+<li><p>solution2：读写分离且写操作分配；不同表的写操作分配给不同的数据库服务器</p>
+</li>
+<li><p>solution3：不同的表分配给不同的数据库服务器&#x3D;&gt;问题：跨服务器实现join非常困难</p>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216135027732.png" srcset="/img/loading.gif" lazyload alt="image-20230216135027732" style="zoom:50%;" /></li>
+</ol>
+</li>
+<li><p>不擅长：<strong>有数据更新时需要更新索引，甚至更新表结构</strong></p>
+<ol>
+<li>更新时需要加锁，数据访问受限制，高并发应用的性能受影响</li>
+</ol>
+</li>
+<li><p>不擅长：表结构不固定的应用</p>
+<ol>
+<li>更新表结构困难</li>
+</ol>
+</li>
+</ul>
+<h2 id="计算机系统scale-up和scale-out"><a href="#计算机系统scale-up和scale-out" class="headerlink" title="计算机系统scale up和scale out"></a>计算机系统scale up和scale out</h2><ul>
+<li>scale up:使独立的CPU运行得更快；提高时钟频率；增加RAM；提高磁盘IO性能</li>
+<li>scale out:多个CPU一起工作，将问题分解成独立的线程</li>
+</ul>
+<h2 id="计算机体系结构"><a href="#计算机体系结构" class="headerlink" title="计算机体系结构"></a>计算机体系结构</h2><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216135728120.png" srcset="/img/loading.gif" lazyload alt="image-20230216135728120" style="zoom:67%;" />
+
+<h2 id="非关系数据库之后"><a href="#非关系数据库之后" class="headerlink" title="非关系数据库之后"></a>非关系数据库之后</h2><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216140857129.png" srcset="/img/loading.gif" lazyload alt="image-20230216140857129" style="zoom:50%;" />
+
+<h2 id="非关系数据库与NoSQL"><a href="#非关系数据库与NoSQL" class="headerlink" title="非关系数据库与NoSQL"></a>非关系数据库与NoSQL</h2><h3 id="NoSQL定义-not-only-SQL"><a href="#NoSQL定义-not-only-SQL" class="headerlink" title="NoSQL定义 not-only SQL"></a>NoSQL定义 not-only SQL</h3><p>符合非关系型、分布式、开源和具有水平可扩展能力的下一代数据库。</p>
+<p>NoSQL数据库的诞生定位于非结构化的数据。相对于结构化数据而言，不方便使用数据库二维逻辑来表现的数据称为非结构化数据，包括所有格式的办公文档、文本、图片、XML、HTML、各类报表、图像和音频视频信息等</p>
+<p><strong>和结构化数据相比，非结构化的数据最本质的区别包括三个方面：</strong></p>
+<ul>
+<li>非结构化数据的容量比结构化数据大</li>
+<li>产生的速度比结构化数据最快</li>
+<li>数据来源具有多样性</li>
+<li>不提供JOIN操作</li>
+<li>schemaless：allows data to have <strong>arbitrary structures</strong> as they are not explicitly defined by a data definition language (schema-on-write). Instead, they are implicitly <strong>encoded by the application logic</strong> (schema-on-read).</li>
+<li>运行于shared-nothing的商用计算机构成的集群上</li>
+<li>具有横向可扩展性</li>
+</ul>
+<h6 id="数据模型包括"><a href="#数据模型包括" class="headerlink" title="数据模型包括:"></a>数据模型包括:</h6><p>key&#x2F;value、gragh(采用图结构存储数据之间的关系)、column family(Bigtable)(类似系数矩阵，行和列作为key，列族由多个列构成)、document-oriented(存储层次结构的数据)</p>
+<h6 id="NoSQL不是"><a href="#NoSQL不是" class="headerlink" title="NoSQL不是"></a>NoSQL不是</h6><ul>
+<li>NoSQL不是关于SQL语言，NoSQL 不是指不使用SQL查询语言的数据库系统。</li>
+<li>NoSQL数据库也提供SQL查询语言。</li>
+<li>既有开源NoSQL数据库产品，也有商用产品。</li>
+<li>NoSQL数据库不仅仅针对大数据中的量大（volume）和高速（velocity）特征，同样注重<strong>多样性</strong></li>
+<li><strong>NoSQL不是云计算：</strong>因为良好的可伸缩性，不少NoSQL系统部署在云中。 NoSQL既可以运行在云环境中，也可以运行在自己的数据中心。</li>
+<li><strong>NoSQL不是基于RAM和SSD的应用，</strong>而是利用RAM和SSD提高性能，NoSQL系统可以运行在标准的硬件上。</li>
+</ul>
+<h6 id="comparison-of-NoSQL-Data-Models"><a href="#comparison-of-NoSQL-Data-Models" class="headerlink" title="comparison of NoSQL Data Models"></a>comparison of NoSQL Data Models</h6><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216142121807.png" srcset="/img/loading.gif" lazyload alt="image-20230216142121807" style="zoom:80%;" />
+
+<h2 id="multi-model-database"><a href="#multi-model-database" class="headerlink" title="multi-model database"></a>multi-model database</h2><p>The data are naturally organized in different formats and models, including <strong>structured, semi-structured and unstructured data.</strong> </p>
+<ul>
+<li><strong>structured data</strong> includes relational, key&#x2F;value, and graph data. </li>
+<li><strong>Semi-structured data</strong> commonly refer to XML and JSON documents. </li>
+<li><strong>Unstructured data</strong> are typically text files, containing dates, numbers and facts.</li>
+</ul>
+<h1 id="相关基础知识及概念"><a href="#相关基础知识及概念" class="headerlink" title="相关基础知识及概念"></a>相关基础知识及概念</h1><h2 id="单机的局限性"><a href="#单机的局限性" class="headerlink" title="单机的局限性"></a>单机的局限性</h2><ul>
+<li>数据读写速度受单机硬件组成的影响</li>
+<li>物理硬盘的性能是影响数据读写速度的重要因素</li>
+</ul>
+<h3 id="解决单机局限性的方案"><a href="#解决单机局限性的方案" class="headerlink" title="解决单机局限性的方案"></a>解决单机局限性的方案</h3><ul>
+<li>提高单机的物理配置(PC服务器-&gt;小型机-&gt;大型机)  <strong>纵向扩展</strong></li>
+<li>添加更多的节点，节点之间用高速网络连接，当需要更高的性能或更大的容量时，可迅速向集群中添加节点，而不会导致任何宕机。   <strong>横向扩展</strong></li>
+</ul>
+<h2 id="计算平台分类"><a href="#计算平台分类" class="headerlink" title="计算平台分类"></a>计算平台分类</h2><p>Flynn分类法按照指令流和数据流进行分类</p>
+<ol>
+<li>SISD：单指令流单数据流(传统的串行计算机，硬件不支持任何形式的并行计算，所有的指令都是串行执行)</li>
+<li>SIMD：单指令流多数据流(在单个时钟周期内处理多个数据单元，数据级别的并行处理；例GPU的应用，图像处理、矩阵计算)</li>
+<li>MIMD：多指令流多数据流(紧耦合MIMD和松耦合MIMD；多核、多CPU共享内存)</li>
+<li>MISD：多指令流单数据流(理论模型，没有实际实现)</li>
+</ol>
+<h2 id="集群"><a href="#集群" class="headerlink" title="集群"></a>集群</h2><p><strong>集群</strong>是紧密耦合的一些<strong>服务器或节点</strong>，这些服务器通过高速网络连接在一起作为一个工作单元。</p>
+<p>集群中每个节点都有自己的专属资源：<strong>CPU、内存和硬盘</strong></p>
+<p>通过将任务分解成若干个小任务分配给集群中的节点服务器上，协同完成任务。</p>
+<h2 id="IO并行"><a href="#IO并行" class="headerlink" title="IO并行"></a>IO并行</h2><p>通过在多个节点（计算机）上对多个磁盘上的数据集进行分区，减少从磁盘检索数据所需的时间</p>
+<ul>
+<li><strong>跨节点</strong>并行</li>
+<li><strong>一个节点跨磁盘</strong>并行</li>
+</ul>
+<p>水平分区——数据记录被划分在多个节点上，即每个节点上存储一个数据子集</p>
+<ul>
+<li>垂直分区：例如 r(A,B,C,D)，主键为A ，划分为r1(A,B)和r2(A,C,D)</li>
+<li>默认是水平分区</li>
+</ul>
+<h3 id="IO并行技术"><a href="#IO并行技术" class="headerlink" title="IO并行技术"></a>IO并行技术</h3><ul>
+<li><p>轮询方法：第i条记录存储到的节点为 i mod n</p>
+</li>
+<li><p>Hash分区：选择一个或多个属性作为分区属性；选择取值范围为0…n-1的哈希函数h；设i 为哈希函数h应用于记录属性的计算结果，然后将记录存储在节点i</p>
+</li>
+<li><p>范围分区：选择分区的属性；选定分区向量vector [vo, v1, …, vn-2] ；设v是一个记录分区属性的值，那么vi &lt; vi+1 的记录分配到节点 i + 1；v &lt; v0 的记录分配到节点0；v &gt;&#x3D; vn-2 的记录分配到节点n-1.</p>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216143634341.png" srcset="/img/loading.gif" lazyload alt="image-20230216143634341" style="zoom:67%;" /></li>
+</ul>
+<h2 id="分片-sharding"><a href="#分片-sharding" class="headerlink" title="分片(sharding)"></a>分片(sharding)</h2><p>分片：<strong>水平</strong>地将大的数据集划分成较小的、易于管理的数据集的过程。</p>
+<p>每个小数据集可以<strong>独立</strong>地为所负责的数据提供<strong>读写服务</strong>；某个查询的数据可能来自两个小数据集；数据分片要考虑<strong>查询模式</strong>以便小数据集本身不会成为<strong>性能瓶颈</strong></p>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216143828768.png" srcset="/img/loading.gif" lazyload alt="image-20230216143828768" style="zoom:50%;" />
+
+<h2 id="复制"><a href="#复制" class="headerlink" title="复制"></a>复制</h2><p>复制：多个节点上存储数据集的多个拷贝，称作副本。</p>
+<p>相同的数据在不同的节点上存在多个副本，提供了<strong>可伸缩性、可用性和容错性</strong>。</p>
+<h3 id="复制实现方法"><a href="#复制实现方法" class="headerlink" title="复制实现方法"></a>复制实现方法</h3><ol>
+<li><p><strong>主从复制</strong></p>
+<p>系统配置是主从配置环境；所有数据写入主节点，<strong>持久化后</strong>复制到多个从节点；数据的写（增删改）操作访问<strong>主节点</strong>的数据，读（查询）操作访问<strong>任意节点</strong>；<strong>适用于读密集型应用</strong>；需要考虑<strong>读一致性</strong>的问题；</p>
+<ul>
+<li>投票机制：大多数<strong>从节点</strong>包含相同版本的记录，则声明读操作是一致的</li>
+<li>实现投票机制需要从节点之间建立可靠、快速的沟通机制</li>
+</ul>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216144316280.png" srcset="/img/loading.gif" lazyload alt="image-20230216144316280" style="zoom:50%;" />
+</li>
+<li><p><strong>对等复制</strong></p>
+<p>节点之间不分主从，每个节点是对等的，每个<strong>写操作</strong>数据复制到所有对等的节点上。</p>
+<p>每个节点都可以处理读请求和写请求；</p>
+<p>对等复制容易导致<strong>写不一致问题</strong>：同时更新多个节点的同一个数据</p>
+<ul>
+<li>悲观并发策略：基于锁机制</li>
+<li>乐观并发策略：不用锁，最终一致性</li>
+</ul>
+<p><strong>读不一致问题</strong>：投票机制</p>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216144458438.png" srcset="/img/loading.gif" lazyload alt="image-20230216144458438" style="zoom:67%;" /></li>
+</ol>
+<h2 id="数据分布倾斜-data-distribution-skew"><a href="#数据分布倾斜-data-distribution-skew" class="headerlink" title="数据分布倾斜(data-distribution skew)"></a>数据分布倾斜(data-distribution skew)</h2><p>数据分布倾斜含义: 一些节点拥有较多记录，而其他节点则拥有的记录数很少。</p>
+<ul>
+<li><strong>属性-值倾斜：</strong>一些分区属性值出现在多个记录中；分区属性值相同的所有记录最终都在同一个分区中；范围分区和hash分区都会出现这个问题。</li>
+<li><strong>分区倾斜：</strong>选择不当的范围分区向量可能会将太多记录分配给某些分区，而将太少记录分配给其他分区</li>
+</ul>
+<p><strong>执行倾斜：</strong>某些运算符运行的时间比其他运算符长，执行时间的差异可能会导致一些处理器空闲，而其他处理器仍然计算查询的一部分。</p>
+<h3 id="处理范围分区内的倾斜"><a href="#处理范围分区内的倾斜" class="headerlink" title="处理范围分区内的倾斜"></a>处理范围分区内的倾斜</h3><ul>
+<li><strong>创建平衡的分区向量</strong><ol>
+<li>基于<strong>分区属性</strong>对数据进行排序；</li>
+<li>按照如下顺序扫描数据来构造分区向量<ul>
+<li>每读取1&#x2F;n的数据之后，下一个记录的分区属性值被添加到分区向量中（n表示分区数量）</li>
+</ul>
+</li>
+<li>如果分区属性中存在重复项，则可能导致不平衡</li>
+</ol>
+</li>
+<li><strong>减少代价</strong><ol>
+<li>分区向量可以使用记录的随机样本创建</li>
+<li>另外一种方法：采用直方图创建分区向量</li>
+</ol>
+</li>
+</ul>
+<h3 id="采用直方图方法创建分区向量"><a href="#采用直方图方法创建分区向量" class="headerlink" title="采用直方图方法创建分区向量"></a>采用直方图方法创建分区向量</h3><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216145226985.png" srcset="/img/loading.gif" lazyload alt="image-20230216145226985" style="zoom:67%;" />
+
+<h2 id="虚拟节点分区"><a href="#虚拟节点分区" class="headerlink" title="虚拟节点分区"></a>虚拟节点分区</h2><h3 id="核心思想"><a href="#核心思想" class="headerlink" title="核心思想"></a>核心思想</h3><p>引入虚拟节点，假设虚拟节点的数量是实际节点倍数：</p>
+<ul>
+<li>虚拟节点映射到真实节点</li>
+<li>使用范围分区向量跨虚拟节点划分记录(也可以使用Hash分区)</li>
+</ul>
+<h3 id="虚拟节点映射到真实节点"><a href="#虚拟节点映射到真实节点" class="headerlink" title="虚拟节点映射到真实节点"></a>虚拟节点映射到真实节点</h3><ul>
+<li><strong>轮询：</strong>虚拟节点i 映射到真实节点 (i mod n)+1</li>
+<li><strong>映射表：</strong>用一个映射表记录虚拟节点和真实节点的对应关系<ol>
+<li>通过将虚拟节点从加载较多的节点移动到加载较少的节点来<strong>处理倾斜</strong></li>
+<li>可以解决<strong>数据倾斜和执行倾斜</strong></li>
+</ol>
+</li>
+</ul>
+<h2 id="并行VS分布式"><a href="#并行VS分布式" class="headerlink" title="并行VS分布式"></a>并行VS分布式</h2><ul>
+<li><p><strong>并行计算</strong></p>
+<p>单指令流多数据流计算机：SIMD；多台计算机中多个CPU，多指令流多数据流MIMD</p>
+</li>
+<li><p><strong>分布式计算</strong></p>
+<p>多台计算机中多个CPU—<strong>MIMD</strong>；CPU间<strong>高通信延迟</strong>；不同节点可以是<strong>异构</strong>的系统，可靠性维护困难</p>
+</li>
+</ul>
+<h2 id="分布式系统的可靠性要求"><a href="#分布式系统的可靠性要求" class="headerlink" title="分布式系统的可靠性要求"></a>分布式系统的可靠性要求</h2><ol>
+<li>允许部分节点失效</li>
+<li>如果某节点失效，<strong>其负载应由其他节点承担</strong>，确保数据可恢复</li>
+<li>某节点失效重启后应能加入原来的计算机组，而<strong>不必重启所有的节点</strong></li>
+<li><strong>并发操作</strong>或<strong>部分内部失效</strong>不应导致外部可见的不确定性，应确保<strong>一致性</strong></li>
+<li>新增节点应提升系统的性能</li>
+<li>整个系统应阻止<strong>非授权访问</strong>，要比单机系统更多考虑攻击，以确保<strong>安全</strong></li>
+</ol>
+<h2 id="事物及其事物的特性"><a href="#事物及其事物的特性" class="headerlink" title="事物及其事物的特性"></a>事物及其事物的特性</h2><p>事务是描述完成数据处理的完整逻辑工作单元的操作集合。</p>
+<p>在关系数据库管理系统中，为了保证数据一致性，数据库系统中事务必须具有ACID特性：（原子性（Atomicity）一致性（Consistency）隔离性（Isolation）持久性（Durability））</p>
+<ul>
+<li>Atomicity.  事务的所有操作或者全部执行，或者全不执行，是一个不可分割的整体。</li>
+<li>Consistency.  在并发环境中，不同事务访问相同数据时，事务执行保证数据的一致性，即事务必须在任何时候满足系统定义的协议和原则，<strong>数据库在事务开始和结束时必须保持一致状态。</strong></li>
+<li>Isolation.  多个事务并发访问同一个数据库时，每个事务都有自己的数据空间，<strong>对其他事务的执行不知情</strong>；事务无法访问处于中间状态或未完成状态的任何其他事务的数据，每个事务自身是<strong>独立的</strong>。</li>
+<li>Durability.一旦事务完成（成功提交），所有对数据的更新是<strong>持久的</strong>，即使数据库发生故障。</li>
+</ul>
+<h2 id="事物的状态"><a href="#事物的状态" class="headerlink" title="事物的状态"></a>事物的状态</h2><ol>
+<li>Active ：事务执行对数据库的读写操作</li>
+<li>Partially committed ：事务的最后一个语句执行之后进入部分提交状态，数据在<strong>缓冲区</strong>中</li>
+<li>Failed ：事务无法继续正常地执行</li>
+<li>Aborted ：事务回滚且数据库恢复到事务执行之前的状态<ul>
+<li>重新启动事务</li>
+<li>杀掉事务</li>
+</ul>
+</li>
+<li>committed：成功执行后的状态</li>
+</ol>
+<h3 id="事物状态图"><a href="#事物状态图" class="headerlink" title="事物状态图"></a>事物状态图<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216150303919.png" srcset="/img/loading.gif" lazyload alt="image-20230216150303919" style="zoom:50%;" /></h3><h2 id="事务并发地执行"><a href="#事务并发地执行" class="headerlink" title="事务并发地执行"></a>事务并发地执行</h2><p>在系统中允许多个事务并发地执行：</p>
+<ul>
+<li>提高CPU和磁盘的利用率（例如：一个事务利用CPU的同时<strong>另一个事务在读或者写磁盘</strong>）</li>
+<li>减少事务的<strong>平均响应时间</strong>（例如：短事务不需要等待长事务提交后再得到响应）</li>
+</ul>
+<h2 id="并行操作引起的问题"><a href="#并行操作引起的问题" class="headerlink" title="并行操作引起的问题"></a>并行操作引起的问题</h2><ol>
+<li><strong>丢失修改：</strong>事务T1与事务T2从数据库中读入数据A并修改，事务T2的写操作破坏了事务T1的结果，导致事务T1的修改被丢失</li>
+<li><strong>读脏数据：</strong>事务1修改数据A，并将其写回数据库，事务2读取数据A后，事务1由于某种原因被撤消，这时事务1已修改过的数据恢复原值  ；事务2读到的数据与数据库中的数据不一致，是不正确的数据，又称为<strong>“脏”数据。</strong></li>
+<li><strong>不可重复读问题</strong>：事务1读取数据后，事务2执行更新操作，使事务1无法再现前一次读取结果。</li>
+</ol>
+<h2 id="事务并发控制"><a href="#事务并发控制" class="headerlink" title="事务并发控制"></a>事务并发控制</h2><p><strong>并发控制模式</strong>：达到<strong>事务隔离</strong>目的的机制</p>
+<ul>
+<li>控制并发事务间的交互，避免破坏数据库的一致性</li>
+</ul>
+<h2 id="并发控制机制的任务"><a href="#并发控制机制的任务" class="headerlink" title="并发控制机制的任务"></a>并发控制机制的任务</h2><ol>
+<li>并发控制机制协调事务的执行，确保事务的<strong>隔离性</strong></li>
+<li>对并发操作进行正确调度</li>
+<li>保证事务的<strong>隔离性</strong></li>
+<li>保证数据库的<strong>一致性</strong>（用户A修改数据是某个事务的一部分，当事务成功完成后，用户B和C请求相同记录时，数据库提供修改后的数据）</li>
+</ol>
+<h2 id="事务的4中隔离级别"><a href="#事务的4中隔离级别" class="headerlink" title="事务的4中隔离级别"></a>事务的4中隔离级别</h2><p><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216151630821.png" srcset="/img/loading.gif" lazyload alt="image-20230216151630821"></p>
+<h2 id="并发控制机制"><a href="#并发控制机制" class="headerlink" title="并发控制机制"></a>并发控制机制</h2><ol>
+<li>基于锁的并发控制机制：2PL<ul>
+<li>锁是一种控制并发访问数据的机制</li>
+<li>事务必须在读和写数据前获得锁</li>
+<li>使用锁必须恰当<ul>
+<li>事务必须在读&#x2F;写数据前拥有锁，之后必须释放锁</li>
+<li>不存在两个事务同时对同一数据加锁</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>基于时间戳的并发控制机制</li>
+<li>基于多版本的并发控制机制MVCC</li>
+</ol>
+<h2 id="NoSQL数据库中的数据一致性"><a href="#NoSQL数据库中的数据一致性" class="headerlink" title="NoSQL数据库中的数据一致性"></a>NoSQL数据库中的数据一致性</h2><p>主流非关系型数据库是 <strong>分布式系统</strong></p>
+<p>CAP是<strong>分布式环境</strong>中设计和部署系统要考虑的三个重要的系统需求</p>
+<ol>
+<li><strong>Consistency（强一致性）</strong>：更新操作执行成功后所有的用户都应该读到最新的值</li>
+<li><strong>Availability（可用性）</strong>：每一个操作总能在一定的时间返回结果，不会发生错误和超时</li>
+<li><strong>Partition Tolerance（分区容忍性）</strong>：当网络发生故障时，系统仍能保持响应客户的请求</li>
+</ol>
+<p>CAP理论是NoSQL数据库的基础。根据CAP理论，数据共享系统只能满足三个特性中的其中两个（RDBMS满足CA，分布式数据库满足CP，QQ头像更新满足AP）</p>
+<ul>
+<li>如果一致性和可用性是必需的，可用节点之间需要通信确保一致性，分区<strong>容忍性</strong>达不到</li>
+<li>如果一致性和分区容忍性是必需的，为了实现一致性节点将变得不可用，<strong>可用性</strong>达不到</li>
+<li>如果可用性和分区容忍性是必需的，考虑节点之间的通信需要，<strong>一致性</strong>做出让步，不考虑ACID。</li>
+</ul>
+<p><strong><u>分布式数据库始终支持分区容忍性</u></strong><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216152051075.png" srcset="/img/loading.gif" lazyload alt="image-20230216152051075" style="zoom:50%;" /></p>
+<h2 id="数据一致性模型"><a href="#数据一致性模型" class="headerlink" title="数据一致性模型"></a>数据一致性模型</h2><p>对于数据不断增长的系统，尤其是OLAP应用，对<strong>可用性A和分区容忍性P</strong>的要求高于<strong>强一致性C</strong>。一些分布式系统通过复制数据的方法来提高系统的<strong>可靠性和容错性</strong>，将数据的不同副本存放在不同的机器上。</p>
+<ol>
+<li><p><strong>强一致性</strong></p>
+<p>不论针对哪一个副本进行数据更新，之后所有的读操作都能读到最新的数据</p>
+</li>
+<li><p><strong>弱一致性</strong></p>
+<p>数据更新后，用户可以在<strong>某个时间后</strong>读到更新后的数据——<strong>不一致性窗口</strong></p>
+</li>
+<li><p><strong>最终一致性</strong></p>
+<p>弱一致性的特例，系统中的副本经过一段时间后<strong>最终能够达到一致</strong>，保证用户最终可以读到数据的更新</p>
+</li>
+</ol>
+<h2 id="BASE：根据CAP定理的分布式数据库设计原则"><a href="#BASE：根据CAP定理的分布式数据库设计原则" class="headerlink" title="BASE：根据CAP定理的分布式数据库设计原则"></a>BASE：根据CAP定理的分布式数据库设计原则</h2><p>对于面向大数据的分布式系统，可用性和分区容忍性要求高，但对于一些应用，<strong>完全牺牲一致性会导致数据混乱</strong>。</p>
+<ol>
+<li><strong>Basically Available</strong>：基本可用，容忍部分失败而不导致系统整体不可用</li>
+<li><strong>Soft-state</strong>：不要求系统一直保持<strong>强一致状态</strong>，系统状态可能随时间的推移有变化</li>
+<li><strong>Eventual Consistency</strong>：一旦系统停止接受输入，系统中的副本经过一段时间后<strong>最终能够达到一致</strong>，保证用户最终可以读到数据的更新</li>
+</ol>
+<h1 id="数据模型-1"><a href="#数据模型-1" class="headerlink" title="数据模型"></a>数据模型</h1><h3 id="数据类型的演化"><a href="#数据类型的演化" class="headerlink" title="数据类型的演化"></a>数据类型的演化</h3><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216154220679.png" srcset="/img/loading.gif" lazyload alt="image-20230216154220679" style="zoom:67%;" />
+
+<h3 id="主流的4种非关系数据模型"><a href="#主流的4种非关系数据模型" class="headerlink" title="主流的4种非关系数据模型"></a>主流的4种非关系数据模型</h3><p><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216154330503.png" srcset="/img/loading.gif" lazyload alt="image-20230216154330503"></p>
+<h4 id="key-x2F-value数据模型"><a href="#key-x2F-value数据模型" class="headerlink" title="key&#x2F;value数据模型"></a>key&#x2F;value数据模型</h4><p>Data are managed and represented as (key, value) pairs stored in <strong>efficient, highly scalable, key-based lookup</strong> structures such as <strong>Distributed Hash Tables (DHTs)</strong> and <strong>Log-Structured Merge-trees</strong> </p>
+<h5 id="key"><a href="#key" class="headerlink" title="key"></a>key</h5><ul>
+<li>key的内容可以有实际含义，而且可以是复杂的自定义结构，但要保证key的唯一性</li>
+<li>key不是越长越好，否则内存开销大，增加查询代价</li>
+<li>key太短也不可取，否则可能含义不清</li>
+</ul>
+<h5 id="value"><a href="#value" class="headerlink" title="value"></a>value</h5><ul>
+<li>可以存放任何类型的数据</li>
+<li>编码为BLOB形式存储</li>
+<li>无需预先定义数据类型</li>
+</ul>
+<h5 id="key-value"><a href="#key-value" class="headerlink" title="key-value"></a>key-value</h5><ul>
+<li>key和value形成一对一的对应关系</li>
+</ul>
+<h5 id="namespace"><a href="#namespace" class="headerlink" title="namespace"></a>namespace</h5><ul>
+<li>由key-value对构成的集合，通常一类key-value对构成一个集合</li>
+<li>在key-value的基础上加NameSpace目的是在内存中访问该数据集时，<strong>该数据集具有唯一名称</strong>。类似表的名称</li>
+<li><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216154758778.png" srcset="/img/loading.gif" lazyload alt="image-20230216154758778" style="zoom: 80%;" /></li>
+</ul>
+<h5 id="示例：分布式web内容服务"><a href="#示例：分布式web内容服务" class="headerlink" title="示例：分布式web内容服务"></a>示例：分布式web内容服务</h5><ul>
+<li>key表示URL</li>
+<li>value表示任何形式的文件如PDFs，JPEGs，JSON或XML documents</li>
+</ul>
+<p>这样的设计可以在集群环境中管理大量的请求和web内容</p>
+<h5 id="key-value存储类型"><a href="#key-value存储类型" class="headerlink" title="key-value存储类型"></a>key-value存储类型</h5><p>根据数据的持久性，key-value存储分为以下三类：</p>
+<ul>
+<li><strong>内存（In-memory）key-value存储：</strong>例如Memcached，数据存储在内存中，提供非常快速的数据访问，通常用做云中应用的的缓存层，处理密集型的请求，如 <strong>API调用、数据库查询、页面呈现</strong>等</li>
+<li><strong>持久（Persistent） key-value存储：</strong>例如Riak KV and Oracle NoSQL, 提供对存储在HDD&#x2F;SSD中的信息高可用性访问</li>
+<li><strong>混合（Hybrid）key-value存储：</strong>例如<strong>Redis</strong>和Aerospike，<strong>数据首先保存在内存中，当满足一定条件后数据持久存储</strong>。</li>
+</ul>
+<h5 id="基于key的查询操作"><a href="#基于key的查询操作" class="headerlink" title="基于key的查询操作"></a>基于key的查询操作</h5><ul>
+<li>**get(key):**检索与key关联的value（或具有不同版本的value的列表）</li>
+<li>**put(key,value):**仅当key不在数据库中时，将key-value对添加到数据库中。否则，将使用新版本更新存储的value。注意，即使更新存储的value中的一部分也需要替换整个value</li>
+<li><strong>delete(key)</strong>: 删除key 及其关联的value(s)</li>
+</ul>
+<p>这些操作依赖<strong>一致性模型和索引</strong>，执行可通过REST或Lucene接口访问</p>
+<h5 id="代表"><a href="#代表" class="headerlink" title="代表"></a>代表</h5><p>Redis    Dynamo    Scalaris    Spinnaker    Scatter    Walter    COPS</p>
+<h4 id="Column-family-数据模型"><a href="#Column-family-数据模型" class="headerlink" title="Column family 数据模型"></a>Column family 数据模型</h4><ul>
+<li>以表的形式存储数据，表有行和列<ul>
+<li><strong>column</strong>是数据库中最小的存储单元，它是一个<strong>带时间戳的key-value对</strong></li>
+</ul>
+</li>
+<li>每一个row 也是一个key-value 对 ， 表示一个高度结构化的数据项，<strong>row key是该row数据的唯一标示，value 是一个column的集合</strong>。</li>
+<li>column family由<strong>任意数量的column</strong>构成，这些column在逻辑上相互关联，通常<strong>一起访问</strong><ul>
+<li>Row和column确定为一个<strong>cell</strong>，每个cell存储同一份数据的多个版本，用<strong>时间戳</strong>来区分</li>
+<li>时间戳：用于区分数据版本的索引</li>
+</ul>
+</li>
+<li>访问控制、磁盘和内存使用统计在<strong>column family层面</strong>, column family的模式灵活，可以在运行时<strong>添加或删除其中的列</strong></li>
+</ul>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216155930387.png" srcset="/img/loading.gif" lazyload alt="image-20230216155930387" style="zoom:67%;" />
+
+<h5 id="column存储实例"><a href="#column存储实例" class="headerlink" title="column存储实例"></a>column存储实例</h5><p>通过三元组**&lt;row-key, column-key,timestamp&gt;**检索cell的value</p>
+<p>Column family数据库中的数据可以<strong>有效地进行水平（按行）和垂直（按列族）分区</strong>，使得它们适合存储大数据集</p>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216160354950.png" srcset="/img/loading.gif" lazyload alt="image-20230216160354950" style="zoom:80%;" />
+
+<h5 id="column-family嵌套结构"><a href="#column-family嵌套结构" class="headerlink" title="column family嵌套结构"></a>column family嵌套结构</h5><ul>
+<li>一些column family数据库提供aggregate (或embedded&#x2F;nested）数据结构，允许<strong>一个column-family嵌套在其他column-families中</strong>(Apache Cassandra)</li>
+<li>column family数据库支持不同的建模结构，例如<strong>row、 column family和nested column-families</strong> 。这些结构可用于根据查询工作负载<strong>创建aggregate层次结构</strong>，从而通过<strong>访问collocated数据</strong>来<strong>提高查询性能</strong>。</li>
+</ul>
+<h5 id="基于column-family存储的查询案例"><a href="#基于column-family存储的查询案例" class="headerlink" title="基于column family存储的查询案例"></a>基于column family存储的查询案例</h5><p>Facebook针对收件箱搜索服务，采用Column family数据模型组织数据（包含aggregate）</p>
+<ul>
+<li>提供服务：用户基于关键字或发件人&#x2F;收件人的名字查询发送和接收的邮件</li>
+</ul>
+<p><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216161404872.png" srcset="/img/loading.gif" lazyload alt="image-20230216161404872"></p>
+<h5 id="具有存储和分析大数据的优势"><a href="#具有存储和分析大数据的优势" class="headerlink" title="具有存储和分析大数据的优势"></a>具有存储和分析大数据的优势</h5><p>Column family数据库中的数据可以<strong>有效地水平划分（by rows ）和垂直划分（by column-families）</strong>，适于存储大数据集</p>
+<p><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216163720905.png" srcset="/img/loading.gif" lazyload alt="image-20230216163720905"></p>
+<h6 id="为什么要用LSM树？"><a href="#为什么要用LSM树？" class="headerlink" title="为什么要用LSM树？"></a>为什么要用LSM树？</h6><p><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216163819950.png" srcset="/img/loading.gif" lazyload alt="image-20230216163819950"></p>
+<h6 id="LSM树的结构"><a href="#LSM树的结构" class="headerlink" title="LSM树的结构"></a>LSM树的结构</h6><p><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216163837412.png" srcset="/img/loading.gif" lazyload alt="image-20230216163837412"></p>
+<h6 id="LSM树的insert操作"><a href="#LSM树的insert操作" class="headerlink" title="LSM树的insert操作"></a>LSM树的insert操作</h6><p><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216163852921.png" srcset="/img/loading.gif" lazyload alt="image-20230216163852921"></p>
+<h6 id="LSM树的merge操作"><a href="#LSM树的merge操作" class="headerlink" title="LSM树的merge操作"></a>LSM树的merge操作</h6><p><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216163909299.png" srcset="/img/loading.gif" lazyload alt="image-20230216163909299"></p>
+<h6 id="LSM树的查找与删除"><a href="#LSM树的查找与删除" class="headerlink" title="LSM树的查找与删除"></a>LSM树的查找与删除</h6><p><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216163927831.png" srcset="/img/loading.gif" lazyload alt="image-20230216163927831"></p>
+<h6 id="以Hbase为例的LSM树读写文件"><a href="#以Hbase为例的LSM树读写文件" class="headerlink" title="以Hbase为例的LSM树读写文件"></a>以Hbase为例的LSM树读写文件</h6><p><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216163947386.png" srcset="/img/loading.gif" lazyload alt="image-20230216163947386"></p>
+<p>Hbase的一个column family本质上是一棵<strong>LSM树(Log-Structured Merge Tree)</strong></p>
+<p>LSM树分为内存部分和磁盘部分。</p>
+<ul>
+<li><p>内存部分是一个维护有序数据集合的数据结构。一般来讲，内存数据结构可以选择平衡二叉树、红黑树、跳跃表（SkipList）等维护有序集的数据结构，由于考虑并发性能，HBase选择了表现更优秀的跳跃表。</p>
+</li>
+<li><p>磁盘部分是由一个个独立的文件组成，每一个文件又是由一个个数据块组成。对于数据存储在磁盘上的数据库系统来说，磁盘寻道以及数据读取都是非常耗时的操作（简称IO耗时）。<strong>为了避免不必要的IO耗时，可以在磁盘中存储一些额外的二进制数据，这些数据用来判断对于给定的key是否有可能存储在这个数据块中，这个数据结构称为布隆过滤器（BloomFilter）。</strong><strong>(利用布隆过滤器进行IO优化)</strong>:star:</p>
+</li>
+<li><p>跳跃表（SkipList）是一种能高效实现插入、删除、查找的内存数据结构，复杂度都是O(logN）。与红黑树以及其他的二分查找树相比，跳跃表的优势在于实现简单，而且在并发场景下加锁粒度更小，从而可以实现更高的并发性。</p>
+</li>
+<li><p>LSM树是一种磁盘数据的索引结构。LSM树的索引对写入请求更友好。因为无论是何种写入请求，LSM树都会将写入操作处理为一次顺序写，而HDFS擅长的正是顺序写（且HDFS不支持随机写）。</p>
+</li>
+<li><p>一个LSM树的索引主要由两部分构成：内存部分和磁盘部分。内存部分是一个ConcurrentSkipListMap，Key是rowkey、<strong>column family</strong>、qualifier、type以及timestamp， Value是<strong>字节数组</strong>。</p>
+</li>
+<li><p>随着数据不断写入MemStore，一旦内存超过阈值会将数据flush到磁盘，生产HFile；多个小HFile文件会compact成一个大HFile。</p>
+<p>compact操作分成两种类型。</p>
+<ul>
+<li>major compact，是将所有的hfile一次合并成一个文件。<strong>好处是</strong>，合并之后只有一个文件，读取的性能好；<strong>但它的问题是</strong>，合并所有的文件可能需要很长的时间并消耗大量的IO带宽，所以major compact不宜使用太频繁，适合周期性地跑。</li>
+<li>minor compact，即选中少数几个hfile 合并成一个文件。<strong>优点是</strong>，可以进行局部的compact，通过少量的IO减少文件数量，提升读取操作的性能，适合较高频率地跑；但它的<strong>缺点是</strong>，只合并了局部的数据，对于那些全局删除操作，无法在合并过程中完全删除。</li>
+<li>minor compact虽然能减少文件，但却无法彻底清除那些delete操作。而major compact能完全清理那些delete操作，保证数据的最小化。</li>
+</ul>
+</li>
+</ul>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216162600345.png" srcset="/img/loading.gif" lazyload alt="image-20230216162600345" style="zoom:80%;" />
+
+<h5 id="布隆过滤器"><a href="#布隆过滤器" class="headerlink" title="布隆过滤器"></a>布隆过滤器</h5><p>布隆过滤器对任意给定w，给出的存在性结果为两种：</p>
+<ul>
+<li>w可能存在于集合A中</li>
+<li>w肯定不在集合A中</li>
+</ul>
+<p>布隆过滤器由一个长度为N的01数组array组成。首先将数组array每个元素初始设为0。<br>对集合A中的每个元素w，做K次哈希，第i次哈希值对N取模得到一个 index(i)，即 index(i) &#x3D; HASH_i(w) % N，将array数组中的array[index(i)]置为1。最终array变成一个某些元素为1的01数组。</p>
+<h6 id="布隆过滤器算法示例"><a href="#布隆过滤器算法示例" class="headerlink" title="布隆过滤器算法示例"></a>布隆过滤器算法示例</h6><figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">A=&#123;x，y，z&#125;，N=<span class="hljs-number">18</span>，K=<span class="hljs-number">3</span>。<br>初始化<span class="hljs-built_in">array</span> = <span class="hljs-number">000000000000000000</span><br>对元素x，<span class="hljs-constructor">HASH_0(<span class="hljs-params">x</span>)</span> % N=<span class="hljs-number">1</span>，<span class="hljs-constructor">HASH_1(<span class="hljs-params">x</span>)</span> % N=<span class="hljs-number">5</span>，<span class="hljs-constructor">HASH_2(<span class="hljs-params">x</span>)</span> % N=<span class="hljs-number">13</span>。因此<span class="hljs-built_in">array</span>=<span class="hljs-number">010001000000010000</span>;<br>对元素y，<span class="hljs-constructor">HASH_0(<span class="hljs-params">y</span>)</span> % N=<span class="hljs-number">4</span>，<span class="hljs-constructor">HASH_1(<span class="hljs-params">y</span>)</span> % N=<span class="hljs-number">11</span>，<span class="hljs-constructor">HASH_2(<span class="hljs-params">y</span>)</span> % N=<span class="hljs-number">16</span>。因此<span class="hljs-built_in">array</span>=<span class="hljs-number">010011000001010010</span>;<br>对元素z，<span class="hljs-constructor">HASH_0(<span class="hljs-params">z</span>)</span> % N=<span class="hljs-number">3</span>，<span class="hljs-constructor">HASH_1(<span class="hljs-params">y</span>)</span> % N=<span class="hljs-number">5</span>，<span class="hljs-constructor">HASH_2(<span class="hljs-params">y</span>)</span> % N=<span class="hljs-number">11</span>。因此<span class="hljs-built_in">array</span>=<span class="hljs-number">010111000001010010</span>;<br>最终得到的布隆过滤器串为：<span class="hljs-number">010111000001010010</span>。<br></code></pre></td></tr></table></figure>
+
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216163205801.png" srcset="/img/loading.gif" lazyload alt="image-20230216163205801" style="zoom:67%;" />
+
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">对于元素w，K次哈希值分别为：<br><span class="hljs-constructor">HASH_0(<span class="hljs-params">w</span>)</span> %N=<span class="hljs-number">4</span><br><span class="hljs-constructor">HASH_1(<span class="hljs-params">w</span>)</span> %N=<span class="hljs-number">13</span><br><span class="hljs-constructor">HASH_2(<span class="hljs-params">w</span>)</span> %N=<span class="hljs-number">15</span><br>可以发现，布隆过滤器串中的第<span class="hljs-number">15</span>位为<span class="hljs-number">0</span>，因此可以确认w肯定不在集合A中。因为若w在A中，则第<span class="hljs-number">15</span>位必定为<span class="hljs-number">1</span>。<br><br>如果有另外一个元素t，K次哈希值分别为：<br><span class="hljs-constructor">HASH_0(<span class="hljs-params">t</span>)</span> %N=<span class="hljs-number">5</span><br><span class="hljs-constructor">HASH_1(<span class="hljs-params">t</span>)</span> %N=<span class="hljs-number">11</span><br><span class="hljs-constructor">HASH_2(<span class="hljs-params">t</span>)</span> %N=<span class="hljs-number">13</span><br>发现布隆过滤器串中的第<span class="hljs-number">5</span>、<span class="hljs-number">11</span>、<span class="hljs-number">13</span>位都为<span class="hljs-number">1</span>，但是却没法肯定t一定在集合A中。<br></code></pre></td></tr></table></figure>
+
+<h6 id="Hbase与布隆过滤器"><a href="#Hbase与布隆过滤器" class="headerlink" title="Hbase与布隆过滤器"></a>Hbase与布隆过滤器</h6><p>由于布隆过滤器只需占用极小的空间，便可给出“可能存在”和“肯定不存在”的存在性判断，可以提前过滤掉很多不必要的数据块，<strong>从而节省了大量的磁盘IO</strong>。HBase的<strong>Get操作</strong>就是通过<strong>运用低成本高效率的布隆过滤器来过滤大量无效数据块的</strong>，从而节省大量磁盘IO。</p>
+<h6 id="LSM树存储引擎"><a href="#LSM树存储引擎" class="headerlink" title="LSM树存储引擎"></a>LSM树存储引擎</h6><p>LSM-Tree主题思想为划分不同等级的数。可以想象一份索引由两棵树组成：一个存在于内存（可以使用其他树结构），一个存在于磁盘（如下图）。</p>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216163533367.png" srcset="/img/loading.gif" lazyload alt="image-20230216163533367" style="zoom:67%;" />
+
+<p>LSM树的设计思想非常朴素：将对数据的修改增量保持在内存中，达到指定的大小限制后将这些修改操作批量写入磁盘，不过读取的时候稍微麻烦，需要合并磁盘中历史数据和内存中最近修改操作，所以写入性能大大提升，读取时可能需要先看是否命中内存，否则需要访问较多的磁盘文件。极端的来说，基于LSM树实现的HBase的写性能比Mysql高了一个数量级，读性能低了一个数量级。</p>
+<p>数据首先会插入到内存中的树，为了防止数据丢失，写内存的同时需要暂时持久化到磁盘，即输入数据时数据会以完全有序的形式先存储在日志文件中（对应HBase的MemStore和HLog）。当日志文件被修改时，对应的更新会被先保存在内存中来加速查询。</p>
+<p>当内存中树的数据达到阀值时，会进行合并操作。合并操作会从左至右遍历内存中的叶子节点与磁盘中树的叶子节点进行合并，当合并的数据量达到磁盘的存储页的大小时，会将合并的数据持久化到磁盘。同时更新父亲节点对叶子节点的指针（如下图）。</p>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216163556696.png" srcset="/img/loading.gif" lazyload alt="image-20230216163556696" style="zoom:67%;" />
+
+<p>查找通过合并的方式完成，首先搜索内存存储结构，接下来是磁盘存储结构。</p>
+<p>LSM树所有节点都是满的并按页存储，经过多次的flush会创建很多数据存储文件，后台线程会将小文件聚合成大文件，因此磁盘的寻道操作就会被限制在一定数目的数据存储文件中，以优化读性能。磁盘上的树结构也可以分割成多个存储文件，因为所有的存储数据都是按照Key有序排列的，因此在现有节点中插入新的关键字不需要重新排序。</p>
+<p>LSM-Tree属于传输型，在磁盘传输速率上进行文件的排序和合并以及日志操作，可以更好的拓展到更大的数据规模上，因为它会使用日志文件和一个内存存储结构把随机写操作转化为顺序写，读写独立，不会产生两种操作的竞争。</p>
+<h6 id="LSM树在Hbase中的应用"><a href="#LSM树在Hbase中的应用" class="headerlink" title="LSM树在Hbase中的应用"></a>LSM树在Hbase中的应用</h6><p>LSM树可以看成n层合并树。在HBase中，它把随机写转换成对MemStore和HFile的连续写。下图展示了LSM树数据写的过程。</p>
+<p><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216163619959.png" srcset="/img/loading.gif" lazyload alt="image-20230216163619959"></p>
+<ul>
+<li><p><strong>数据写（插入，更新）：</strong>数据首先顺序写如HLog（WAL），然后写到MemStore，在MemStore中，数据是一个2层B+树（上图中的C0树）。MemStore满了之后，数据会被刷到StoreFile（HFile），在StoreFile中，数据是3层B+树（图2中的C1树），并针对顺序磁盘操作进行优化。</p>
+</li>
+<li><p><strong>数据读：</strong>首先搜索MemStore，如果不在MemStore中，则到StoreFile中寻找。</p>
+</li>
+<li><p><strong>数据删除：</strong>不会去删除磁盘上的数据，而是为数据添加一个删除标记。在随后的major compaction中，被删除的数据和删除标记才会真的被删除。</p>
+<p>LSM数据更新只在内存中操作，没有磁盘访问，因此比B+树要快。对于数据读来说，如果读取的是最近访问过的数据，LSM树能减少磁盘访问，提高性能。</p>
+</li>
+</ul>
+<h4 id="document-oriented数据模型"><a href="#document-oriented数据模型" class="headerlink" title="document-oriented数据模型"></a>document-oriented数据模型</h4><ul>
+<li>key&#x2F;value的扩展形式，value表示为document，以标准半结构化格式，如XML&#x2F;JSON或BSON</li>
+<li>采用Key-Value结构组织document，value部分即document</li>
+<li><strong>Document：是document-oriented数据库的基本概念</strong>，是自包含的的数据单元，<strong>是一系列数据项的集合</strong><ol>
+<li>每个数据项有名字与对应的值，值既可以是简单的数据类型，也可以是复杂的类型。</li>
+<li>每个document有全局唯一的ID和版本号</li>
+<li>document是半结构化数据类型的数据</li>
+<li>document具有灵活的模式，可以<strong>在运行时添加或删除属性</strong>（属性具有名称和一个或多个值）</li>
+</ol>
+</li>
+<li>同一个document中数据的属性数量喝类型都不同</li>
+<li>document的格式已知，适合在key和value上<strong>建立索引和实现查询性能</strong></li>
+</ul>
+<h5 id="Document-oriented数据库基本存储结构"><a href="#Document-oriented数据库基本存储结构" class="headerlink" title="Document-oriented数据库基本存储结构"></a>Document-oriented数据库基本存储结构</h5><ul>
+<li>适用于数据可以表达为<strong>document格式</strong>的应用，例如<strong>内容管理、博客</strong>等，数据包含各种属性，存在<strong>嵌套</strong>的情况。</li>
+<li><strong>key&#x2F;value pair形式：</strong><ol>
+<li>基本的key&#x2F;value pair</li>
+<li>带结构的key&#x2F;value pair<ul>
+<li>value有数组或嵌入的文档</li>
+</ul>
+</li>
+<li>多结构的key&#x2F;value pair<ul>
+<li>value的结构不同</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<ol>
+<li>Document<ul>
+<li>key&#x2F;value pair构成的有序集</li>
+<li>JSON、XML、BSON格式</li>
+</ul>
+</li>
+<li>collection<ul>
+<li>由若干个document构成的对象，通常这些document具有相关性</li>
+<li><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216170249457.png" srcset="/img/loading.gif" lazyload alt="image-20230216170249457" style="zoom:67%;" /></li>
+</ul>
+</li>
+<li>database<ul>
+<li>包含多个集合</li>
+<li>Database&#x3D;{collection}</li>
+</ul>
+</li>
+</ol>
+<h5 id="数据查询"><a href="#数据查询" class="headerlink" title="数据查询"></a>数据查询</h5><ul>
+<li><p>允许查询document中的数据，而不必检索整个document</p>
+</li>
+<li><p>CouchBase 中的SQL-like 查询语言 (N1QL)</p>
+<p>例如：查找title&#x3D;“Vince Shields”的文档，返回属性 url 和categories的值：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> c.url, c.categories <span class="hljs-keyword">FROM</span> Content_MetaData c <span class="hljs-keyword">WHERE</span> title <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;Vince Shields&#x27;</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+<h5 id="document-oriented数据模型的代表"><a href="#document-oriented数据模型的代表" class="headerlink" title="document-oriented数据模型的代表"></a>document-oriented数据模型的代表</h5><p>MongoDB    couchbase   Apache CouchDB    ArangoDB</p>
+<h4 id="图数据模型"><a href="#图数据模型" class="headerlink" title="图数据模型"></a>图数据模型</h4><h5 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h5><p>语义Web、Web数据挖掘、知识图谱、生物系统中蛋白质的相互作用、社交网络应用等产生了大量面向图的数据，催生了图数据管理的需求。</p>
+<ul>
+<li>有效地存储图数据，提供查询和分析图数据的操作</li>
+<li>图论作为数据存储的理论基础：顶点表示实体、边表示实体间的关系</li>
+</ul>
+<p>由结点、结点间关系和属性表达和存储数据</p>
+<ol>
+<li>节点存储数据</li>
+<li>边存储节点之间的关系</li>
+<li>属性表达数据的特征</li>
+</ol>
+<p>用Traversal进行数据查询<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216170846694.png" srcset="/img/loading.gif" lazyload alt="image-20230216170846694" style="zoom:67%;" /></p>
+<h5 id="图模型种类"><a href="#图模型种类" class="headerlink" title="图模型种类"></a>图模型种类</h5><p>属性图（Property Gragh）、资源描述框架（RDF）三元组和超图（HyperGragh）</p>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216170958612.png" srcset="/img/loading.gif" lazyload alt="image-20230216170958612" style="zoom:67%;" />
+
+<h5 id="图模型的应用场景"><a href="#图模型的应用场景" class="headerlink" title="图模型的应用场景"></a>图模型的应用场景</h5><p>社交网络、交通物流、推荐引擎、欺诈检测、知识图谱、生命科学和 IT&#x2F;网络游戏开发等</p>
+<h5 id="图数据模型应用案例"><a href="#图数据模型应用案例" class="headerlink" title="图数据模型应用案例"></a>图数据模型应用案例</h5><p>Facebook的社交网络采用了图数据模型；Facebook实现了一个分布式的图数据库TAO，TAO采用分片的NoSQL数据库持久化存储社交网络图</p>
+<h5 id="图数据存储"><a href="#图数据存储" class="headerlink" title="图数据存储"></a>图数据存储</h5><ol>
+<li>Nonnative<ul>
+<li>基于非图数据存储，如document-oriented存储或者关系数据库系统，通常需要<strong>索引技术</strong>提高图遍历的效率</li>
+<li>例如，OrientDB、ArangoDB采用文档方式存储，Titan有两种存储选择： wide-column和 key-value).</li>
+<li>分区策略基于底层的存储</li>
+</ul>
+</li>
+<li>Native<ul>
+<li>存储基于图数据模型</li>
+<li>例如Neo4j</li>
+</ul>
+</li>
+<li>三种著名的图优化存储技术<ul>
+<li>Compressed Sparse Row (CSR)</li>
+<li>adjacency list</li>
+<li>edge list</li>
+</ul>
+</li>
+</ol>
+<h5 id="图数据访问"><a href="#图数据访问" class="headerlink" title="图数据访问"></a>图数据访问</h5><ol>
+<li><p>online gragh navigations</p>
+<ul>
+<li><p>a basic path query </p>
+<p><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216172218794.png" srcset="/img/loading.gif" lazyload alt="image-20230216172218794"></p>
+</li>
+<li><p>a pattern matching query</p>
+<p><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216172234107.png" srcset="/img/loading.gif" lazyload alt="image-20230216172234107"></p>
+</li>
+</ul>
+</li>
+<li><p>offline analytical gragh computations</p>
+<ul>
+<li>需访问整个图的顶点和边的有效部分（例如，研究图的拓扑结构和寻找连通的组件），需要考虑高吞吐量的需求</li>
+</ul>
+</li>
+</ol>
+<h5 id="图数据库代表"><a href="#图数据库代表" class="headerlink" title="图数据库代表"></a>图数据库代表</h5><p>Neo4j    Titan    OrientDB    GraghDB</p>
+<h1 id="Bigtable"><a href="#Bigtable" class="headerlink" title="Bigtable"></a>Bigtable</h1><h2 id="Bigtable出现的背景"><a href="#Bigtable出现的背景" class="headerlink" title="Bigtable出现的背景"></a>Bigtable出现的背景</h2><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216172637127.png" srcset="/img/loading.gif" lazyload alt="image-20230216172637127" style="zoom:67%;" />
+
+<h2 id="Bigtable设计的动机与目标"><a href="#Bigtable设计的动机与目标" class="headerlink" title="Bigtable设计的动机与目标"></a>Bigtable设计的动机与目标</h2><h3 id="动机-1"><a href="#动机-1" class="headerlink" title="动机"></a>动机</h3><ul>
+<li>需要存储的数据种类繁多、类型多样<ul>
+<li>URL、图片、文字、视频、html文件、用户设置数据等</li>
+</ul>
+</li>
+<li>需要处理海量的 <strong>服务请求</strong></li>
+<li>商用数据库无法满足Google的需求，底层系统技术的掌控便于系统维护和升级</li>
+</ul>
+<h3 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h3><ul>
+<li><strong>广泛的适用性：</strong>满足Google的系列产品的需求</li>
+<li><strong>很强的可扩展性：</strong>横向扩展和纵向扩展</li>
+<li><strong>高可用性：</strong>确保系统24×7可用</li>
+<li><strong>简单：</strong>底层系统简单减少出错概率，为上层应用开发提供便利</li>
+</ul>
+<h2 id="Bigtable数据模型"><a href="#Bigtable数据模型" class="headerlink" title="Bigtable数据模型"></a>Bigtable数据模型</h2><ul>
+<li><strong>分布式多维映射表结构</strong></li>
+<li><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216172949303.png" srcset="/img/loading.gif" lazyload alt="image-20230216172949303"></li>
+<li>存储逻辑表示为（row:string,column:string, item:int64) $\rightarrow$ string<ul>
+<li>Google追溯谁访问过网站：只要用户点击网页，点击行为就被记录下来<ul>
+<li>记录URL、时间戳以及网页，进行统计分析    日志:heart:</li>
+<li><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216173134970.png" srcset="/img/loading.gif" lazyload alt="image-20230216173134970" style="zoom:67%;" />例如，网页<a target="_blank" rel="noopener" href="http://www.cnn.com的数据片段/">www.cnn.com的数据片段</a><ul>
+<li>行名称是倒排的URL<ul>
+<li>便于同一地址域的网页被存储在表中连续的位置</li>
+<li>便于数据压缩，大幅提高压缩率</li>
+</ul>
+</li>
+<li>contents列族包含了网页内容</li>
+<li>anchor列族包含了任何引用这个页面的anchor文本<ul>
+<li>CNN的主页被Sports Illustrated和MY-look主页同时引用，因此，行包含了名称为”anchor:cnnsi.com”和” anchor:my.look.ca”的列。</li>
+</ul>
+</li>
+<li>每个anchor单元格都只一个版本，contents列有三个版本，分别对应于时间戳t3,t5和t6。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="Bigtable的数据模型-Rows"><a href="#Bigtable的数据模型-Rows" class="headerlink" title="Bigtable的数据模型-Rows"></a>Bigtable的数据模型-Rows</h3><ul>
+<li>BigTable的row key是任意的字符串，大小不超过64KB</li>
+<li>对于每行数据的读写操作都是<strong>原子的（atomic）</strong>，不管这个行中所包含的<strong>列族数量</strong>是多少</li>
+<li>Bigtable中的数据按照row key的 <strong>字典顺序</strong>排序</li>
+<li>单个大规模的大表不利于数据的处理与分析，BigTable将一个表划分成多个<strong>子表（Tablet）</strong>，是<strong>负载均衡和数据分发</strong>的基本单位。</li>
+</ul>
+<h3 id="BigTable的数据模型-Column-Families"><a href="#BigTable的数据模型-Column-Families" class="headerlink" title="BigTable的数据模型-Column Families"></a>BigTable的数据模型-Column Families</h3><ul>
+<li>BigTable将<strong>column key</strong>组织成<strong>列族（column family）</strong>，是基本的访问控制单元，每个列族的数据属于同一个类型，同列族数据压缩存储。</li>
+<li>在把数据存放到这个<strong>column family</strong>的某个<strong>column key</strong>下之前，必须首先创建这个<strong>column family</strong> ，创建后，可以使用<strong>column key</strong> <ol>
+<li>表当中所包含的column family的数量尽可能少（至多几百个列族），在操作过程当中， column family很少发生变化；一个表可以包含无限数量的列</li>
+<li>column key命名语法：family:qualifier<ul>
+<li>例: anchor:cnnsi.com</li>
+</ul>
+</li>
+<li><strong>访问控制</strong>以及<strong>磁盘、内存审计</strong>在<strong>column family</strong>级别完成</li>
+</ol>
+</li>
+</ul>
+<h3 id="BigTable的数据模型-timestamps"><a href="#BigTable的数据模型-timestamps" class="headerlink" title="BigTable的数据模型-timestamps"></a>BigTable的数据模型-timestamps</h3><ol>
+<li>在BigTable中，<strong>每个单元都包含相同数据的多个版本</strong>，这些版本采用<strong>时间戳</strong>进行索引。</li>
+<li>时间戳是64位整数，代表真实时间，以微秒来计算。客户应用也可以直接分配时间戳。</li>
+<li>需要避免冲突的应用必须生成唯一的时间戳。</li>
+<li>一个单元的不同版本根据<strong>时间戳降序</strong>顺序存储，最新的版本可以被最先读取。</li>
+<li>为了减轻版本数据的管理负担， BigTable支持<strong>用户设定保存单元中数据的最近n个版本</strong>，或者只保存足够新版本（比如只保存最近7天内的数据版本）</li>
+</ol>
+<h2 id="Bigtable体系结构"><a href="#Bigtable体系结构" class="headerlink" title="Bigtable体系结构"></a>Bigtable体系结构</h2><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216174120767.png" srcset="/img/loading.gif" lazyload alt="image-20230216174120767" style="zoom:80%;" />
+
+<ol>
+<li><p><strong>BigTable基于Google的的三个云计算组件</strong></p>
+<ul>
+<li><p>GFS：Google File System</p>
+<p>基于廉价的商用计算机的大型分布式文件系统</p>
+</li>
+<li><p>Chubby</p>
+<p>基于松耦合分布式系统的<strong>锁服务</strong>；存储元服务的存储系统；名字服务</p>
+</li>
+<li><p>WorkQueue</p>
+<p>分布式任务调度器，用于处理分布式系统队列分组与调度；未公开</p>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="分布式锁服务Chubby"><a href="#分布式锁服务Chubby" class="headerlink" title="分布式锁服务Chubby"></a>分布式锁服务Chubby</h3><ol>
+<li>提供<strong>存储服务</strong>并为其他基础设施（GFS和Bigtable）提供<strong>协调服务</strong><ul>
+<li><strong>GFS</strong>使用Chubby选取<strong>master服务器</strong></li>
+<li><strong>Bigtable</strong>使用chubby<strong>指定master服务器并发现、控制相关的子表服务器。</strong></li>
+</ul>
+</li>
+<li>提供粗粒度的分布式锁<ul>
+<li>Advisory lock，不是Mandatory lock</li>
+<li>锁持有时间可以长达几天</li>
+</ul>
+</li>
+<li>提供一个文件系统，为小文件提供可靠存储<strong>，补充GFS提供的服务</strong></li>
+<li>做Google内部的 <strong>名字服务</strong></li>
+<li>核心服务： <strong>提供分布式共识解决方案</strong>（其他服务从这一服务衍生）</li>
+<li>通常一个数据中心运行一个chubby cell（服务实例）</li>
+</ol>
+<h3 id="设计chubby的一些考虑"><a href="#设计chubby的一些考虑" class="headerlink" title="设计chubby的一些考虑"></a>设计chubby的一些考虑</h3><ol>
+<li>Google没有直接实现包含Paxos算法的函数库来保持<strong>数据一致性</strong>，而是<strong>设计实现了锁服务Chubby</strong><ul>
+<li>单独的锁服务可以保证原有系统架构不发生改变</li>
+<li>避免因大量系统组件之间的<strong>事件通信</strong>导致的系统性能下降<ul>
+<li>系统中很多事件的发生需要告知其它用户和服务器，使用<strong>基于文件系统的锁服务</strong>可以将变动写入文件，从而需要了解变动的用户和服务器直接访问文件，</li>
+</ul>
+</li>
+<li>相比一致性算法，<strong>基于锁的开发接口</strong>容易被开发者接受</li>
+<li><strong>单独的锁服务</strong>使用<strong>一台服务器</strong>可以保证<strong>高可用性</strong></li>
+<li>实现chubby服务采用<strong>多台服务器</strong>实现高可用性，而<strong>外部用户</strong>则需<strong>一台服务器</strong>保证高可用性。</li>
+<li>Chubby采用<strong>建议性锁</strong>而不是<strong>强制性锁</strong><ul>
+<li>当用户访问拥有锁的文件时，<strong>强制性锁阻止访问，而建议性锁不会阻止</strong>。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="chubby的体系结构"><a href="#chubby的体系结构" class="headerlink" title="chubby的体系结构"></a>chubby的体系结构</h3><p><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216175257945.png" srcset="/img/loading.gif" lazyload alt="image-20230216175257945" style="zoom:67%;" /><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216175316227.png" srcset="/img/loading.gif" lazyload alt="image-20230216175316227"></p>
+<ol>
+<li>两个部分：client和server，通过RPC进行通信<ul>
+<li>客户端每个客户有一个<strong>Chubby library</strong>，客户端应用调用这个库中的函数</li>
+<li>服务端称作Chubby cell，通常由<strong>5个副本</strong>组成，其中一个副本被指定为<strong>主副本(master)</strong>,并且一段时间只有一个master。<ul>
+<li>这段时间被称为master lease</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>每个副本维护一个小型数据库，管理Chubby命名空间中的实体，即<strong>目录和锁</strong></li>
+<li>数据库的一致性使用底层的<strong>共识协议（Paxos算法）</strong>实现<ul>
+<li>基于操作日志</li>
+<li>支持创建快照snapshots(在给定时间点上完整的系统状态)</li>
+</ul>
+</li>
+</ol>
+<h3 id="chubby文件"><a href="#chubby文件" class="headerlink" title="chubby文件"></a>chubby文件</h3><ol>
+<li>Chubby提供基于<strong>文件系统</strong>的抽象，每一个数据对象是一个文件，文件组织成层次的命名空间，采用 <strong>目录结构</strong><ul>
+<li>所有操作<strong>在文件</strong>的基础上完成</li>
+</ul>
+</li>
+<li>Chubby的名字空间结构类似于<strong>文件系统</strong>，这样就使得可以为应用<strong>提供特定的API</strong>，也可以<strong>使用他文件系统的接口</strong>，例如GFS</li>
+<li>文件系统与Unix文件系统类似<ul>
+<li>文件名形式：&#x2F;ls&#x2F;chubby_cell&#x2F;directory_name&#x2F;…&#x2F;file_name<ul>
+<li>ls指锁服务lock service，指明是chubby系统的一部分</li>
+<li>Chubby_cell是chubby系统的一个特定实例的名字</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>名字空间</strong>由文件和目录组成，统称为<strong>node</strong>。每个node在一个Chubby cell单元中只有一个名称与之关联</li>
+<li>实现时，文件系统由多个节点组成，分为<strong>永久型和临时型</strong>，每个节点是一个文件或目录，包含元数据<ul>
+<li><strong>三个访问控制列表(ACLs)：</strong>用于控制读、写操作及修改节点的访问控制列表(ACL)。</li>
+</ul>
+</li>
+<li>每个节点的元数据还包含4个严格递增的64位数字，通过它们<strong>客户端可以很方便的检测出变化</strong><ul>
+<li>实例号</li>
+<li>内容生成号</li>
+<li>锁生成号</li>
+<li>ACL生成号</li>
+</ul>
+</li>
+</ol>
+<h3 id="chubby访问接口"><a href="#chubby访问接口" class="headerlink" title="chubby访问接口"></a>chubby访问接口</h3><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216213320641.png" srcset="/img/loading.gif" lazyload alt="image-20230216213320641" style="zoom:80%;" />
+
+<h3 id="chubby一致性"><a href="#chubby一致性" class="headerlink" title="chubby一致性"></a>chubby一致性</h3><ul>
+<li>Chubby cell有5个副本，通过选举产生<strong>主服务器</strong>（主副本），存在一致性问题<ul>
+<li>采用Paxos算法</li>
+</ul>
+</li>
+<li>客户端所有读写操作由主服务器负责完成，<strong>写操作</strong>面临数据一致性问题<ul>
+<li>采用Paxos算法</li>
+</ul>
+</li>
+</ul>
+<h2 id="Bigtable的基本架构——Master-Server"><a href="#Bigtable的基本架构——Master-Server" class="headerlink" title="Bigtable的基本架构——Master Server"></a>Bigtable的基本架构——Master Server</h2><ul>
+<li><p><strong>Master Server的作用</strong></p>
+<ol>
+<li>新Tablet分配</li>
+<li>Tablet Server状态监控</li>
+<li>Tablet Server之间的负载均衡</li>
+</ol>
+</li>
+<li><p><strong>Master Server启动</strong></p>
+<p>（1）从Chubby中获取一个<strong>独占锁</strong>，确保同一时间只有一个Master Server</p>
+<p>（2）扫描服务器目录，发现目前<strong>活跃的Tablet Server</strong></p>
+<p>（3）与所有活跃Tablet Server建立联系并了解<strong>Tablet的分配情况</strong></p>
+<p>（4）扫描METADATA表，<strong>发现未分配的Tablet并将其分配到合适的Tablet Server</strong>。如果METADATA表未分配，则首先将<strong>Root Tablet</strong>加入未分配的Tablet中<strong>（Root Tablet保存其他Metadata Tablet的信息）</strong> </p>
+</li>
+<li><p>Bigtable中<strong>数据以Tablet的形式保存在Tablet Server上，客户只和Tablet Server通信。</strong></p>
+</li>
+<li><p><strong>SSTable（Sorted String Table）</strong></p>
+<ol>
+<li>Sstable是Google为Bigtable设计的<strong>内部数据存储格式</strong>，所有SSTable文件存储在<strong>GFS</strong>上。</li>
+<li>一个SSTable提供一个<strong>持久化的、排序的、不可变的、从key到value的映射</strong>，其中，key和value都是任意的字节字符串</li>
+<li>用户通过key查询相应的值。</li>
+</ol>
+</li>
+<li><p>SSTable中的数据被分成64KB大小的块，索引 保存块的位置信息</p>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216213958715.png" srcset="/img/loading.gif" lazyload alt="image-20230216213958715" style="zoom:50%;" />
+</li>
+<li><p><strong>Tablet的组成</strong></p>
+<ol>
+<li>概念上， Tablet是表中<strong>一系列行的集合</strong></li>
+<li>每个Tablet由多个<strong>SSTable和日志文件</strong>构成，不同Tablet的SSTable可以共享。</li>
+<li>日志是一种共享文件，<strong>每Tablet Server仅保存一个日志文件，日志内容按key值排序</strong></li>
+<li>tablet组成：<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216214104438.png" srcset="/img/loading.gif" lazyload alt="image-20230216214104438" style="zoom:67%;" /></li>
+</ol>
+</li>
+<li><p><strong>Tablet Location：类似B+树的三层架构</strong></p>
+<ol>
+<li>第一层是一个存储在Chubby中的文件，包含<strong>root tablet</strong>的位置信息。root tablet包含了所有tablet的位置信息，存储在METADATA表中。</li>
+<li>每个METADATA表都包含一个user tablet集合的位置信息。</li>
+<li>root tablet是METADATA表中第一个Tablet，任何情况下不会被拆分<strong>，保证了tablet的位置层次不会超过三层。</strong></li>
+<li>METADATA表将<strong>每个子表</strong>的位置信息存储在一个<strong>Row key</strong>下， Row key由<strong>tablet所在的表的标识符和tablet的最后一行编码</strong>而成。</li>
+</ol>
+</li>
+<li><p><strong>Bigtable使用Cache和Prefetch技术提高客户访问效率</strong></p>
+<ol>
+<li>子表的地址<strong>缓存</strong>在<strong>客户端</strong></li>
+<li>如果缓存信息过时或为空，客户需要进行<strong>Network Round-trip通信</strong>来寻址</li>
+</ol>
+</li>
+</ul>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216214241187.png" srcset="/img/loading.gif" lazyload alt="image-20230216214241187" style="zoom:67%;" />
+
+<ul>
+<li><p><strong>Tablet Assignment</strong></p>
+<ol>
+<li>每次、每个Tablet最多被分配到一个Tablet Server。<strong>Master Server跟踪运行的Tablet Server的状况，</strong>掌握当前Tablet被分配到Tablet Server的情况，记录哪个Tablet还没有被分配。</li>
+<li>当一个Tablet没有被分配，并且一个Tablet Server空间足够，可以容纳该Tablet且可用时，<strong>Master server</strong>向这个Tablet Server发送一个tablet load请求，<strong>将Tablet分配给这个Tablet Server 。</strong></li>
+<li><strong>Chubby用于跟踪Tablet servers</strong>，Tablet server启动时请求互斥锁</li>
+</ol>
+</li>
+<li><p><strong>Tablet数据存储</strong></p>
+<ol>
+<li><p>较新的数据存储在<strong>Memtable</strong>的有序缓存中</p>
+</li>
+<li><p>较早的数据以<strong>SSTable格式存储在GFS中</strong></p>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216214853631.png" srcset="/img/loading.gif" lazyload alt="image-20230216214853631" style="zoom:67%;" /></li>
+</ol>
+</li>
+<li><p><strong>Tablet数据读写操作</strong></p>
+<ol>
+<li><p><strong>WriteOp：</strong>需要先访问<strong>Chubby</strong>中保存的访问控制列表，确定用户的写权限，认证后有效的修改操作会记录在提交日志里。当写操作提交后，它的内容被插入到<strong>memtable</strong></p>
+</li>
+<li><p><strong>ReadOp：</strong>需要先通过认证，然后合并<strong>内存表</strong>和<strong>SSTable表</strong>读数据。</p>
+<ul>
+<li>由于<strong>SSTable</strong>和<strong>memtable</strong>是字典排序的数据结构，合并视图的执行非常高效。</li>
+</ul>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216223305130.png" srcset="/img/loading.gif" lazyload alt="image-20230216223305130" style="zoom:67%;" /></li>
+</ol>
+</li>
+</ul>
+<h2 id="BigTable的性能优化"><a href="#BigTable的性能优化" class="headerlink" title="BigTable的性能优化"></a>BigTable的性能优化</h2><h3 id="局部群组化-locality-groups"><a href="#局部群组化-locality-groups" class="headerlink" title="局部群组化(locality  groups)"></a>局部群组化(locality  groups)</h3><ol>
+<li>多个<strong>column family</strong>一起分组到一个<strong>locality group</strong>中</li>
+<li>为每个<strong>tablet</strong>中的每个<strong>locality group</strong>创建一个单独的<strong>SSTable</strong>。</li>
+<li>通常<strong>不被一起访问的column family分割到不同的locality group</strong>，实现更高效的读</li>
+<li>一些有用的参数，可以针对每个<strong>locality group</strong>来设定<ul>
+<li>例如，一个locality group可以设置成存放在内存中。</li>
+</ul>
+</li>
+</ol>
+<h3 id="压缩-Compression"><a href="#压缩-Compression" class="headerlink" title="压缩(Compression)"></a>压缩(Compression)</h3><ol>
+<li>客户端可以决定是否对相应于某个locality group的SSTable进行<strong>压缩和压缩格式，</strong>自定义的压缩格式可以被应用到每个<strong>SSTable</strong>块中（块的尺寸可以采用与locality group相关的参数来进行控制）。</li>
+<li>许多客户端都使用“<strong>两段自定义压缩模式</strong>”。第一遍使用<strong>Bentley and McIlroy模式</strong>，它对一个大窗口内的长公共字符串进行压缩。第二遍使用一个<strong>快速的压缩算法</strong>，这个压缩算法在一个16KB数据量的窗口内寻找重复数据。</li>
+</ol>
+<h3 id="改进读性能的缓存技术-caching-for-read-performance"><a href="#改进读性能的缓存技术-caching-for-read-performance" class="headerlink" title="改进读性能的缓存技术(caching for read performance)"></a>改进读性能的缓存技术(caching for read performance)</h3><ol>
+<li><strong>tablet服务器使用两级缓存</strong><ul>
+<li><strong>Scan Cache是高层次的缓存</strong>，它缓存了由tablet服务器代码的SSTable接口返回的key-value对。ScanCache对于那些频繁读取相同数据的应用来说非常有用。</li>
+<li><strong>BlockCache是低层次的缓存</strong>，它缓存了从GFS当中读取的SSTable块。Block缓存对于那些倾向于读取与自己最近读取数据临近的数据的应用来说，比较有用。</li>
+</ul>
+</li>
+</ol>
+<h3 id="布隆过滤器-Bloom-Filter"><a href="#布隆过滤器-Bloom-Filter" class="headerlink" title="布隆过滤器(Bloom Filter)"></a>布隆过滤器(Bloom Filter)</h3><ol>
+<li>一个读操作必须从构成一个tablet的当前状态的所有SSTable中读取数据。</li>
+<li>为<strong>减少磁盘访问</strong>，通过bloom过滤器可以查询一个SSTable是否包含了特定行&#x2F;列对的数据。</li>
+<li>对于某些应用程序，只使用了<strong>少量的tablet服务器内存来存储Bloom过滤器</strong>，却大幅度减少了读操作需要的<strong>磁盘访问次数。</strong></li>
+<li>Bloom过滤器的使用也意味着对不存在的行或列的大多数查询不需要访问硬盘。</li>
+</ol>
+<h1 id="HBase"><a href="#HBase" class="headerlink" title="HBase"></a>HBase</h1><h2 id="Hbase数据模型"><a href="#Hbase数据模型" class="headerlink" title="Hbase数据模型"></a>Hbase数据模型</h2><ol>
+<li>在Hbase中, 数据以表的形式存放<ul>
+<li>一个table有若干行，其中每列可以有多个版本</li>
+<li>一行（row）由若干列组成，由<strong>row key</strong>确定存储，具有<strong>唯一性</strong></li>
+<li><strong>Column（列）</strong>是Hbase最基本的单位</li>
+<li>若干列形成<strong>column family（列族）</strong><ol>
+<li>一个列族的所有列存储在同一个底层文件中：<strong>HFile</strong></li>
+</ol>
+</li>
+<li>在每个cell存储不同的值</li>
+<li>每一列的值或cell的值都有<strong>时间戳</strong></li>
+</ul>
+</li>
+<li>所有的行按row key<strong>字典序</strong>排序存储</li>
+<li>行数据的存取操作是<strong>原子的</strong></li>
+</ol>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216225507736.png" srcset="/img/loading.gif" lazyload alt="image-20230216225507736" style="zoom:80%;" />
+
+<h3 id="HBase数据模型术语"><a href="#HBase数据模型术语" class="headerlink" title="HBase数据模型术语"></a>HBase数据模型术语</h3><ol>
+<li>Table：一个Hbase表由多行构成</li>
+<li>Row：每行由一个row key和一个或多个具有值的列组成，并按照row key排序</li>
+<li>Column：列由一个<strong>column family</strong>和 <strong>column qualifier</strong>组成, 用 冒号<strong>（:）</strong>字符分隔。</li>
+<li>Column Family：物理上，<strong>column family所有列及其值存储在一起，具有相同的前缀</strong>，一个column family的所有成员用相同的方式访问。</li>
+<li>Column Qualifier：column qualifier附加到column family，<strong>提供数据的索引</strong>。例如 content:html, content:pdf</li>
+<li>Cell：<strong>cell由row, column family, qualifier,存储的值以及timestamp</strong>表示，其中时间戳表示值的版本。</li>
+</ol>
+<h3 id="表实例"><a href="#表实例" class="headerlink" title="表实例"></a>表实例</h3><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216225716406.png" srcset="/img/loading.gif" lazyload alt="image-20230216225716406" style="zoom:80%;" />
+
+<h3 id="概念视图"><a href="#概念视图" class="headerlink" title="概念视图"></a>概念视图</h3><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216225741320.png" srcset="/img/loading.gif" lazyload alt="image-20230216225741320" style="zoom:67%;" />
+
+<h3 id="HBASE逻辑模型实例"><a href="#HBASE逻辑模型实例" class="headerlink" title="HBASE逻辑模型实例"></a>HBASE逻辑模型实例</h3><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216225759919.png" srcset="/img/loading.gif" lazyload alt="image-20230216225759919" style="zoom:80%;" />
+
+<h2 id="物理视图—面向列族"><a href="#物理视图—面向列族" class="headerlink" title="物理视图—面向列族"></a>物理视图—面向列族</h2><ol>
+<li>HBase按照列族分组，<strong>每个列族在硬盘上有自己的HFile格式文件集合</strong>，每个HFile格式文件都是独立管理，自身是二进制文件</li>
+<li>HBase的记录按照<strong>Key-value对</strong>存储以<strong>HFile</strong>格式存储，一个列族的数据物理上存放在一起</li>
+</ol>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216225858662.png" srcset="/img/loading.gif" lazyload alt="image-20230216225858662" style="zoom:67%;" />
+
+
+
+<h2 id="物理存储"><a href="#物理存储" class="headerlink" title="物理存储"></a>物理存储</h2><ol>
+<li>Table中所有行按照<strong>row key</strong>的字典顺序排列</li>
+<li>Table横向分割为多个<strong>Region</strong>，每个Region的大小一定，当新的数据不断添加，会产生新的Region</li>
+<li>Region是HBASE<strong>分布式存储和负载均衡的最小单位</strong>，不同的Region可以分布在<strong>不同的Region Server</strong>上，<strong>但是一个Region不会拆分到多个Server上</strong></li>
+<li>Region由一个或多个Store组成，<strong>每个Store保存一个Column Family</strong>，<strong>每个Store由一个memStore和0到多个StoreFile组成</strong>，<strong>StoreFile以HFile格式存储在HDFS上。</strong></li>
+</ol>
+<h3 id="物理存储示意"><a href="#物理存储示意" class="headerlink" title="物理存储示意"></a>物理存储示意</h3><p><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216230132572.png" srcset="/img/loading.gif" lazyload alt="image-20230216230132572" style="zoom: 33%;" /><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216230142131.png" srcset="/img/loading.gif" lazyload alt="image-20230216230142131" style="zoom: 50%;" /></p>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216230229654.png" srcset="/img/loading.gif" lazyload alt="image-20230216230229654" style="zoom:67%;" />
+
+<h2 id="Hfile结构"><a href="#Hfile结构" class="headerlink" title="Hfile结构"></a>Hfile结构</h2><h3 id="Hfile的组成"><a href="#Hfile的组成" class="headerlink" title="Hfile的组成"></a>Hfile的组成</h3><ol>
+<li><strong>Data Block</strong>：保存表中的数据，可以被压缩</li>
+<li><strong>Meta Block</strong>（可选）：保存用户定义的Key-Value对，可以被压缩</li>
+<li><strong>File Info：</strong>HFile的元信息，不压缩。用户可添加自己的元信息</li>
+<li><strong>Data Block Index</strong>：Data Block的索引，每条索引记录的key是被索引block的第一条记录的key。 <ul>
+<li>读HFile时，<strong>DataBlock Index会读到内存</strong>，当检索某个Key时，只需在内存中查找key所在的block，<strong>不必扫描整个HFile</strong>。<strong>即通过一次I&#x2F;O将整个Block读到内存。</strong>:heart:</li>
+</ul>
+</li>
+<li>Meta Block Index（可选）：MetaBlock的索引</li>
+<li>Trailer:定长，保存每一部分的<strong>偏移量</strong>。读HFile时，<strong>首先读Trailer</strong><ul>
+<li>Trailer记录了每个部分的起始位置</li>
+</ul>
+</li>
+</ol>
+<h3 id="Hfile结构示意"><a href="#Hfile结构示意" class="headerlink" title="Hfile结构示意"></a>Hfile结构示意</h3><p><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216230508159.png" srcset="/img/loading.gif" lazyload alt="image-20230216230508159"></p>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216230520217.png" srcset="/img/loading.gif" lazyload alt="image-20230216230520217" style="zoom:67%;" />
+
+<h2 id="HLog-Write-Ahead-Log"><a href="#HLog-Write-Ahead-Log" class="headerlink" title="HLog(Write Ahead Log)"></a>HLog(Write Ahead Log)</h2><ol>
+<li><p><strong>WAL（Write Ahead Log）</strong>：预写日志，用作系统恢复:star:</p>
+</li>
+<li><p>HLog记录数据的所有修改</p>
+</li>
+<li><p>每个Region Server维护一个HLog</p>
+<ul>
+<li>不是每个Region维护一个HLog。</li>
+</ul>
+</li>
+<li><p>HLog是<strong>Hadoop Sequence File</strong>形式</p>
+<ul>
+<li>Key：<strong>HLogKey对象</strong>，记录数据的所属的table ,Region以及sequence number和timestamp </li>
+<li>Value：Hbase的KeyValue对象，对应HFile的Key-value</li>
+</ul>
+</li>
+<li><p>问题：为什么不是每个Region维护一个HLog，而是每个Region Server维护一个HLog？回放代价大吗？HLog和数据存放在一起吗？:star:</p>
+<p>这样不同region(来自不同table)的日志会混在一起，这样做的目的是不断追加单个文件相对于同时写多个文件而言，可以减少磁盘寻址次数，因此可以提高对table的写性能。带来的麻烦是，如果一台region server下线，为了恢复其上的region，需要将region server上的log进行拆分，然后分发到其它region server上进行恢复</p>
+<p><strong>优点：</strong> 多个Region对象的更新操作所发生的日志修改，只需要不断把日志记录追加到单个日志文件中，不需要同时打开、写入到多个日志文件中。</p>
+<p><strong>缺点：</strong>如果一个Region服务器发生故障，为了恢复其上次的Region对象，需要将Region服务器上的对象，需要将Region服务器上的HLog按照其所属的Region对象进行拆分，然后分发到其他Region服务器上执行恢复操作。</p>
+<p><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216230919967.png" srcset="/img/loading.gif" lazyload alt="image-20230216230919967"></p>
+<p><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216230934660.png" srcset="/img/loading.gif" lazyload alt="image-20230216230934660"></p>
+<p><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216230948704.png" srcset="/img/loading.gif" lazyload alt="image-20230216230948704"></p>
+<p><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216231002847.png" srcset="/img/loading.gif" lazyload alt="image-20230216231002847" style="zoom: 67%;" /><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216231016433.png" srcset="/img/loading.gif" lazyload alt="image-20230216231016433" style="zoom:57%;" /></p>
+<p><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216231025516.png" srcset="/img/loading.gif" lazyload alt="image-20230216231025516"></p>
+<p><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216231036258.png" srcset="/img/loading.gif" lazyload alt="image-20230216231036258"></p>
+<p><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216231051791.png" srcset="/img/loading.gif" lazyload alt="image-20230216231051791"></p>
+</li>
+</ol>
+<h2 id="HBASE系统架构"><a href="#HBASE系统架构" class="headerlink" title="HBASE系统架构"></a>HBASE系统架构</h2><ol>
+<li><strong>客户端API</strong><ul>
+<li>包括访问HBASE的接口，维护cache加快对HBASE的访问</li>
+</ul>
+</li>
+<li><strong>Master（主服务器）</strong><ul>
+<li>利用ZooKeeper为RegionServer分配Region</li>
+<li>负责Region Server的负载均衡</li>
+<li>发现失效的Region Server，并重新分配Region Server</li>
+<li>回收HDFS上的垃圾文件</li>
+<li>处理Schema更新</li>
+</ul>
+</li>
+<li><strong>Region Server</strong><ul>
+<li>维护Master分配的Region，处理这些Region的I&#x2F;O请求</li>
+<li>负责切分运行过程中变大的Region</li>
+</ul>
+</li>
+</ol>
+<h2 id="Hbase组成"><a href="#Hbase组成" class="headerlink" title="Hbase组成"></a>Hbase组成</h2><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216231401893.png" srcset="/img/loading.gif" lazyload alt="image-20230216231401893" style="zoom:67%;" />
+
+<h2 id="Hbase系统架构"><a href="#Hbase系统架构" class="headerlink" title="Hbase系统架构"></a>Hbase系统架构</h2><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216231416292.png" srcset="/img/loading.gif" lazyload alt="image-20230216231416292" style="zoom:67%;" />
+
+<h2 id="HBASE存储结构概览"><a href="#HBASE存储结构概览" class="headerlink" title="HBASE存储结构概览"></a>HBASE存储结构概览</h2><p><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216231440204.png" srcset="/img/loading.gif" lazyload alt="image-20230216231440204"></p>
+<h2 id="HBase与Bigtable的命名差异"><a href="#HBase与Bigtable的命名差异" class="headerlink" title="HBase与Bigtable的命名差异"></a>HBase与Bigtable的命名差异</h2><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216231505542.png" srcset="/img/loading.gif" lazyload alt="image-20230216231505542" style="zoom:67%;" />
+
+<h2 id="Hbase的访问接口"><a href="#Hbase的访问接口" class="headerlink" title="Hbase的访问接口"></a>Hbase的访问接口</h2><ol>
+<li><strong>Native Java API：</strong>最常规和高效的访问方式，适合Hadoop MapReduce Job并行批处理HBase表数据</li>
+<li><strong>HBase Shell：</strong>HBase的命令行工具，最简单的接口，适合HBase管理使用</li>
+<li><strong>Thrift Gateway，</strong>利用Thrift序列化技术，支持C++，PHP，Python等多种语言，适合其他异构系统在线访问HBase表数据</li>
+<li><strong>REST Gateway</strong>：支持REST 风格的Http API访问HBase, 解除了语言限制</li>
+<li><strong>Pig：</strong>可以使用Pig Latin流式编程语言来操作HBase中的数据，和Hive类似，本质最终也是编译成MapReduce Job来处理HBase表数据，适合做数据统计</li>
+<li><strong>Hive：</strong>Hive 支持HBase，可以使用类似SQL语言来访问HBase</li>
+</ol>
+<h2 id="Hbase写路径"><a href="#Hbase写路径" class="headerlink" title="Hbase写路径"></a>Hbase写路径</h2><ol>
+<li>Hbase接收到写请求，会将数据同时写入<strong>WAL和MemStore</strong>。<strong>当WAL和MemStore的写操作都完成，本次写操作完成。</strong></li>
+<li>当MemStore写满之后，其中的数据刷写到磁盘，生成一个新的<strong>HFile</strong></li>
+<li>不写WAL，直接写MemStore，可以吗？会出什么问题吗？:star:<ul>
+<li>HBase的Write Ahead Log (WAL)提供了一种高并发、持久化的日志保存与回放机制。WAL最重要的作用是灾难恢复。和MySQL 的BIN log类似，它记录所有的数据改动。一旦服务器崩溃，通过重放log，我们可以恢复崩溃之前的数据。这也意味如果写入WAL失败，整个操作将认为失败</li>
+</ul>
+</li>
+</ol>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216231941551.png" srcset="/img/loading.gif" lazyload alt="image-20230216231941551" style="zoom:67%;" />
+
+<h2 id="Hbase读路径"><a href="#Hbase读路径" class="headerlink" title="Hbase读路径"></a>Hbase读路径</h2><ol>
+<li>Hbase使用BlockCache优化读性能，采用LRU调度策略</li>
+<li>BlockCache中以block为单位存储数据</li>
+<li>从Hbase表中读一行数据时，首先检查MemStore中等待修改的数据队列，然后检查BlockCache查看包含该数据的block是否最近被访问过，最后访问硬盘上对应的HFile</li>
+</ol>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216231950572.png" srcset="/img/loading.gif" lazyload alt="image-20230216231950572" style="zoom:50%;" />
+
+<h2 id="合并-compaction"><a href="#合并-compaction" class="headerlink" title="合并(compaction)"></a>合并(compaction)</h2><ol>
+<li>随着memStore的刷写，会产生多个HFile，<strong>如果文件数目达到阈值，就将它们合并成数量更少，更大的文件</strong>。这个过程持续进行，直到最大的文件超过配置规定的最大文件大小，触发Region拆分。</li>
+<li>合并的种类，系统决定采用哪种合并：<ul>
+<li><strong>Major compaction：将所有的文件压缩成一个文件</strong></li>
+<li><strong>Minor compaction：将多个小HFile合并成一个大HFile。</strong></li>
+</ul>
+</li>
+</ol>
+<h2 id="Zookeeper"><a href="#Zookeeper" class="headerlink" title="Zookeeper"></a>Zookeeper</h2><p><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216232102170.png" srcset="/img/loading.gif" lazyload alt="image-20230216232102170"></p>
+<h2 id="Zookeeper数据结构"><a href="#Zookeeper数据结构" class="headerlink" title="Zookeeper数据结构"></a>Zookeeper数据结构</h2><ol>
+<li>Zookeeper维护一个层次的数据结构，类似标准的文件系统。</li>
+<li>层次命名，<strong>例如&#x2F;namespace&#x2F;server1</strong></li>
+<li>树中每个节点znode可以存储数据的多个版本</li>
+</ol>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216232141989.png" srcset="/img/loading.gif" lazyload alt="image-20230216232141989" style="zoom:50%;" />
+
+<h1 id="分布式系统基础"><a href="#分布式系统基础" class="headerlink" title="分布式系统基础"></a>分布式系统基础</h1><h2 id="分布式系统的特征"><a href="#分布式系统的特征" class="headerlink" title="分布式系统的特征"></a>分布式系统的特征</h2><ol>
+<li>分布式系统：<strong>硬件或软件分布在联网的计算机上，组件之间通过消息传递通信和动作协调的系统</strong></li>
+<li>分布式系统的<strong>特征</strong><ul>
+<li>并发性</li>
+<li>缺乏全局时钟</li>
+<li>故障独立性</li>
+</ul>
+</li>
+<li>计算机网络无处不在，<strong>资源共享</strong>是构建分布式系统的主要动机</li>
+<li>分布式系统实例：Web search、Massive Multiplayer Oline Game，MMOG（大型多人在线游戏）、WWW、云服务</li>
+</ol>
+<h2 id="分布式系统面临的挑战"><a href="#分布式系统面临的挑战" class="headerlink" title="分布式系统面临的挑战"></a>分布式系统面临的挑战</h2><p>对共享资源并发执行程序的协调是一个重要的问题:heart:</p>
+<ol>
+<li>**异构性:**多样性和差异<ul>
+<li>网络、计算机硬件、操作系统、编程语言、不同开发者完成的软件实现等</li>
+</ul>
+</li>
+<li><strong>开放性</strong>：增加新的资源共享服务和多种客户程序使用的程度<ul>
+<li>发布系统的关键接口</li>
+<li>基于一致的通信机制和发布的接口访问共享资源</li>
+<li>基于不同开发商提供的异构硬件和软件</li>
+</ul>
+</li>
+<li><strong>安全性</strong></li>
+<li><strong>可伸缩性</strong></li>
+<li><strong>并发性</strong></li>
+<li><strong>透明性</strong>:透明性对用户和应用隐藏了与当前任务无直接关系的资源，并能够匿名使用资源(访问透明性、位置透明性、并发透明性、复制透明性、故障透明性、移动透明性、伸缩透明性)</li>
+<li><strong>故障处理</strong><ul>
+<li>有些组件出现故障，有些组件运行正常</li>
+<li>容错</li>
+<li>故障恢复</li>
+<li>冗余组件</li>
+</ul>
+</li>
+<li><strong>服务质量（QoS）</strong><ul>
+<li>不同服务的质量要求不同<ul>
+<li><strong>SLA（Service-Level Agreement）</strong>，服务等级协议，指的是系统服务提供者对客户的一个承诺,用来衡量一个分布式系统的好坏程度。</li>
+<li>最常用的<strong>SLA指标：可用性、准确性、系统容量和延迟</strong>。:heart:</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="分布式系统模型"><a href="#分布式系统模型" class="headerlink" title="分布式系统模型"></a>分布式系统模型</h2><p>有效描述和讨论分布式系统的设计，一般有三种系统模型描述方式</p>
+<ol>
+<li><strong>物理模型</strong>：描述组成系统的计算机和设备的类型以及它们的互联，不涉及特定的技术细节。</li>
+<li><strong>体系结构模型：</strong>从系统的计算元素执行的计算和通信任务方面描述系统，其中计算元素可以是单个计算机也可以是通过网络互连的计算机集合。<ul>
+<li>例如Client-Server，Peer-to-Peer</li>
+</ul>
+</li>
+<li><strong>基础模型</strong>：采用<strong>抽象</strong>的观点描述大多数分布式系统面临的单个问题的解决方案<ul>
+<li><strong>交互模型</strong>：处理分布式系统的性能问题，并解决设置时间约束的难题（分布式系统没有全局时间）。</li>
+<li><strong>故障模型</strong>：进程和通信通道故障的精确描述，定义可靠的通信和正确的进程。</li>
+<li><strong>安全模型</strong>：描述进程和通信通道的各种可能的威胁。</li>
+</ul>
+</li>
+</ol>
+<h2 id="物理模型"><a href="#物理模型" class="headerlink" title="物理模型"></a>物理模型</h2><ol>
+<li><strong>基线物理模型：</strong>一组可扩展的计算机节点，这些节点通过计算机网络相互连接进行所需的消息传递。</li>
+<li><strong>早期的分布式系统</strong>：通过局域网连接10~100个节点组成，与互联网的连接有限，单个系统是同构的，很少提供服务质量。</li>
+<li><strong>互联网规模的分布式系统</strong>：通过互联网连接，为全球化组织提供分布式系统服务，异构性突出。</li>
+<li><strong>当代的分布式系统</strong>：移动设备、嵌入式设备以及云计算促使异构性增加，节点数成千上万。</li>
+</ol>
+<h2 id="体系结构模型"><a href="#体系结构模型" class="headerlink" title="体系结构模型"></a>体系结构模型</h2><p><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216232950377.png" srcset="/img/loading.gif" lazyload alt="image-20230216232950377"></p>
+<h3 id="体系结构模型—体系结构元素-角色与责任"><a href="#体系结构模型—体系结构元素-角色与责任" class="headerlink" title="体系结构模型—体系结构元素-角色与责任"></a>体系结构模型—体系结构元素-角色与责任</h3><h4 id="Client-Server"><a href="#Client-Server" class="headerlink" title="Client-Server"></a>Client-Server</h4><p><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216233018177.png" srcset="/img/loading.gif" lazyload alt="image-20230216233018177"></p>
+<h4 id="Peer-to-Peer"><a href="#Peer-to-Peer" class="headerlink" title="Peer-to-Peer"></a>Peer-to-Peer</h4><ol>
+<li><strong>所有参与的进程运行相同的程序</strong>，并且相互之间提供相同的接口集合。</li>
+<li>进程间通信依赖于对应用的需求。</li>
+<li><strong>共享数据对象</strong>，个体计算机只保存应用数据库的一小部分，存储、处理和通信的负载分布到联网的多个计算机上。</li>
+<li>每个数据对象被复制到<strong>多个计算机</strong>上，一方面分散负载，另一方面提高数据可用性。</li>
+<li>应用案例：Bittorrent</li>
+</ol>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216233102205.png" srcset="/img/loading.gif" lazyload alt="image-20230216233102205" style="zoom:67%;" />
+
+<h3 id="体系结构模型—体系结构元素-放置"><a href="#体系结构模型—体系结构元素-放置" class="headerlink" title="体系结构模型—体系结构元素-放置"></a>体系结构模型—体系结构元素-放置</h3><ol>
+<li>放置：解决对象和服务等实体与底层物理基础设施的映射问题。</li>
+<li>从性能的角度考虑<ul>
+<li>实体间的通信模式</li>
+<li>给定计算机的可靠性和当前的负载</li>
+<li>不同计算机之间的通信质量</li>
+</ul>
+</li>
+<li>放置策略<ul>
+<li>服务映射到多个服务器</li>
+<li>缓存</li>
+<li>移动代码</li>
+<li>移动代理</li>
+</ul>
+</li>
+</ol>
+<h3 id="体系结构模型—体系结构模式"><a href="#体系结构模型—体系结构模式" class="headerlink" title="体系结构模型—体系结构模式"></a>体系结构模型—体系结构模式</h3><ol>
+<li><p>体系结构模式提供<strong>组合的、重复出现的结构</strong>，这些结构在一些给定的场景下表现良好。</p>
+</li>
+<li><p>几个重要的分布式系统体系结构模式</p>
+<ul>
+<li>Layering</li>
+<li>Tiered architecture</li>
+<li>Thin client</li>
+</ul>
+</li>
+<li><p><strong>Layering：</strong>与抽象紧密相关:star:</p>
+<ul>
+<li>复杂系统被分成若干层，每层利用下层提供的服务</li>
+<li>一个给定的层提供一个软件抽象，高层不了解其底层的实现细节以及其他更低的层</li>
+</ul>
+</li>
+<li><p><strong>platform：</strong>由最底层的硬件和软件层构成，这些层为上层提供服务，在每个计算机独立实现，提供系统API，便于进程间通信及协调。:star:</p>
+</li>
+<li><p><strong>middleware</strong>：一个软件层，表示成一组计算机上的进程或对象，这些进程或对象相互交互，实现分布式应用的通信和资源共享支持，目的是屏蔽异构性，给程序员提供方便的编程接口:star:</p>
+<ul>
+<li>通过对抽象的支持，提升应用程序活动的层次。一些抽象包括远程方法调用、进程组织间的通信、事件的通知、共享数据的分区、放置和检索、共享数据的复制等。</li>
+</ul>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216233354153.png" srcset="/img/loading.gif" lazyload alt="image-20230216233354153" style="zoom: 67%;" />
+</li>
+<li><p><strong>Tiered architecture：</strong>对layering的补充，是在特定层组织功能、放置功能至合适的服务或物理节点的技术，与layering上层的应用和服务的组织最相关。:star2:</p>
+<p><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216233509200.png" srcset="/img/loading.gif" lazyload alt="image-20230216233509200"></p>
+</li>
+</ol>
+<h3 id="体系结构模型—体系结构模式-分层模式"><a href="#体系结构模型—体系结构模式-分层模式" class="headerlink" title="体系结构模型—体系结构模式-分层模式"></a>体系结构模型—体系结构模式-分层模式</h3><ol>
+<li><strong>两层模式：</strong>表示逻辑、应用逻辑和数据逻辑被分到<strong>客户进程和服务器进程</strong>，通常通过分割应用逻辑来完成划分。<ul>
+<li>一部分业务逻辑放在客户端，一部分放在服务器端</li>
+<li>交互延迟低</li>
+<li>应用逻辑分布到不同进程，导致有些功能不能直接被调用</li>
+</ul>
+</li>
+<li><strong>三层模式</strong>：逻辑元素与物理服务器一一对应，每层都定义了明确的角色<ul>
+<li>软件可维护性高</li>
+<li>增加了管理三个服务器的复杂性</li>
+<li>可推广至多层方案</li>
+</ul>
+</li>
+</ol>
+<h3 id="体系结构模型—体系结构模式-瘦客户"><a href="#体系结构模型—体系结构模式-瘦客户" class="headerlink" title="体系结构模型—体系结构模式-瘦客户"></a>体系结构模型—体系结构模式-瘦客户</h3><ol>
+<li><p>瘦客户：一个提供了基于窗口的本地用户界面的软件层，提供访问远程计算机的服务。</p>
+<ul>
+<li>客户设备的假设和需求小，可以访问复杂的网络服务</li>
+<li>复杂性从最终用户设备移到互联网服务云计算</li>
+</ul>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216233652433.png" srcset="/img/loading.gif" lazyload alt="image-20230216233652433" style="zoom:67%;" /></li>
+</ol>
+<h2 id="基础模型"><a href="#基础模型" class="headerlink" title="基础模型"></a>基础模型</h2><ol>
+<li><strong>物理模型和体系结构模型</strong>共享一些基础特征<ul>
+<li>都由进程组成，这些进程在计算机网络上通过发送消息进行通信</li>
+<li>共享设计需求：实现进程及网络性能的可靠性，确保系统资源的安全性</li>
+</ul>
+</li>
+<li><strong>基础模型包含分布式系统的基本组成</strong>，以便理解和推理系统的行为，目的是<ul>
+<li>显式地表达所建模的系统的相关假设</li>
+<li>给定假设，归纳出哪些可能，那些不可能，比如了解设计依赖什么，不依赖什么</li>
+</ul>
+</li>
+<li>分布式系统基础模型包含以下需要解决的问题<ul>
+<li>交互</li>
+<li>保障</li>
+<li>安全</li>
+</ul>
+</li>
+</ol>
+<h3 id="基础模型—交互模型"><a href="#基础模型—交互模型" class="headerlink" title="基础模型—交互模型"></a>基础模型—交互模型</h3><ol>
+<li><p>分布式系统中影响<strong>进程交互</strong>的两个重要因素</p>
+<ul>
+<li><strong>通信性能</strong>通常是一限制特性</li>
+<li>不可能维护单一的<strong>全局时间</strong></li>
+</ul>
+</li>
+<li><p>通信通道的<strong>性能</strong></p>
+<ul>
+<li>通道的实现方式：可以是流或消息传递</li>
+<li>计算机网络上的通信性能<ul>
+<li>延迟、带宽和抖动（jitter）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>计算机时钟和时序时间</strong></p>
+<ul>
+<li>分布式系统中每台计算机有自己的时钟，本地进程获取当前的时间值</li>
+<li>不同计算机上运行的两个进程将时戳与时间关联，即使同时读时钟，各自本地时钟也提供不同的时间值</li>
+<li>时钟漂移率：计算机时钟偏离绝对参考时钟的比率</li>
+</ul>
+</li>
+<li><p>交互模型的两个变体：同步分布式系统和异步分布式系统</p>
+</li>
+<li><p>同步分布式系统:heart:</p>
+<ul>
+<li>满足的约束</li>
+<li>进程执行每一步的时间有一个上下限</li>
+<li>通过通道传递的每个消息在一个已知的时间范围内接收到</li>
+<li>每个进程有一个本地时钟，时钟偏移率在一个已知的范围内</li>
+</ul>
+<p>实际应用时，可以采用超时检测进程的故障</p>
+</li>
+<li><p>异步分布式系统:heart:</p>
+<ul>
+<li>对以下因素没有限制<ul>
+<li>进程执行速度</li>
+<li>消息传递延迟</li>
+<li>时钟漂移率</li>
+</ul>
+</li>
+<li>实际的分布式系统大多是异步的，如互联网</li>
+</ul>
+</li>
+</ol>
+<h3 id="基础模型—故障模型"><a href="#基础模型—故障模型" class="headerlink" title="基础模型—故障模型"></a>基础模型—故障模型</h3><ol>
+<li><p>分布式系统中，进程和通信通道都有可能出现故障</p>
+</li>
+<li><p>故障模型定义了故障可能发生的模式，从而理解故障的影响</p>
+</li>
+<li><p>故障分类</p>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216234136714.png" srcset="/img/loading.gif" lazyload alt="image-20230216234136714" style="zoom:60%;" />
+
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216234156953.png" srcset="/img/loading.gif" lazyload alt="image-20230216234156953" style="zoom:67%;" /></li>
+</ol>
+<h3 id="基础模型—安全模型"><a href="#基础模型—安全模型" class="headerlink" title="基础模型—安全模型"></a>基础模型—安全模型</h3><ol>
+<li>分布式系统安全可以通过保证进程和用于进程交互的通道的安全，以及保护所封装的对象免遭未授权访问来实现。</li>
+</ol>
+<h1 id="分布式文件系统"><a href="#分布式文件系统" class="headerlink" title="分布式文件系统"></a>分布式文件系统</h1><ol>
+<li>文件系统最初是为集中式计算机系统和台式机开发的，作为操作系统设施提供方便的磁盘存储访问接口，通过访问控制机制和文件锁机制实现数据和程序的共享。</li>
+<li>分布式文件系统支持程序像对本地文件一样对远程文件进行存储和访问，而且能获得与访问本地磁盘文件类似的性能和可靠性。</li>
+<li>分布式文件系统以文件形式支持信息共享，以持久存储的形式支持硬件资源的共享</li>
+<li>大规模广域可读写文件存储系统会产生<strong>负载均衡、一致性、可靠性、可用性和安全性问题</strong>:star:</li>
+</ol>
+<h2 id="存储系统及其性质"><a href="#存储系统及其性质" class="headerlink" title="存储系统及其性质"></a>存储系统及其性质</h2><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216234332100.png" srcset="/img/loading.gif" lazyload alt="image-20230216234332100" style="zoom:67%;" />
+
+<h2 id="文件系统的特点"><a href="#文件系统的特点" class="headerlink" title="文件系统的特点"></a>文件系统的特点</h2><ol>
+<li>文件系统负责文件的组织、存储、检索、命名、访问控制、共享和保护，提供描述文件抽象的程序接口。</li>
+<li>文件包括数据和属性<ul>
+<li><strong>数据</strong>包括一系列数据项，读写操作可访问这些数据项的任何部分</li>
+<li><strong>属性</strong>包括文件长度、时间戳、文件类型、拥有者身份、访问控制列表</li>
+</ul>
+</li>
+<li><strong>目录：</strong>是一类特殊类型的文件，提供从文件名字到内部文件标识符的映射，可以包括其他目录的名字，形成层次化的文件命名方案</li>
+<li><strong>元数据：</strong>文件系统用于管理文件而存储的所有关于文件的信息，包括文件属性、目录和其他文件系统使用的持久信息</li>
+</ol>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216234513903.png" srcset="/img/loading.gif" lazyload alt="image-20230216234513903" style="zoom:67%;" />
+
+<h2 id="文件系统操作"><a href="#文件系统操作" class="headerlink" title="文件系统操作"></a>文件系统操作</h2><p>以Unix文件系统为例，主要的文件操作如下，由操作系统内核实现</p>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216234547171.png" srcset="/img/loading.gif" lazyload alt="image-20230216234547171" style="zoom:67%;" />
+
+<h2 id="分布式文件系统的需求"><a href="#分布式文件系统的需求" class="headerlink" title="分布式文件系统的需求"></a>分布式文件系统的需求</h2><ol>
+<li><strong>透明性</strong><ul>
+<li><strong>访问透明性：</strong>客户程序不需要了解文件的分布性，只需通过文件访问操作访问本地或远程文件。</li>
+<li><strong>位置透明性：</strong>客户程序使用统一的文件命名空间，在不改变路径名的情况下，文件或文件组可以被重定位。</li>
+<li><strong>移动透明性：</strong>移动文件时，客户程序和客户节点上的系统管理表不必修改</li>
+<li><strong>性能透明性：</strong>服务的负载在一定范围变化时，客户程序的性能不受影响</li>
+<li><strong>伸缩透明性：</strong>文件服务可以不断扩充，以应对负载和网络规模的增长</li>
+</ul>
+</li>
+<li><strong>并发文件更新</strong>：一个客户对文件的修改的操作不影响同时访问同一个文件的其他客户，即并发控制</li>
+<li><strong>文件复制：</strong>一个文件可以表示为其内容在多个位置的多个备份</li>
+<li><strong>硬件和操作系统异构性</strong>：文件访问接口定义明确，不受操作系统和计算机异构性的影响、这是开放性的一个重要方面。</li>
+<li><strong>容错</strong>：文件服务在客户和服务器出现故障时可以继续提供服务</li>
+<li><strong>一致性：</strong>多个拷贝在多个节点上存储或缓存时，会因为网络延迟导致一个拷贝的修改延迟反映到其他拷贝,需要确定一致性原则</li>
+<li><strong>安全性</strong>：提供访问控制机制</li>
+<li><strong>效率：</strong>应提供至少和传统文件系统相同的能力，且达到一定的性能要求。</li>
+</ol>
+<h2 id="文件服务体系结构"><a href="#文件服务体系结构" class="headerlink" title="文件服务体系结构"></a>文件服务体系结构</h2><p>文件系统三个组件:</p>
+<ol>
+<li><strong>Flat file service</strong>：实现文件内容上的操作，唯一文件标识符UFID表示文件</li>
+<li><strong>Directory service：</strong>提供文件名字到UFID的映射，生成目录以及为目录增加新的文件名等功能</li>
+<li><strong>Client service</strong>：运行在客户机上，在应用程序接口上集成和扩展flat file service和directory service，提供用户级程序使用。</li>
+</ol>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216234752641.png" srcset="/img/loading.gif" lazyload alt="image-20230216234752641" style="zoom:67%;" />
+
+<h2 id="Flat-file-service接口"><a href="#Flat-file-service接口" class="headerlink" title="Flat file service接口"></a>Flat file service接口</h2><p><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216234820700.png" srcset="/img/loading.gif" lazyload alt="image-20230216234820700"></p>
+<h2 id="Directory-service接口"><a href="#Directory-service接口" class="headerlink" title="Directory service接口"></a>Directory service接口</h2><p><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216234835007.png" srcset="/img/loading.gif" lazyload alt="image-20230216234835007"></p>
+<h2 id="层次文件系统"><a href="#层次文件系统" class="headerlink" title="层次文件系统"></a>层次文件系统</h2><ol>
+<li>层次文件系统由组织成树形结构的目录组成，每一个目录包含文件和其他可以从此目录访问的目录名字。例如，Unix文件系统</li>
+<li>可以使用路径名来访问任何一个文件或目录</li>
+<li>客户模块提供函数，用来获得给定路径文件的UFID</li>
+</ol>
+<h2 id="分布式文件系统案例"><a href="#分布式文件系统案例" class="headerlink" title="分布式文件系统案例"></a>分布式文件系统案例</h2><ol>
+<li>通用的分布式文件系统<ul>
+<li>SUN Microsystem 的网络文件系统NFS</li>
+<li>CMU的Andrew文件系统AFS</li>
+<li>DFS</li>
+<li>FastDFS</li>
+<li>Coda</li>
+</ul>
+</li>
+<li>定制的分布式文件系统<ul>
+<li>Google File System（GFS）</li>
+<li>Hadoop File System（HDFS）</li>
+</ul>
+</li>
+</ol>
+<h2 id="GFS"><a href="#GFS" class="headerlink" title="GFS"></a>GFS</h2><h3 id="研发GFS的动机"><a href="#研发GFS的动机" class="headerlink" title="研发GFS的动机"></a>研发GFS的动机</h3><ol>
+<li>满足Google搜索引擎和其他web应用程序迅速增长的需求<ul>
+<li>在廉价、不可靠计算机上存储大量的数据</li>
+<li>针对Google的应用，对存储的文件类型和访问模式进行优化<ul>
+<li>例如，文件数量不多，但文件大小很大，106个100MB的文件，甚至GB</li>
+<li>大文件的顺序读和对文件的追加操作的顺序写——数据分析应用</li>
+<li>并发访问多，大量并发追加写操作</li>
+</ul>
+</li>
+<li>GFS整体上满足Google基础设施的所有需求<ul>
+<li>从数据和客户数量的角度必须可伸缩</li>
+<li>基础设施发生故障时是可靠的</li>
+<li>是开放的，以支持新的应用</li>
+<li>对高吞吐量进行了优化，而不是优先考虑延迟</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="一些假设"><a href="#一些假设" class="headerlink" title="一些假设"></a>一些假设</h3><ol>
+<li>组件失效率高<ul>
+<li>廉价的商用机器容易出现故障</li>
+</ul>
+</li>
+<li>大文件数量较多<ul>
+<li>基本上每个文件 100MB或更大，大部分是GB级文件</li>
+</ul>
+</li>
+<li>文件访问模式是写一次，大多数是添加操作<ul>
+<li>并发操作</li>
+</ul>
+</li>
+<li>大量流数据读操作</li>
+<li>持久的高吞吐量、低延迟</li>
+</ol>
+<h3 id="GFS体系结构"><a href="#GFS体系结构" class="headerlink" title="GFS体系结构"></a>GFS体系结构</h3><ol>
+<li>GFS提供从文件到块的映射，然后将文件的操作映射为各个块的操作。</li>
+<li>一个master节点，多个chunkservers（数百个）</li>
+</ol>
+<p><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216235235490.png" srcset="/img/loading.gif" lazyload alt="image-20230216235235490"></p>
+<h3 id="GFS设计决策"><a href="#GFS设计决策" class="headerlink" title="GFS设计决策"></a>GFS设计决策</h3><ol>
+<li>文件以chunk为单位存储<ul>
+<li>大小为固定的64MB</li>
+</ul>
+</li>
+<li>通过复制提高可靠性<ul>
+<li>每个chunk有3个以上的副本存储在不同的chunkservers</li>
+</ul>
+</li>
+<li>单一master负责协调访问以及保存元数据<ul>
+<li>简单的集中式管理</li>
+</ul>
+</li>
+<li>没有数据缓存<ul>
+<li>​	大数据集合、流数据读操作获益</li>
+</ul>
+</li>
+<li>API接口常用，但是定制的<ul>
+<li>简化问题，针对Google应用</li>
+<li>添加了snapshot和record append操作</li>
+</ul>
+</li>
+</ol>
+<h3 id="Master节点"><a href="#Master节点" class="headerlink" title="Master节点"></a>Master节点</h3><ol>
+<li>管理有关文件系统的元数据</li>
+<li>维护多个数据副本的位置信息</li>
+<li>全局元数据<ul>
+<li>文件和chunk命名空间</li>
+<li>文件名与chunks的映射表</li>
+<li>每个chunk副本的地址</li>
+<li>访问控制信息</li>
+</ul>
+</li>
+<li>元数据持久存储在操作日志中，记录关键的元数据修改，恢复系统用<ul>
+<li>在本地磁盘持久存储</li>
+<li>有副本</li>
+<li>快速恢复目的的checkpoint机制</li>
+</ul>
+</li>
+</ol>
+<h3 id="Chunkserver"><a href="#Chunkserver" class="headerlink" title="Chunkserver"></a>Chunkserver</h3><ol>
+<li>Chunkserver存储数据</li>
+<li>客户端和Master节点的通信只获取元数据，所有的数据操作都是由客户端直接和Chunkserver进行交互。<ul>
+<li>Client可以同时访问多个chunkserver，提高系统的I&#x2F;O性能</li>
+</ul>
+</li>
+<li>Chunk服务器不需要缓存文件数据<ul>
+<li>Chunk以本地文件的方式保存，Linux操作系统的文件系统缓存会把经常访问的数据缓存在内存中。</li>
+</ul>
+</li>
+</ol>
+<h3 id="GFS的一致性管理"><a href="#GFS的一致性管理" class="headerlink" title="GFS的一致性管理"></a>GFS的一致性管理</h3><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216235544574.png" srcset="/img/loading.gif" lazyload alt="image-20230216235544574" style="zoom:80%;" />
+
+<h3 id="GFS的一致性管理步骤"><a href="#GFS的一致性管理步骤" class="headerlink" title="GFS的一致性管理步骤"></a>GFS的一致性管理步骤</h3><ol>
+<li>当master收到来自client的修改操作请求时，master授予其中一个副本lease，然后将primary副本和其他secondary副本的标示返回给client</li>
+<li>client将所有数据发送到多个副本，数据暂存在缓存（可以任意顺序），直到收到进一步的指示才进行写操作</li>
+<li>一旦所有的副本确认收到数据，client向primary副本发送写请求，然后primary副本确定并发请求的顺序，按照顺序在primary副本节点进行更新</li>
+<li>Primary副本请求在secondary副本上以同样的顺序执行同样的修改操作，直到所有的修改成功执行后，其他副本发送确认消息</li>
+<li>如果primary副本收到了所有secondary副本写数据的确认消息后，向客户报告成功消息，否则报告失败消息。失败表明副本处于不一致的状态。</li>
+</ol>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216235625229.png" srcset="/img/loading.gif" lazyload alt="image-20230216235625229" style="zoom:55%;" />
+
+<h2 id="Hadoop-Distributed-File-System-HDFS"><a href="#Hadoop-Distributed-File-System-HDFS" class="headerlink" title="Hadoop Distributed File System(HDFS)"></a>Hadoop Distributed File System(HDFS)</h2><h3 id="HDFS概述"><a href="#HDFS概述" class="headerlink" title="HDFS概述"></a>HDFS概述</h3><ol>
+<li>Hadoop分布式文件系统(HDFS)的设计目标是针对适合运行在通用硬件(commodity hardware)上的分布式文件系统。</li>
+<li>HDFS是一个高度容错性的分布式文件系统，适合部署在廉价的机器上。</li>
+<li>HDFS能提供高吞吐量的数据访问，非常适合大规模数据集上的应用。</li>
+<li>HDFS放宽了一部分POSIX（ Portable Operating System Interface of UNIX， POSIX  ）约束，来实现流式读取文件系统数据的目的。</li>
+</ol>
+<h3 id="前提和设计目标（1）"><a href="#前提和设计目标（1）" class="headerlink" title="前提和设计目标（1）"></a>前提和设计目标（1）</h3><ol>
+<li>硬件错误<ul>
+<li>硬件错误是常态而不是异常。HDFS可能由成百上千的服务器所构成，每个服务器上存储着文件系统的部分数据。构成系统的组件数目巨大，任一组件都有可能失效，错误检测和快速、自动的恢复是HDFS最核心的架构目标。</li>
+</ul>
+</li>
+<li>流式数据访问<ul>
+<li>HDFS的设计中更多考虑到了数据批处理，而不是用户交互处理。比之数据访问的低延迟问题，关注高吞吐量。</li>
+</ul>
+</li>
+<li>大规模数据集<ul>
+<li>运行在HDFS上的应用具有很大的数据集。HDFS上的一个典型文件大小一般都在GB至TB，支持大文件存储。它应该能提供整体上高的数据传输带宽，能在一个集群里扩展到数百个节点。一个单一的HDFS实例应该能支撑数以千万计的文件。</li>
+</ul>
+</li>
+</ol>
+<h3 id="前提和设计目标（2）"><a href="#前提和设计目标（2）" class="headerlink" title="前提和设计目标（2）"></a>前提和设计目标（2）</h3><ol>
+<li>简单的一致性模型<ul>
+<li>支持“一次写入多次读取”的文件访问模型，简化了数据一致性问题，并且使高吞吐量的数据访问成为可能。</li>
+</ul>
+</li>
+<li>“移动计算比移动数据更划算”<ul>
+<li>一个应用请求的计算，离它操作的数据越近就越高效，当数据达到海量级别的时就能降低网络阻塞的影响，提高系统数据的吞吐量。HDFS为应用提供了将计算移动到数据附近的接口。</li>
+</ul>
+</li>
+<li>异构软硬件平台间的可移植性<ul>
+<li>考虑到平台的可移植性，方便了HDFS作为大规模数据应用平台的推广。</li>
+</ul>
+</li>
+</ol>
+<h3 id="HDFS体系结构"><a href="#HDFS体系结构" class="headerlink" title="HDFS体系结构"></a>HDFS体系结构</h3><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216235843665.png" srcset="/img/loading.gif" lazyload alt="image-20230216235843665" style="zoom:67%;" />
+
+<h3 id="GFS和HDFS术语对照"><a href="#GFS和HDFS术语对照" class="headerlink" title="GFS和HDFS术语对照"></a>GFS和HDFS术语对照</h3><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230216235859538.png" srcset="/img/loading.gif" lazyload alt="image-20230216235859538" style="zoom:67%;" />
+
+<h3 id="Namenode-和-Datanode"><a href="#Namenode-和-Datanode" class="headerlink" title="Namenode 和 Datanode"></a>Namenode 和 Datanode</h3><ol>
+<li>HDFS采用master&#x2F;slave架构<ul>
+<li>一个HDFS集群是由一个Namenode和一定数目的Datanodes组成。</li>
+<li>Namenode是一个中心服务器，负责管理文件系统的名字空间(namespace)以及客户端对文件的访问。Namenode执行文件系统的名字空间操作，比如打开、关闭、重命名文件或目录。它也负责确定数据块到具体Datanode节点的映射。</li>
+<li>集群中的Datanode一般是一个节点一个，负责管理它所在节点上的存储，负责处理文件系统客户端的读写请求。在Namenode的统一调度下进行数据块的创建、删除和复制。</li>
+<li>一个文件被分成一个或多个数据块，这些块存储在一组Datanode上。</li>
+</ul>
+</li>
+</ol>
+<h3 id="文件系统的名字空间-namespace"><a href="#文件系统的名字空间-namespace" class="headerlink" title="文件系统的名字空间 (namespace)"></a>文件系统的名字空间 (namespace)</h3><ol>
+<li>HDFS支持传统的层次型文件组织结构。用户或者应用程序可以创建目录，然后将文件保存在这些目录里。</li>
+<li>文件系统名字空间的层次结构和大多数现有的文件系统类似，用户可以创建、删除、移动或重命名文件。</li>
+<li>Namenode负责维护文件系统的名字空间，任何对文件系统名字空间或属性的修改都将被Namenode记录下来。应用程序可以设置HDFS保存的文件的副本数目。文件副本的数目称为文件的复制因子，这个信息也是由Namenode保存。</li>
+</ol>
+<h3 id="数据复制"><a href="#数据复制" class="headerlink" title="数据复制"></a>数据复制</h3><ol>
+<li>HDFS被设计成能够在一个大集群中跨节点可靠地存储超大文件的文件系统。它将每个文件存储成一系列的数据块，除了最后一个，所有的数据块都同样大小。</li>
+<li>为了容错，文件的所有数据块都会有副本。每个文件的数据块大小和复制因子都是可配置的。应用程序可以指定某个文件的副本数目。副本系数可以在文件创建的时候指定，也可以在之后改变。HDFS中的文件是write-one，并且严格要求在任何时候只能有一个writer。</li>
+<li>Namenode全权管理数据块的复制，它周期性地从集群中的每个Datanode接收心跳信号和块状态报告(Blockreport)。接收到心跳信号意味着该Datanode节点工作正常。块状态报告包含了一个该Datanode上所有数据块的列表。</li>
+</ol>
+<h3 id="复制-1"><a href="#复制-1" class="headerlink" title="复制"></a>复制</h3><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230217000033263.png" srcset="/img/loading.gif" lazyload alt="image-20230217000033263" style="zoom:67%;" />
+
+<h3 id="复制-副本存放"><a href="#复制-副本存放" class="headerlink" title="复制-副本存放"></a>复制-副本存放</h3><ol>
+<li>副本的存放是HDFS可靠性和性能的关键。</li>
+<li>HDFS采用机架感知(rack-aware)的策略来改进数据的可靠性、可用性和网络带宽的利用率。</li>
+<li>大型HDFS实例一般运行在跨越多个机架的PC集群上，不同机架上的两台机器之间的通讯需要经过交换机。在大多数情况下，同一个机架内的两台机器间的带宽会比不同机架的两台机器间的带宽大。</li>
+<li>通过rack-aware过程，Namenode可以确定每个Datanode所属的机架id。简单但没有优化的策略就是将副本存放在不同的机架上。这种策略设置可以将副本均匀分布在集群中，有利于当组件失效情况下的负载均衡。但是写操作需要传输数据块到多个机架，这增加了写的代价。</li>
+<li>在大多数情况下，复制因子是3，将一个副本存放在本地机架的节点上，一个副本放在同一机架的另一个节点上，最后一个副本放在不同机架的节点上。</li>
+</ol>
+<h3 id="复制-副本选择"><a href="#复制-副本选择" class="headerlink" title="复制-副本选择"></a>复制-副本选择</h3><ol>
+<li>为了降低整体的带宽消耗和读取延时，HDFS会尽量让读操作进程 读取离它最近的副本。如果与读进程在同一个机架上有一个副本，那么就读取该副本。</li>
+<li>如果一个HDFS集群跨越多个数据中心，那么客户端也将首先读本地数据中心的副本。</li>
+</ol>
+<h3 id="文件系统元数据的持久化"><a href="#文件系统元数据的持久化" class="headerlink" title="文件系统元数据的持久化"></a>文件系统元数据的持久化</h3><ol>
+<li>Namenode上保存着HDFS的名字空间。对于任何对文件系统元数据产生修改的操作，Namenode都会使用称为<strong>EditLog</strong>的<strong>事务日志记录下来。</strong><ul>
+<li>例如，在HDFS中创建一个文件，Namenode就会在Editlog中插入一条记录来表示；</li>
+<li>同样地，修改文件的复制因子也将往Editlog插入一条记录。Namenode在本地操作系统的文件系统中存储这个Editlog。</li>
+</ul>
+</li>
+<li>整个文件系统的名字空间，包括数据块到文件的映射、文件的属性等，都存储在<strong>FsImage</strong>的文件中，这个文件放在Namenode所在的本地文件系统上。</li>
+<li>DataNode不知道关于文件的任何信息，只存储文件的数据块。</li>
+</ol>
+<h3 id="通讯协议"><a href="#通讯协议" class="headerlink" title="通讯协议"></a>通讯协议</h3><ol>
+<li>所有的HDFS通讯协议都建立在TCP&#x2F;IP协议之上。</li>
+<li>客户端通过一个可配置的TCP端口连接到Namenode，通过ClientProtocol协议与Namenode交互。</li>
+<li>Datanode使用DatanodeProtocol协议与Namenode交互。</li>
+<li>ClientProtocol和Datanodeprotocol协议被抽象封装为远程过程调用(RPC)模型，Namenode不会主动发起RPC，而是响应来自客户端或 Datanode 的RPC请求。</li>
+</ol>
+<h3 id="健壮性"><a href="#健壮性" class="headerlink" title="健壮性"></a>健壮性</h3><ol>
+<li>HDFS的主要目标就是即使在出错的情况下也要保证数据存储的可靠性。常见的三种出错情况是：Namenode出错, Datanode出错和网络割裂(network partitions)。<ul>
+<li>磁盘数据错误，心跳检测和重新复制<ul>
+<li>每个Datanode节点周期性地向Namenode发送心跳信号。网络割裂可能导致一部分Datanode跟Namenode失去联系。Namenode通过心跳信号的缺失来检测这一情况，并将这些近期不再发送心跳信号Datanode标记为宕机，不会再将新的IO请求发给它们。</li>
+<li>任何存储在宕机Datanode上的数据将不再有效。Datanode的宕机可能会引起一些数据块的复制因子低于指定值，Namenode不断地检测这些需要复制的数据块，一旦发现就启动复制操作。</li>
+<li>在下列情况下，可能需要重新复制：某个Datanode节点失效、某个副本遭到损坏、Datanode上的硬盘错误、文件的复制因子增大。</li>
+</ul>
+</li>
+<li>集群均衡<ul>
+<li>如果某个Datanode节点上的空闲空间低于特定的临界点，按照均衡策略系统就会自动地将数据从这个Datanode移动到其他空闲的Datanode。</li>
+<li>当对某个文件的请求突然增加，那么也可能启动一个计划创建该文件新的副本，并且同时重新平衡集群中的其他数据。</li>
+</ul>
+</li>
+<li>数据完整性<ul>
+<li>从某个Datanode获取的数据块有可能因为Datanode的存储设备错误、网络错误或者软件bug造成出错。</li>
+<li>HDFS客户端软件实现了对HDFS文件内容的校验和(checksum)检查<ul>
+<li>当客户端创建一个新的HDFS文件，计算这个文件每个数据块的校验和，并将校验和作为一个单独的隐藏文件保存在同一个HDFS名字空间下。</li>
+<li>当客户端获取文件内容后，它会检验从Datanode获取的数据跟相应的校验和文件中的校验和是否匹配，如果不匹配，客户端可以选择从其他Datanode获取该数据块的副本。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>元数据磁盘错误<ul>
+<li><strong>FsImage和Editlog</strong>是HDFS的核心数据结构，如果损坏了，整个HDFS实例都将失效。</li>
+<li>Namenode可以配置成支持维护多个FsImage和Editlog的副本。任何对FsImage或者Editlog的修改，都将同步到它们的副本上。<ul>
+<li>这种多副本的同步操作可能会降低Namenode每秒处理的名字空间事务数量。即使HDFS的应用是数据密集的，但不是元数据密集的。当Namenode重启的时候，它会选取最近的完整的FsImage和Editlog来使用。</li>
+</ul>
+</li>
+<li>Namenode是HDFS集群中的单点故障(single point of failure)所在。如果Namenode机器故障，需要手工干预。可以尝试自动重启或在另一台机器上做Namenode故障转移。</li>
+</ul>
+</li>
+<li>快照<ul>
+<li>快照支持某一特定时刻的数据的复制备份。利用快照，可以让HDFS在数据损坏时恢复到过去一个已知正确的时间点。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="数据组织"><a href="#数据组织" class="headerlink" title="数据组织"></a>数据组织</h3><ol>
+<li>数据块<ul>
+<li>HDFS适用于处理大数据集应用，这些应用都具有数据“写一次，读多次”特点，并且读取速度应能满足流式读取的需要。典型的数据块大小是64MB，HDFS中的文件总是按照64M被切分成不同的块，每个块尽可能地存储于不同的Datanode中。</li>
+</ul>
+</li>
+<li>复制流水线<ul>
+<li>当客户端以复制因子3向HDFS文件写入数据的时候，客户端会从Namenode获取一个Datanode列表用于存放副本。然后客户端开始向第一个Datanode传输数据，第一个Datanode以4 KB大小接收数据，将每一部分写入本地存储，并同时传输该部分到列表中第二个Datanode节点。第二个Datanode也是这样的操作，并同时传给第三个Datanode。最后，第三个Datanode接收数据并存储在本地。</li>
+<li>Datanode能流水线式地从前一个节点接收数据，并同时转发给下一个节点，数据以流水线的方式从前一个Datanode复制到下一个。</li>
+</ul>
+</li>
+</ol>
+<h3 id="HDFS的访问"><a href="#HDFS的访问" class="headerlink" title="HDFS的访问"></a>HDFS的访问</h3><ol>
+<li>DFShell</li>
+<li>Java API</li>
+</ol>
+<h3 id="MapReduce-star"><a href="#MapReduce-star" class="headerlink" title="MapReduce:star:"></a>MapReduce:star:</h3><ol>
+<li>由Google提出，基于函数式编程模型思想</li>
+<li>动机：在成千上百CPU上方便地并行处理大规模数据</li>
+<li>思想：分而治之</li>
+<li>自动并行和分布</li>
+<li>容错，提供状态监控工具</li>
+<li>程序员接口清晰，两个函数map（）和reduce（）</li>
+</ol>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230217000548509.png" srcset="/img/loading.gif" lazyload alt="image-20230217000548509" style="zoom:67%;" />
+
+<h3 id="编程模型"><a href="#编程模型" class="headerlink" title="编程模型"></a>编程模型</h3><ol>
+<li><p>基于函数式编程思想。</p>
+</li>
+<li><p>用户实现两个函数接口：</p>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230217000619603.png" srcset="/img/loading.gif" lazyload alt="image-20230217000619603" style="zoom:70%;" /></li>
+</ol>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/image-20230217000636607.png" srcset="/img/loading.gif" lazyload alt="image-20230217000636607" style="zoom:80%;" />
+
+<h3 id="并行化"><a href="#并行化" class="headerlink" title="并行化"></a>并行化</h3><ol>
+<li>map()函数并行执行，给定数据集，按照key生成 不同的中间结果</li>
+<li>reduce() 函数针对不同的out-key并行执行</li>
+<li>所有值的处理是独立的。</li>
+<li>瓶颈：直到所有的map函数执行结束后，reduce阶段才开始。</li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">非关系数据库</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93/">#非关系数据库</a>
+      
+        <a href="/tags/PPT/">#PPT</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>非关系数据库PPT</div>
+      <div>http://example.com/2023/02/16/非关系数据库PPT/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>ECNU_zhy</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>February 16, 2023</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>Licensed under</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/02/27/computation-theory-1/" title="">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile"></span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/02/15/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/" title="非关系数据库期末复习">
+                        <span class="hidden-mobile">非关系数据库期末复习</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.1/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

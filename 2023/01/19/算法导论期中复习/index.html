@@ -1,0 +1,919 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/xiaoxin.png">
+  <link rel="icon" href="/img/xiaoxin.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="ECNU_zhy">
+  <meta name="keywords" content="算法导论">
+  
+    <meta name="description" content="排序算法        插入排序  归并排序     最大子数组问题   $T(n)&#x3D;\theta (nlgn)$ 线性时间的最大子数组求解算法 12345678910111213141516ITERATIVE-FIND-MAXIMUM-SUBARRAY(A):    max-sum &#x3D; -∞    sum &#x3D; -∞    for j &#x3D; 1 to A.length        cur">
+<meta property="og:type" content="article">
+<meta property="og:title" content="算法导论-到最大子数组问题复习">
+<meta property="og:url" content="http://example.com/2023/01/19/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/index.html">
+<meta property="og:site_name" content="zhy-blog">
+<meta property="og:description" content="排序算法        插入排序  归并排序     最大子数组问题   $T(n)&#x3D;\theta (nlgn)$ 线性时间的最大子数组求解算法 12345678910111213141516ITERATIVE-FIND-MAXIMUM-SUBARRAY(A):    max-sum &#x3D; -∞    sum &#x3D; -∞    for j &#x3D; 1 to A.length        cur">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108224901740.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109210843551.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109210850112.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109210857118.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109210903497.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109210926336.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109210956279.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109211204109.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108235815520.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109000006738.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108205429843.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108205730347-16679122509241.png">
+<meta property="og:image" content="http://example.com/2023/01/19/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109000328999.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109000337404.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108220622199.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108220631259.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108220739184.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108220909886.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108222735283.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108222819501.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108222847224.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109000922811.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109001820983-16679243012913.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109001834262.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108223606756.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108223620426.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108223731556.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108223906073.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109000902435.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221014191207322.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221014191632821.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221014191754174.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221014191952818.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221014192054063.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108225150953.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108225245744.png">
+<meta property="og:image" content="http://example.com/2023/01/19/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108225341359.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108225553262.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108230133117.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108230159541.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108230310982.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108230403762.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108230642277.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108231004288.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108231448885.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108233524259.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108234119551.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109212150497.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108234130425.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108234153013.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108234806215.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108234528891.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108234850737.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108234905003.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108235230197.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109100559427.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109100804042.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109101820963-16679603012661.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109101830337.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109102544998.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109102553211.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109102714339.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109103927400.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109103940398.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109103956787.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109104243101.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109104606624.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109104932378.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109105101722.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109110002082.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109110324416.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109110832233.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109140545276.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109140928170.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109141520092.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109142010075.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109142023217.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109142105887.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109145114106.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109145123231.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109145145290.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109142515242.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109143650013.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109231350495.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109231406566.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109145604941.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109152741385.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109152748569.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109152757333.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109155802315.png">
+<meta property="og:image" content="http://example.com/2023/01/19/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109161138267.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109232455434.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109232552601.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109232639313.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109235511447.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109235518635.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109235535325.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109235543478.png">
+<meta property="article:published_time" content="2023-01-19T06:25:33.000Z">
+<meta property="article:modified_time" content="2023-01-19T06:26:36.176Z">
+<meta property="article:author" content="ECNU_zhy">
+<meta property="article:tag" content="算法导论">
+<meta property="article:tag" content="期中复习">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108224901740.png">
+  
+  
+  
+  <title>算法导论-到最大子数组问题复习 - zhy-blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ECNU-zhy</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                Links
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="算法导论-到最大子数组问题复习"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-01-19 14:25" pubdate>
+          January 19, 2023 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.4k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          37 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">算法导论-到最大子数组问题复习</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="排序算法"><a href="#排序算法" class="headerlink" title="排序算法"></a>排序算法</h1><p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108224901740.png" srcset="/img/loading.gif" lazyload alt="image-20221108224901740"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109210843551.png" srcset="/img/loading.gif" lazyload alt="image-20221109210843551"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109210850112.png" srcset="/img/loading.gif" lazyload alt="image-20221109210850112"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109210857118.png" srcset="/img/loading.gif" lazyload alt="image-20221109210857118"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109210903497.png" srcset="/img/loading.gif" lazyload alt="image-20221109210903497"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109210926336.png" srcset="/img/loading.gif" lazyload alt="image-20221109210926336"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109210956279.png" srcset="/img/loading.gif" lazyload alt="image-20221109210956279"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109211204109.png" srcset="/img/loading.gif" lazyload alt="image-20221109211204109"></p>
+<h1 id="插入排序"><a href="#插入排序" class="headerlink" title="插入排序"></a>插入排序</h1><p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108235815520.png" srcset="/img/loading.gif" lazyload alt="image-20221108235815520"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109000006738.png" srcset="/img/loading.gif" lazyload alt="image-20221109000006738"></p>
+<h1 id="归并排序"><a href="#归并排序" class="headerlink" title="归并排序"></a>归并排序</h1><p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108205429843.png" srcset="/img/loading.gif" lazyload alt="image-20221108205429843"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108205730347-16679122509241.png" srcset="/img/loading.gif" lazyload alt="image-20221108205730347"></p>
+<img src="../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109000328999.png" srcset="/img/loading.gif" lazyload alt="image-20221109000328999" style="zoom:67%;" />
+
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109000337404.png" srcset="/img/loading.gif" lazyload alt="image-20221109000337404"></p>
+<h1 id="最大子数组问题"><a href="#最大子数组问题" class="headerlink" title="最大子数组问题"></a>最大子数组问题</h1><p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108220622199.png" srcset="/img/loading.gif" lazyload alt="image-20221108220622199"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108220631259.png" srcset="/img/loading.gif" lazyload alt="image-20221108220631259"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108220739184.png" srcset="/img/loading.gif" lazyload alt="image-20221108220739184"></p>
+<p>$T(n)&#x3D;\theta (nlgn)$</p>
+<h1 id="线性时间的最大子数组求解算法"><a href="#线性时间的最大子数组求解算法" class="headerlink" title="线性时间的最大子数组求解算法"></a>线性时间的最大子数组求解算法</h1><p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108220909886.png" srcset="/img/loading.gif" lazyload alt="image-20221108220909886"></p>
+<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs arcade">ITERATIVE-<span class="hljs-built_in">FIND</span>-MAXIMUM-SUBARRAY(A):<br>    <span class="hljs-built_in">max</span>-<span class="hljs-built_in">sum</span> = -∞<br>    <span class="hljs-built_in">sum</span> = -∞<br>    <span class="hljs-keyword">for</span> j = <span class="hljs-number">1</span> to A.<span class="hljs-built_in">length</span><br>        currentHigh = j<br>        <span class="hljs-keyword">if</span> <span class="hljs-built_in">sum</span> &gt; <span class="hljs-number">0</span>   <span class="hljs-comment">//只要是正的就可以加上，就会大一点</span><br>            <span class="hljs-built_in">sum</span> = <span class="hljs-built_in">sum</span> + A[j]<br>        <span class="hljs-keyword">else</span><br>            currentLow = j   <span class="hljs-comment">//前面的和是负的，就从后面开始,，如果都是正的，那么currentLow就是1</span><br>            <span class="hljs-built_in">sum</span> = A[j]<br>        <span class="hljs-keyword">if</span> <span class="hljs-built_in">sum</span> &gt; <span class="hljs-built_in">max</span>-<span class="hljs-built_in">sum</span><br>            <span class="hljs-built_in">max</span>-<span class="hljs-built_in">sum</span> = <span class="hljs-built_in">sum</span><br>            low = currentLow<br>            high = currentHigh<br>    <span class="hljs-keyword">return</span> (low, high, <span class="hljs-built_in">max</span>-<span class="hljs-built_in">sum</span>)<br><br></code></pre></td></tr></table></figure>
+
+<h1 id="Strassen算法的运行时间"><a href="#Strassen算法的运行时间" class="headerlink" title="Strassen算法的运行时间"></a>Strassen算法的运行时间</h1><p>$\theta (n^{lg7})$</p>
+<p>$O(n^{2.81})$</p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108222735283.png" srcset="/img/loading.gif" lazyload alt="image-20221108222735283"></p>
+<h1 id="用代入法求解递归式"><a href="#用代入法求解递归式" class="headerlink" title="用代入法求解递归式"></a>用代入法求解递归式</h1><p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108222819501.png" srcset="/img/loading.gif" lazyload alt="image-20221108222819501"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108222847224.png" srcset="/img/loading.gif" lazyload alt="image-20221108222847224"></p>
+<h1 id="用递归树法求解递归式"><a href="#用递归树法求解递归式" class="headerlink" title="用递归树法求解递归式"></a>用递归树法求解递归式</h1><p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109000922811.png" srcset="/img/loading.gif" lazyload alt="image-20221109000922811"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109001820983-16679243012913.png" srcset="/img/loading.gif" lazyload alt="image-20221109001820983"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109001834262.png" srcset="/img/loading.gif" lazyload alt="image-20221109001834262"></p>
+<h1 id="用主方法求解递归式"><a href="#用主方法求解递归式" class="headerlink" title="用主方法求解递归式"></a>用主方法求解递归式</h1><p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108223606756.png" srcset="/img/loading.gif" lazyload alt="image-20221108223606756"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108223620426.png" srcset="/img/loading.gif" lazyload alt="image-20221108223620426"></p>
+<h1 id="二分查找"><a href="#二分查找" class="headerlink" title="二分查找"></a>二分查找</h1><p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108223731556.png" srcset="/img/loading.gif" lazyload alt="image-20221108223731556"></p>
+<h2 id="循环迭代"><a href="#循环迭代" class="headerlink" title="循环迭代"></a>循环迭代</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c">ITERATIVE-BINARY-SEARCH(A, v, low, high)<br>    <span class="hljs-keyword">while</span> low ≤ high<br>        mid = <span class="hljs-built_in">floor</span>((low + high) / <span class="hljs-number">2</span>)<br>        <span class="hljs-keyword">if</span> v == A[mid]<br>            <span class="hljs-keyword">return</span> mid<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> v &gt; A[mid]<br>            low = mid + <span class="hljs-number">1</span><br>        <span class="hljs-keyword">else</span> high = mid - <span class="hljs-number">1</span><br>    <span class="hljs-keyword">return</span> NIL<br></code></pre></td></tr></table></figure>
+
+<h2 id="递归"><a href="#递归" class="headerlink" title="递归"></a>递归</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c">RECURSIVE-BINARY-SEARCH(A, v, low, high)<br>    <span class="hljs-keyword">if</span> low &gt; high<br>        <span class="hljs-keyword">return</span> NIL<br>    mid = <span class="hljs-built_in">floor</span>((low + high) / <span class="hljs-number">2</span>)<br>    <span class="hljs-keyword">if</span> v == A[mid]<br>        <span class="hljs-keyword">return</span> mid<br>    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> v &gt; A[mid]<br>        <span class="hljs-keyword">return</span> RECURSIVE-BINARY-SEARCH(A, v, mid + <span class="hljs-number">1</span>, high)<br>    <span class="hljs-keyword">else</span> <span class="hljs-keyword">return</span> RECURSIVE-BINARY-SEARCH(A, v, low, mid - <span class="hljs-number">1</span>)<br><br></code></pre></td></tr></table></figure>
+
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108223906073.png" srcset="/img/loading.gif" lazyload alt="image-20221108223906073"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109000902435.png" srcset="/img/loading.gif" lazyload alt="image-20221109000902435"></p>
+<h1 id="堆排序"><a href="#堆排序" class="headerlink" title="堆排序"></a>堆排序</h1><h2 id="最大堆中元素的插入"><a href="#最大堆中元素的插入" class="headerlink" title="最大堆中元素的插入"></a>最大堆中元素的插入</h2><p>The following sequence of pictures shows how 10 is inserted into the heap,then swapped with parent nodes until the max-heap property is restored. The node containing the new key is heavily shaded.</p>
+<h2 id="1-original-heap"><a href="#1-original-heap" class="headerlink" title="1.original heap"></a>1.original heap</h2><p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221014191207322.png" srcset="/img/loading.gif" lazyload alt="image-20221014191207322"></p>
+<h2 id="2-MAX-HEAP-INSERT-A-10-被调用，所以我们首先附加一个节点被赋值为-∞的节点："><a href="#2-MAX-HEAP-INSERT-A-10-被调用，所以我们首先附加一个节点被赋值为-∞的节点：" class="headerlink" title="2. MAX-HEAP-INSERT(A,10) 被调用，所以我们首先附加一个节点被赋值为-∞的节点："></a>2. MAX-HEAP-INSERT(A,10) 被调用，所以我们首先附加一个节点被赋值为-∞的节点：</h2><p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221014191632821.png" srcset="/img/loading.gif" lazyload alt="image-20221014191632821"></p>
+<h2 id="3-进行新添加的节点的健值更新："><a href="#3-进行新添加的节点的健值更新：" class="headerlink" title="3.进行新添加的节点的健值更新："></a>3.进行新添加的节点的健值更新：</h2><p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221014191754174.png" srcset="/img/loading.gif" lazyload alt="image-20221014191754174"></p>
+<h2 id="4-由于父键小于-10，因此交换节点："><a href="#4-由于父键小于-10，因此交换节点：" class="headerlink" title="4.由于父键小于 10，因此交换节点："></a>4.由于父键小于 10，因此交换节点：</h2><p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221014191952818.png" srcset="/img/loading.gif" lazyload alt="image-20221014191952818"></p>
+<h2 id="5-由于父节点小于10，节点交换："><a href="#5-由于父节点小于10，节点交换：" class="headerlink" title="5.由于父节点小于10，节点交换："></a>5.由于父节点小于10，节点交换：</h2><p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221014192054063.png" srcset="/img/loading.gif" lazyload alt="image-20221014192054063"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108225150953.png" srcset="/img/loading.gif" lazyload alt="image-20221108225150953"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108225245744.png" srcset="/img/loading.gif" lazyload alt="image-20221108225245744"></p>
+<h2 id="维护最大堆性质"><a href="#维护最大堆性质" class="headerlink" title="维护最大堆性质"></a>维护最大堆性质</h2><img src="../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108225341359.png" srcset="/img/loading.gif" lazyload alt="image-20221108225341359" style="zoom:67%;" />
+
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108225553262.png" srcset="/img/loading.gif" lazyload alt="image-20221108225553262"></p>
+<p>$T(n)&#x3D;O(lgn)&#x3D;O(h)$</p>
+<h2 id="建堆"><a href="#建堆" class="headerlink" title="建堆"></a>建堆</h2><p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108230133117.png" srcset="/img/loading.gif" lazyload alt="image-20221108230133117"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108230159541.png" srcset="/img/loading.gif" lazyload alt="image-20221108230159541"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108230310982.png" srcset="/img/loading.gif" lazyload alt="image-20221108230310982"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108230403762.png" srcset="/img/loading.gif" lazyload alt="image-20221108230403762"></p>
+<h2 id="堆排序算法"><a href="#堆排序算法" class="headerlink" title="堆排序算法"></a>堆排序算法</h2><p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108230642277.png" srcset="/img/loading.gif" lazyload alt="image-20221108230642277"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108231004288.png" srcset="/img/loading.gif" lazyload alt="image-20221108231004288"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108231448885.png" srcset="/img/loading.gif" lazyload alt="image-20221108231448885"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108233524259.png" srcset="/img/loading.gif" lazyload alt="image-20221108233524259"></p>
+<h1 id="快速排序"><a href="#快速排序" class="headerlink" title="快速排序"></a>快速排序</h1><p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108234119551.png" srcset="/img/loading.gif" lazyload alt="image-20221108234119551"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109212150497.png" srcset="/img/loading.gif" lazyload alt="image-20221109212150497"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108234130425.png" srcset="/img/loading.gif" lazyload alt="image-20221108234130425"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108234153013.png" srcset="/img/loading.gif" lazyload alt="image-20221108234153013"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108234806215.png" srcset="/img/loading.gif" lazyload alt="image-20221108234806215"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108234528891.png" srcset="/img/loading.gif" lazyload alt="image-20221108234528891"></p>
+<h2 id="最坏情况划分"><a href="#最坏情况划分" class="headerlink" title="最坏情况划分"></a>最坏情况划分</h2><p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108234850737.png" srcset="/img/loading.gif" lazyload alt="image-20221108234850737"></p>
+<h2 id="最好情况划分"><a href="#最好情况划分" class="headerlink" title="最好情况划分"></a>最好情况划分</h2><p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108234905003.png" srcset="/img/loading.gif" lazyload alt="image-20221108234905003"></p>
+<h2 id="快速排序的随机化版本"><a href="#快速排序的随机化版本" class="headerlink" title="快速排序的随机化版本"></a>快速排序的随机化版本</h2><p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221108235230197.png" srcset="/img/loading.gif" lazyload alt="image-20221108235230197"></p>
+<h1 id="排序算法的下界"><a href="#排序算法的下界" class="headerlink" title="排序算法的下界"></a>排序算法的下界</h1><h2 id="决策树模型"><a href="#决策树模型" class="headerlink" title="决策树模型"></a>决策树模型</h2><p>决策树是一颗完全二叉树，表示在给定规模的情况下，某一特定排序算法对所有元素的比较操作</p>
+<h2 id="最坏情况的下界"><a href="#最坏情况的下界" class="headerlink" title="最坏情况的下界"></a>最坏情况的下界</h2><p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109100559427.png" srcset="/img/loading.gif" lazyload alt="image-20221109100559427"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109100804042.png" srcset="/img/loading.gif" lazyload alt="image-20221109100804042"></p>
+<p>决策树高度的下界也就是比较排序算法的下界</p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109101820963-16679603012661.png" srcset="/img/loading.gif" lazyload alt="image-20221109101820963"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109101830337.png" srcset="/img/loading.gif" lazyload alt="image-20221109101830337"></p>
+<p>输入即为叶子结点的个数，m种输入一定小于$2^h$,叶子结点个数不多于$2^h$</p>
+<p>$n!&lt;&#x3D;l&lt;&#x3D;2^h$</p>
+<h1 id="计数排序"><a href="#计数排序" class="headerlink" title="计数排序"></a>计数排序</h1><p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109102544998.png" srcset="/img/loading.gif" lazyload alt="image-20221109102544998"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109102553211.png" srcset="/img/loading.gif" lazyload alt="image-20221109102553211"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109102714339.png" srcset="/img/loading.gif" lazyload alt="image-20221109102714339"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109103927400.png" srcset="/img/loading.gif" lazyload alt="image-20221109103927400"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109103940398.png" srcset="/img/loading.gif" lazyload alt="image-20221109103940398"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109103956787.png" srcset="/img/loading.gif" lazyload alt="image-20221109103956787"></p>
+<h1 id="基数排序"><a href="#基数排序" class="headerlink" title="基数排序"></a>基数排序</h1><p>按照最低有效位进行排序</p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109104243101.png" srcset="/img/loading.gif" lazyload alt="image-20221109104243101"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109104606624.png" srcset="/img/loading.gif" lazyload alt="image-20221109104606624"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109104932378.png" srcset="/img/loading.gif" lazyload alt="image-20221109104932378"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109105101722.png" srcset="/img/loading.gif" lazyload alt="image-20221109105101722"></p>
+<h1 id="桶排序"><a href="#桶排序" class="headerlink" title="桶排序"></a>桶排序</h1><p>假设输入数据服从均匀分布，平均情况下其时间代价为$O(n)$</p>
+<ul>
+<li>计数排序假设输入数据都属于一个小区间内的整数</li>
+<li>桶排序假设输入是一个随机过程产生，该过程将元素均匀、独立地分布在[0,1)区间上</li>
+</ul>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109110002082.png" srcset="/img/loading.gif" lazyload alt="image-20221109110002082"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109110324416.png" srcset="/img/loading.gif" lazyload alt="image-20221109110324416"></p>
+<h1 id="中位数和顺序统计量"><a href="#中位数和顺序统计量" class="headerlink" title="中位数和顺序统计量"></a>中位数和顺序统计量</h1><p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109110832233.png" srcset="/img/loading.gif" lazyload alt="image-20221109110832233"></p>
+<h1 id="最小值和最大值"><a href="#最小值和最大值" class="headerlink" title="最小值和最大值"></a>最小值和最大值</h1><p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109140545276.png" srcset="/img/loading.gif" lazyload alt="image-20221109140545276"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109140928170.png" srcset="/img/loading.gif" lazyload alt="image-20221109140928170"></p>
+<p>在最坏情况下证明 $\lceil 3n&#x2F;2 \rceil$-2 比较的下限，以找到 n 个数字的最大值和最小值。（提示：考虑有多少数字可能是最大值或最小值，并研究比较如何影响这些计数 .)</p>
+<p>[ans]</p>
+<ol>
+<li><p>最初，所有 $n$个数字都可能是最大值或最小值。</p>
+</li>
+<li><p>令$MAX$表示潜在的最大值构成的集合，$MIN$表示潜在的最小值构成的集合。</p>
+</li>
+<li><p>当我们在原数组中比较两个元素a和b时，不妨设$a&lt;&#x3D;b$，我们把a从$MAX$中剔除，把b从$MIN$中剔除，从而a和b均不可能同时出现在$MIN$和$MAX$中。</p>
+<ul>
+<li>当n为偶数时，每两个数为一组进行一次比较，一共 𝑛&#x2F;2 次比较．比较完成后，所有元素均参与一次比较，由上文的分析可知$MIN$和$MAX$不相交，且 $|MAX|$ &#x3D; $|MIN|$ &#x3D; $n&#x2F;2$</li>
+<li>当 n为奇数时，先不考虑最后一个元素，按照偶数的情况比较．对于最后一个元素，与倒数第二个元素进行比较．一共进行了$(n-1)&#x2F;2+1&#x3D;\lceil n&#x2F;2 \rceil$ 次比较，且  $|MAX|$和  $|MIN|$中其一为 $\lceil n&#x2F;2 \rceil$，另一个为$\lfloor n&#x2F;2 \rfloor$</li>
+</ul>
+</li>
+<li><p>综上，经过$\lceil n&#x2F;2 \rceil$次比较后$MIN$和$MAX$是不相交的，并且 $|MIN|$和 $|MAX|$中其一为 $\lceil n&#x2F;2 \rceil$，另一个为$\lfloor n&#x2F;2 \rfloor$</p>
+</li>
+<li><p><strong>对$MIN$做线性比较，一共比较$|m|-1$次可以得到最小值，$MAX$同理。综上，总比较次数为</strong><br>$$<br>\lceil n&#x2F;2 \rceil +\lfloor n&#x2F;2 \rfloor-1+\lceil n&#x2F;2 \rceil-1&#x3D;\lceil n&#x2F;2 \rceil+n-2&#x3D;\lceil 3n&#x2F;2 \rceil-2<br>$$</p>
+</li>
+</ol>
+<h1 id="期望为线性时间的选择算法"><a href="#期望为线性时间的选择算法" class="headerlink" title="期望为线性时间的选择算法"></a>期望为线性时间的选择算法</h1><p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109141520092.png" srcset="/img/loading.gif" lazyload alt="image-20221109141520092"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109142010075.png" srcset="/img/loading.gif" lazyload alt="image-20221109142010075"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109142023217.png" srcset="/img/loading.gif" lazyload alt="image-20221109142023217"></p>
+<h1 id="最坏情况为线性时间的选择算法"><a href="#最坏情况为线性时间的选择算法" class="headerlink" title="最坏情况为线性时间的选择算法"></a><strong>最坏情况</strong>为线性时间的选择算法</h1><p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109142105887.png" srcset="/img/loading.gif" lazyload alt="image-20221109142105887"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109145114106.png" srcset="/img/loading.gif" lazyload alt="image-20221109145114106"></p>
+<ol>
+<li>划分</li>
+<li>插入排序确定每组元素的中位数</li>
+<li>找出中位数的中位数</li>
+<li>根据中位数的中位数x对数组进行划分</li>
+<li>递归<ul>
+<li>i&#x3D;k 返回中位数的中位数x</li>
+<li>i&lt;k 在低区递归调用找到第i小的元素</li>
+<li>i&gt;k 在高区递归查找第i-k小的元素</li>
+</ul>
+</li>
+</ol>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109145123231.png" srcset="/img/loading.gif" lazyload alt="image-20221109145123231"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109145145290.png" srcset="/img/loading.gif" lazyload alt="image-20221109145145290"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109142515242.png" srcset="/img/loading.gif" lazyload alt="image-20221109142515242"></p>
+<p>为了在最坏情况下也保证对$O(nlgn)$的复杂度，需要改变对$pivot$的选择。可以每次都选择序列的 <strong>中位数</strong>作为$pivot$，对中位数的选择只需要$O(n)$，因此不需要额外的复杂度。</p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109143650013.png" srcset="/img/loading.gif" lazyload alt="image-20221109143650013"></p>
+<p>Assume the input elements are divided into groups of k. Similar like the analysis in the book, at least half of the $\lceil n&#x2F;k \rceil$ groups contribute at least $\lceil n&#x2F;2 \rceil$ elements that are greater than x, except for the one group that has fewer than k elements if k does not divide n exactly, and the one group containing x itself. Discounting these two groups, it follows that the number of elements greater than x is at least</p>
+<p>$$<br>\lceil k&#x2F;2 \rceil(\lceil \frac{1}{2} \lceil n&#x2F;k \rceil \rceil - 2) \geq \frac{k}{2}(\frac{1}{2}\frac{n}{k} - 2) &#x3D; \frac{n}{4} - k<br>$$<br>Similarly, at least $\frac{n}{4} - k$ elements are less than x. Thus, in the worst case, step 5 calls SELECT recursively on at most $\frac{3n}{4} + k$ elements.</p>
+<p>So when n is greater than some constant, we have<br>$$<br>T(n) \leq T(\lceil \frac{n}{k} \rceil) + T(\frac{3n}{4} + k) + O(n)<br>$$<br>Assume T(n) runs in linear time, substituting it into the recurrence yields:<br>$$<br>\begin{eqnarray}<br>T(n) &amp;\leq&amp; T(\lceil \frac{n}{k} \rceil) + T(\frac{3n}{4} + k) + O(n) \<br>&amp;\leq&amp; T(\lceil \frac{n}{k} \rceil) + T(\frac{3n}{4} + k) + an \<br>&amp;\leq&amp; c\frac{n}{k} + c(\frac{3n}{4} + k) + an \<br>&amp;&#x3D;&amp; cn + (\frac{c}{k}n + an - \frac{c}{4}n + ck) \<br>&amp;\leq&amp; cn<br>\end{eqnarray}<br>$$<br>where the last step holds as long as<br>$$<br>\frac{c}{k}n + an - \frac{c}{4}n + ck \leq 0<br>$$<br>So we need to find some k such that there exists constants c and a such that<br>$$<br>\frac{c}{k}n + an - \frac{c}{4}n + ck \leq 0<br>$$<br>We have<br>$$<br>\frac{c}{k}n + an - \frac{c}{4}n + ck &#x3D; c(\frac{n}{k} - \frac{n}{4} + k) + an \leq 0<br>$$<br>Because both c and a are positive, so it could only be<br>$$<br>\frac{n}{k} - \frac{n}{4} + k \leq 0<br>$$<br>Let $f(k) &#x3D; \frac{n}{k} - \frac{n}{4} + k$   , so<br>$$<br>f(4) &#x3D; 4 &gt; 0, f(5) &#x3D; -\frac{n}{20} + 5 \leq 0 \text{ when } n \geq 100<br>$$<br>So we can always find a $n_0$ such that $f(k) \leq 0$ when $k \geq 5$</p>
+<p>Thus the algorithm work in linear time if the input elements are divided into groups of 7, but doesn’t run in linear time if they are divided into groups of 3. When k&#x3D;4, the algorithm works in $\Omega(nlgn)$。</p>
+<h1 id="动态规划"><a href="#动态规划" class="headerlink" title="动态规划"></a>动态规划</h1><p>动态规划与分治算法类似，都是通过组合子问题的解来求解原问题的</p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109231350495.png" srcset="/img/loading.gif" lazyload alt="image-20221109231350495"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109231406566.png" srcset="/img/loading.gif" lazyload alt="image-20221109231406566"></p>
+<h2 id="设计一个动态规划算法"><a href="#设计一个动态规划算法" class="headerlink" title="设计一个动态规划算法"></a>设计一个动态规划算法</h2><p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109145604941.png" srcset="/img/loading.gif" lazyload alt="image-20221109145604941"></p>
+<ul>
+<li><h2 id="带备忘的自顶向下法"><a href="#带备忘的自顶向下法" class="headerlink" title="带备忘的自顶向下法"></a>带备忘的自顶向下法</h2><p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109152741385.png" srcset="/img/loading.gif" lazyload alt="image-20221109152741385"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109152748569.png" srcset="/img/loading.gif" lazyload alt="image-20221109152748569"></p>
+</li>
+<li><h2 id="自底向上法"><a href="#自底向上法" class="headerlink" title="自底向上法"></a>自底向上法</h2><p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109152757333.png" srcset="/img/loading.gif" lazyload alt="image-20221109152757333"></p>
+<p>依次求解规模为i&#x3D;0..n的子问题</p>
+</li>
+<li><h2 id="子问题图"><a href="#子问题图" class="headerlink" title="子问题图"></a>子问题图</h2><p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109155802315.png" srcset="/img/loading.gif" lazyload alt="image-20221109155802315"></p>
+</li>
+<li><h2 id="重构解"><a href="#重构解" class="headerlink" title="重构解"></a>重构解</h2><p>扩展动态规划算法，使其对每个子问题不仅保存最优收益值，还保存对应的分割方案</p>
+<img src="../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109161138267.png" srcset="/img/loading.gif" lazyload alt="image-20221109161138267" style="zoom:67%;" /></li>
+</ul>
+<h1 id="矩阵链乘法算法"><a href="#矩阵链乘法算法" class="headerlink" title="矩阵链乘法算法"></a>矩阵链乘法算法</h1><p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109232455434.png" srcset="/img/loading.gif" lazyload alt="image-20221109232455434"></p>
+<h2 id="递归式"><a href="#递归式" class="headerlink" title="递归式"></a>递归式</h2><p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109232552601.png" srcset="/img/loading.gif" lazyload alt="image-20221109232552601"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109232639313.png" srcset="/img/loading.gif" lazyload alt="image-20221109232639313"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109235511447.png" srcset="/img/loading.gif" lazyload alt="image-20221109235511447"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109235518635.png" srcset="/img/loading.gif" lazyload alt="image-20221109235518635"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109235535325.png" srcset="/img/loading.gif" lazyload alt="image-20221109235535325"></p>
+<p><img src="/../images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/image-20221109235543478.png" srcset="/img/loading.gif" lazyload alt="image-20221109235543478"></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/" class="category-chain-item">期中复习</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA/">#算法导论</a>
+      
+        <a href="/tags/%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/">#期中复习</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>算法导论-到最大子数组问题复习</div>
+      <div>http://example.com/2023/01/19/算法导论期中复习/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>ECNU_zhy</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>January 19, 2023</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>Licensed under</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/01/19/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA16-%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/" title="算法导论16-贪心算法">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">算法导论16-贪心算法</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/01/15/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA24-%E5%8D%95%E6%BA%90%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98-%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/" title="算法导论24-单源最短路径问题">
+                        <span class="hidden-mobile">算法导论24-单源最短路径问题</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.1/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

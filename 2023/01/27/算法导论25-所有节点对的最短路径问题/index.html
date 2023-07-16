@@ -1,0 +1,792 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/xiaoxin.png">
+  <link rel="icon" href="/img/xiaoxin.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="ECNU_zhy">
+  <meta name="keywords" content="算法导论">
+  
+    <meta name="description" content="算法导论25-所有节点对的最短路径问题引言本章使用的多数算法使用邻接矩阵来表示图，算法的输入将是一个n*n的矩阵W，该矩阵代表的是一个有n个结点的有向图G&#x3D;（V,E）的边的权重，即W&#x3D;（$w_{ij}$）。其中：  算法的输出也是一个n*n的矩阵D&#x3D;($d_{ij}$)，其中$d_{ij}$表示的是从i到j的一条最短路径的权重，也就是说，如果用$\delta(i,j)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="算法导论25-所有节点对的最短路径问题">
+<meta property="og:url" content="http://example.com/2023/01/27/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:site_name" content="zhy-blog">
+<meta property="og:description" content="算法导论25-所有节点对的最短路径问题引言本章使用的多数算法使用邻接矩阵来表示图，算法的输入将是一个n*n的矩阵W，该矩阵代表的是一个有n个结点的有向图G&#x3D;（V,E）的边的权重，即W&#x3D;（$w_{ij}$）。其中：  算法的输出也是一个n*n的矩阵D&#x3D;($d_{ij}$)，其中$d_{ij}$表示的是从i到j的一条最短路径的权重，也就是说，如果用$\delta(i,j)">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230127233752061.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230127234936210.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128001805200.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128002006614.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128003045608.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128004028151.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128004147976.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128004748075.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128005058561.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128005148684.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128005339787.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128005444173.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128005855328.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128005953851.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128010049847.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128131252336.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128131652096.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128132025927.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128133609479.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128134219605.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128134833809.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128135931405.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128140938861.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128141059602.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128141118864.png">
+<meta property="article:published_time" content="2023-01-27T15:21:22.000Z">
+<meta property="article:modified_time" content="2023-01-28T13:52:36.699Z">
+<meta property="article:author" content="ECNU_zhy">
+<meta property="article:tag" content="算法导论">
+<meta property="article:tag" content="单源最短路径问题">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230127233752061.png">
+  
+  
+  
+  <title>算法导论25-所有节点对的最短路径问题 - zhy-blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ECNU-zhy</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                Links
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="算法导论25-所有节点对的最短路径问题"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-01-27 23:21" pubdate>
+          January 27, 2023 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.1k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          26 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">算法导论25-所有节点对的最短路径问题</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="算法导论25-所有节点对的最短路径问题"><a href="#算法导论25-所有节点对的最短路径问题" class="headerlink" title="算法导论25-所有节点对的最短路径问题"></a>算法导论25-所有节点对的最短路径问题</h1><h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>本章使用的多数算法使用邻接矩阵来表示图，算法的输入将是一个n*n的矩阵W，该矩阵代表的是一个有n个结点的有向图G&#x3D;（V,E）的边的权重，即W&#x3D;（$w_{ij}$）。其中：</p>
+<p><img src="/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230127233752061.png" srcset="/img/loading.gif" lazyload alt="image-20230127233752061"></p>
+<p>算法的输出也是一个n*n的矩阵D&#x3D;($d_{ij}$)，其中$d_{ij}$表示的是从i到j的一条最短路径的权重，也就是说，如果用$\delta(i,j)$表示从i到j之间的最短路径权重，则在算法终结时有$d_{ij}&#x3D;\delta(i,j)$。</p>
+<p>除此之外，我们还要计算 **<u>前驱节点矩阵$π&#x3D;π_{ij}$</u><strong>。其中$π_{ij}$在i&#x3D;j或从i到j不存在路径时为NIL，在其他情况下是从i到j的某条最短路径上</strong><u>结点j的前驱结点</u>**。由矩阵$π$的第i行所诱导的子图应当是一棵根节点为i的最短路径树。</p>
+<p><strong><u>定义前驱子图：</u></strong></p>
+<p><img src="/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230127234936210.png" srcset="/img/loading.gif" lazyload alt="image-20230127234936210"></p>
+<p>打印出从i到j的一条最短路径：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c">PRINT-ALL-PAIRS-SHORTEST-PATH(π,i,j)<br>    <span class="hljs-keyword">if</span> i==j<br>        print i<br>    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> πij==NIL<br>        print <span class="hljs-string">&quot;no path from i to j exists&quot;</span><br>    <span class="hljs-keyword">else</span> PRINT-ALL-PAIRS-SHORTEST-PATH(π,i,πij)<br>        print j<br></code></pre></td></tr></table></figure>
+
+<h2 id="25-1-最短路径和矩阵乘法"><a href="#25-1-最短路径和矩阵乘法" class="headerlink" title="25.1 最短路径和矩阵乘法"></a>25.1 最短路径和矩阵乘法</h2><h3 id="分析最优解的结构：最短路径的结构"><a href="#分析最优解的结构：最短路径的结构" class="headerlink" title="分析最优解的结构：最短路径的结构"></a>分析最优解的结构：最短路径的结构</h3><p>W&#x3D;($w_{ij}$)</p>
+<p>考虑从i到j的一条最短路径p，假定p至多包含m条边。</p>
+<ul>
+<li>如果i&#x3D;j，则p的权重为0且不包含任何边</li>
+<li>如果i≠j，则将路径p分解为i$\leadsto _{p’}  \ k \rightarrow j$，其中路径p’至多包含m-1条边。p’是从i到k的一条最短路径，因此</li>
+</ul>
+<p>$$<br>\delta(i,j)&#x3D;\delta(i,k)+w(k,j)<br>$$</p>
+<h3 id="递归定义最优解的值：所有节点对最短路径问题的最优解"><a href="#递归定义最优解的值：所有节点对最短路径问题的最优解" class="headerlink" title="递归定义最优解的值：所有节点对最短路径问题的最优解"></a>递归定义最优解的值：所有节点对最短路径问题的最优解</h3><p>设$l_{ij}^{(m)}$是从i到j的至多包含m条边的任意路径的最小权重。当m&#x3D;0时，从i到j之间存在一条没有边的最短路径当且仅当i&#x3D;j。</p>
+<p>因此：<img src="/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128001805200.png" srcset="/img/loading.gif" lazyload alt="image-20230128001805200"></p>
+<p>我们通过对j的所有可能前驱k进行检查来获取该值，因此递归定义：</p>
+<p><img src="/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128002006614.png" srcset="/img/loading.gif" lazyload alt="image-20230128002006614"></p>
+<p>真正的最短路径权重$\delta(i,j)$是多少呢？</p>
+<p>从结点i到结点j的由多于n-1条边构成的路径不可能有比从i到j的最短路径权重更小的权重。因此，真正的最短路径权重可以由下面的公式给出：</p>
+<p><img src="/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128003045608.png" srcset="/img/loading.gif" lazyload alt="image-20230128003045608"></p>
+<h3 id="自底向上计算最优解的值：自底向上计算最短路径权重"><a href="#自底向上计算最优解的值：自底向上计算最短路径权重" class="headerlink" title="自底向上计算最优解的值：自底向上计算最短路径权重"></a>自底向上计算最优解的值：自底向上计算最短路径权重</h3><p><img src="/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128004028151.png" srcset="/img/loading.gif" lazyload alt="image-20230128004028151"></p>
+<p>下列伪代码可以在给定W和$L^{(m-1)}$的情况下，计算出$L^{(m)}$。也就是说，该伪代码将最近计算出的最短路径扩展了一条边：</p>
+<p><img src="/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128004147976.png" srcset="/img/loading.gif" lazyload alt="image-20230128004147976"></p>
+<p>该算法的运行时间为$\theta(n^3)$。</p>
+<p>该算法与矩阵乘法的关系：</p>
+<p><img src="/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128004748075.png" srcset="/img/loading.gif" lazyload alt="image-20230128004748075"></p>
+<p>回到所有结点对最短路径问题，我们通过对最短路径一条边一条边地扩展来计算最短路径权重。设A*B表示由算法EXTENDED-SHORTEST-PATHS(A,B)所返回<img src="/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128005058561.png" srcset="/img/loading.gif" lazyload alt="image-20230128005058561">矩阵“乘积”，我们可以计算出下面由n-1个矩阵所构成的矩阵序列：</p>
+<p><img src="/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128005148684.png" srcset="/img/loading.gif" lazyload alt="image-20230128005148684"></p>
+<p>如上所述，矩阵$L^{(n-1)}&#x3D;W^{n-1}$包含的是最短路径权重。下面伪代码在$\theta(n^4)$时间内计算出该矩阵序列：</p>
+<p><img src="/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128005339787.png" srcset="/img/loading.gif" lazyload alt="image-20230128005339787"></p>
+<p>具体实例：</p>
+<p><img src="/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128005444173.png" srcset="/img/loading.gif" lazyload alt="image-20230128005444173"></p>
+<h3 id="改进算法的运行时间"><a href="#改进算法的运行时间" class="headerlink" title="改进算法的运行时间"></a>改进算法的运行时间</h3><p>可以仅用$\lceil lg(n-1)\rceil$个矩阵乘积来计算矩阵$L^{(n-1)}$。我们需要的只是矩阵$L^{(N-1)}$，而不是所有的$L^{(m)}$。</p>
+<p>计算的方法如下：</p>
+<p><img src="/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128005855328.png" srcset="/img/loading.gif" lazyload alt="image-20230128005855328"></p>
+<p>下面使用 **<u>重复平方</u>**技术来计算上述矩阵序列：</p>
+<p><img src="/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128005953851.png" srcset="/img/loading.gif" lazyload alt="image-20230128005953851"></p>
+<h4 id="算法的运行时间："><a href="#算法的运行时间：" class="headerlink" title="算法的运行时间："></a>算法的运行时间：</h4><p><img src="/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128010049847.png" srcset="/img/loading.gif" lazyload alt="image-20230128010049847"></p>
+<h2 id="25-2-Floyd-Warshall算法"><a href="#25-2-Floyd-Warshall算法" class="headerlink" title="25.2 Floyd-Warshall算法"></a>25.2 Floyd-Warshall算法</h2><h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>我们使用一种不同的动态规划方式来解决	所有结点对最短路径问题。Floyd-Warshall算法的运行时间为$\theta(V^3)$。</p>
+<p>负权重的边可以存在，但是不能存在负权重的环路。</p>
+<p>我们仍按照动态规划的思路阐述算法。</p>
+<h3 id="最短路径的结构"><a href="#最短路径的结构" class="headerlink" title="最短路径的结构"></a>最短路径的结构</h3><p>Floyd-Warshall算法考虑的是一条最短路径上的中间结点。</p>
+<p>Floyd-Warshall算法依赖于以下几点考虑：</p>
+<ul>
+<li>考虑从i到j的所有中间结点均取自集合{1,2,3,…,k}的路径，设<strong>p是其中权重最小的简单路径</strong></li>
+<li>Floyd-Warshall算法利用了p和 从i到j之间中间节间均取自集合{1,2,3,..,k-1}的最短路径之间的关系</li>
+<li>该关系依赖于<b><u>k是否是p上的一个中间结点</u></b></li>
+</ul>
+<ol>
+<li><p>如果k<strong>不是</strong>p上的中间结点，则路径p上所有的中间结点都属于集合{1,2，…，k-1}。因此，<strong>从i到j的中间结点取自{1,2,…,k-1}的一条最短路径也是从i到j的中间结点取自{1,2,…,k}的一条最短路径</strong></p>
+</li>
+<li><p>如果k<strong>是</strong>p上的中间结点，则将路径p分为两部分:$i \leadsto_{p_1}k \leadsto_{p_2}j$。</p>
+<p><img src="/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128131252336.png" srcset="/img/loading.gif" lazyload alt="image-20230128131252336"></p>
+<p>路径p1上的所有中间结点都属于集合{1,2,…,k-1}，因此：</p>
+<ul>
+<li>p1是从<strong>i到k</strong>的中间结点全部取自{1,2,…,k-1}的一条最短路径</li>
+<li>p1是从<strong>k到j</strong>的中间结点全部取自{1,2,…,k-1}的一条最短路径</li>
+</ul>
+</li>
+</ol>
+<h3 id="所有结点对最短路径问题的一个递归解"><a href="#所有结点对最短路径问题的一个递归解" class="headerlink" title="所有结点对最短路径问题的一个递归解"></a>所有结点对最短路径问题的一个递归解</h3><p>设$d_{ij}^{(k)}$为从i到j的所有中间结点全部取自集合{1,2,3,…,k}的一条最短路径的权重。</p>
+<p>因此做出如下递归式：</p>
+<p><img src="/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128131652096.png" srcset="/img/loading.gif" lazyload alt="image-20230128131652096"></p>
+<h3 id="自底向上计算最短路径权重"><a href="#自底向上计算最短路径权重" class="headerlink" title="自底向上计算最短路径权重"></a>自底向上计算最短路径权重</h3><p>利用25.5递归式自底向上计算$d_{ij}^{(k)}$，算法输入为n×n矩阵W，算法返回最短路径权重矩阵$D^{(n)}$。</p>
+<p><img src="/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128132025927.png" srcset="/img/loading.gif" lazyload alt="image-20230128132025927"></p>
+<p>一个具体实例：</p>
+<p><img src="/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128133609479.png" srcset="/img/loading.gif" lazyload alt="image-20230128133609479"></p>
+<p>算法的运行时间为$\theta(n^3)$。</p>
+<p>该代码也十分紧凑，没有使用精巧的数据结构，隐藏在$\theta$表述后面的常数比较小。因此及时对于输入规模为中等的图，Floyd-Warshall算法的效率也非常好。</p>
+<h3 id="构建一条最短路径"><a href="#构建一条最短路径" class="headerlink" title="构建一条最短路径"></a>构建一条最短路径</h3><p>可以有多种办法构建最短路径：</p>
+<ul>
+<li><p>先计算最短路径权重矩阵D，然后从矩阵D来构造前驱矩阵π，并将该算法的运行时间限制在$O(n^3)$内。一旦给定了前驱矩阵π，PRINT-ALL-PAIRS-SHORTEST-PATH过程将打印出给定最短路径上的所有结点。</p>
+</li>
+<li><p><img src="/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128134219605.png" srcset="/img/loading.gif" lazyload alt="image-20230128134219605"></p>
+</li>
+<li><p>$π_{ij}^{(k)}$的一个递归公式：</p>
+<ol>
+<li><p>当k&#x3D;0时，从i到j的一条最短路径上没有中间结点，因此：</p>
+<p><img src="/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128134833809.png" srcset="/img/loading.gif" lazyload alt="image-20230128134833809"></p>
+</li>
+<li><p>当k&gt;&#x3D;1时</p>
+<p><img src="/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128135931405.png" srcset="/img/loading.gif" lazyload alt="image-20230128135931405"></p>
+</li>
+</ol>
+<p>同时，$G_{π,i}$是一棵根节点为i的最短路径树</p>
+</li>
+</ul>
+<h3 id="有向图的传递闭包"><a href="#有向图的传递闭包" class="headerlink" title="有向图的传递闭包"></a>有向图的传递闭包</h3><p>给定有向图G&#x3D;（V,E），结点集合为V&#x3D;{1,2,…,n}，我们希望判断对于所有的结点对i和j，图G是否包含一条从i到j的路径。</p>
+<p>我们定义G的传递闭包为$G^*&#x3D;(V,E^*)$，其中$E^*$&#x3D;{(i,j):如果G中包含一条从i到j的路径}</p>
+<ol>
+<li>第一种方法：<ul>
+<li>给E中的每条边赋予权重1，然后运行Floyd-Warshall算法。如果存在一条从i到j的路径，则有$D_{ij}$&lt;n。否则，$D_{ij}&#x3D;∞$</li>
+<li>时间复杂度为$\theta(n^3)$</li>
+</ul>
+</li>
+<li>第二种方法：<ul>
+<li>时间复杂度也为$\theta (n^3)$，但是在实际场景中能够节省时间和空间</li>
+<li><img src="/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128140938861.png" srcset="/img/loading.gif" lazyload alt="image-20230128140938861"></li>
+<li>与Floyd-Warshall算法一样，我们以k递增的次序来计算矩阵$T^{(k)}&#x3D;(t_{ij}^{(k)})$</li>
+<li><img src="/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128141059602.png" srcset="/img/loading.gif" lazyload alt="image-20230128141059602"></li>
+<li>一个具体实例：</li>
+<li><img src="/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA25-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AF%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/image-20230128141118864.png" srcset="/img/loading.gif" lazyload alt="image-20230128141118864"></li>
+<li>在某些计算机上，对单个位值进行的逻辑操作比对数据整数字的算数操作要快。</li>
+<li>而且，因为直接的传递闭包算法仅使用布尔值，而不是整数值，其空间需求比Floyd-Warshall算法的空间需求要小一个数量级，这个数量级就是计算机存储里的一个字的规模。</li>
+</ul>
+</li>
+</ol>
+<h2 id="25-3-用于稀疏图的Johnson算法"><a href="#25-3-用于稀疏图的Johnson算法" class="headerlink" title="25.3 用于稀疏图的Johnson算法"></a>25.3 用于稀疏图的Johnson算法</h2><h3 id="引言-1"><a href="#引言-1" class="headerlink" title="引言"></a>引言</h3><h3 id="重新赋予权重来维持最短路径"><a href="#重新赋予权重来维持最短路径" class="headerlink" title="重新赋予权重来维持最短路径"></a>重新赋予权重来维持最短路径</h3><h3 id="通过重新赋值来生成非负权重"><a href="#通过重新赋值来生成非负权重" class="headerlink" title="通过重新赋值来生成非负权重"></a>通过重新赋值来生成非负权重</h3><h3 id="计算所有结点对之间的最短路径"><a href="#计算所有结点对之间的最短路径" class="headerlink" title="计算所有结点对之间的最短路径"></a>计算所有结点对之间的最短路径</h3>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA/" class="category-chain-item">算法导论</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA/">#算法导论</a>
+      
+        <a href="/tags/%E5%8D%95%E6%BA%90%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/">#单源最短路径问题</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>算法导论25-所有节点对的最短路径问题</div>
+      <div>http://example.com/2023/01/27/算法导论25-所有节点对的最短路径问题/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>ECNU_zhy</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>January 27, 2023</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>Licensed under</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/01/31/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA26-%E6%9C%80%E5%A4%A7%E6%B5%81/" title="算法导论26-最大流">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">算法导论26-最大流</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/01/26/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA23-%E6%9C%80%E5%B0%8F%E7%94%9F%E6%88%90%E6%A0%91-%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/" title="算法导论23-最小生成树-期末复习">
+                        <span class="hidden-mobile">算法导论23-最小生成树-期末复习</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.1/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

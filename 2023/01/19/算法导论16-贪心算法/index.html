@@ -1,0 +1,788 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/xiaoxin.png">
+  <link rel="icon" href="/img/xiaoxin.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="ECNU_zhy">
+  <meta name="keywords" content="算法导论">
+  
+    <meta name="description" content="算法导论16-贪心算法引言贪心算法总是做出局部最优的选择，寄希望这样的选择能导致全局最优解。 利用贪心策略设计的算法：  最小生成树算法 单源最短路径的Dijkstra算法 集合覆盖问题的Chvatal贪心启发式算法  16.1 活动选择问题 调度竞争共享资源的多个活动的问题，目标是选出一个最大的互相兼容的活动集合，假设n个活动的集合$S&#x3D;${$a_1,a_2,…,a_n$}，这些活动使">
+<meta property="og:type" content="article">
+<meta property="og:title" content="算法导论16-贪心算法">
+<meta property="og:url" content="http://example.com/2023/01/19/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA16-%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/index.html">
+<meta property="og:site_name" content="zhy-blog">
+<meta property="og:description" content="算法导论16-贪心算法引言贪心算法总是做出局部最优的选择，寄希望这样的选择能导致全局最优解。 利用贪心策略设计的算法：  最小生成树算法 单源最短路径的Dijkstra算法 集合覆盖问题的Chvatal贪心启发式算法  16.1 活动选择问题 调度竞争共享资源的多个活动的问题，目标是选出一个最大的互相兼容的活动集合，假设n个活动的集合$S&#x3D;${$a_1,a_2,…,a_n$}，这些活动使">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA16-%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/image-20230116144725415.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA16-%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/image-20230118230818236.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA16-%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/image-20230118231609132.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA16-%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/image-20230118232155924.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA16-%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/image-20230118233323821.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA16-%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/image-20230118235155995.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA16-%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/image-20230119130630936.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA16-%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/image-20230119131001537.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA16-%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/image-20230119140217770.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA16-%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/image-20230119140709143.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA16-%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/image-20230119141013831.png">
+<meta property="article:published_time" content="2023-01-19T06:25:33.000Z">
+<meta property="article:modified_time" content="2023-01-19T06:11:23.070Z">
+<meta property="article:author" content="ECNU_zhy">
+<meta property="article:tag" content="算法导论">
+<meta property="article:tag" content="贪心算法">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA16-%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/image-20230116144725415.png">
+  
+  
+  
+  <title>算法导论16-贪心算法 - zhy-blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ECNU-zhy</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                Links
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="算法导论16-贪心算法"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-01-19 14:25" pubdate>
+          January 19, 2023 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.6k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          22 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">算法导论16-贪心算法</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="算法导论16-贪心算法"><a href="#算法导论16-贪心算法" class="headerlink" title="算法导论16-贪心算法"></a>算法导论16-贪心算法</h1><h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>贪心算法总是做出局部最优的选择，寄希望这样的选择能导致全局最优解。</p>
+<p>利用贪心策略设计的算法：</p>
+<ul>
+<li>最小生成树算法</li>
+<li>单源最短路径的Dijkstra算法</li>
+<li>集合覆盖问题的Chvatal贪心启发式算法</li>
+</ul>
+<h2 id="16-1-活动选择问题"><a href="#16-1-活动选择问题" class="headerlink" title="16.1 活动选择问题"></a>16.1 活动选择问题</h2><ul>
+<li>调度竞争共享资源的多个活动的问题，目标是选出一个最大的互相兼容的活动集合，假设n个活动的集合$S&#x3D;${$a_1,a_2,…,a_n$}，这些活动使用同一个资源，而这个资源在某个时刻只能供一个活动所使用。</li>
+<li>每个活动$a_i$都有一个开始时间$s_i$和一个结束时间$f_i$。</li>
+<li>如果两个活动$a_i$和$a_j$满足$[s_i,f_i)$和$[s_j,f_j)$不重叠，则称它们是兼容的。</li>
+<li>在活动选择问题中，我们希望选出一个最大兼容活动集</li>
+</ul>
+<p><img src="/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA16-%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/image-20230116144725415.png" srcset="/img/loading.gif" lazyload alt="image-20230116144725415"></p>
+<p>那么怎么解决这个问题呢?</p>
+<p>→通过动态规划将问题分解成两个子问题，然后将这两个子问题的最优解整合成原问题的一个最优解。</p>
+<p>在做贪心选择时，子问题之一必须是空的，因此只留下一个非空子问题。</p>
+<p>找到一种递归贪心算法来解决活动调度问题，并将递归算法转化为迭代算法，以完成贪心算法的过程。</p>
+<h4 id="活动选择问题的最优子结构"><a href="#活动选择问题的最优子结构" class="headerlink" title="活动选择问题的最优子结构"></a>活动选择问题的最优子结构</h4><p>假设$A_{ij}$是$S_{ij}$的一个最大的相互兼容的活动子集，包含活动$a_k$，因此我们得到的两个子问题即为：$A_{ik}&#x3D;A_{ij}\cap S_{ik}$和</p>
+<p>$A_{kj}&#x3D;A_{ij}\cap S_{kj}$，因此有$A_{ij}&#x3D;A_{ik}\cup a_k\cup A_{kj}$        &#x3D;&gt;</p>
+<p>利用动态规划求解活动选择问题：c[i,j]表示Sij最优解的大小：<br>$$<br>c[i,j]&#x3D;c[i,k]+c[k,j]+1<br>$$<br>因此:</p>
+<p><img src="/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA16-%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/image-20230118230818236.png" srcset="/img/loading.gif" lazyload alt="image-20230118230818236"></p>
+<h4 id="贪心选择"><a href="#贪心选择" class="headerlink" title="贪心选择"></a>贪心选择</h4><p>直觉：选择S中结束最早的活动，因为它剩下的资源可供它之后尽量多的活动使用</p>
+<p>因此贪心选择就是$a_1$</p>
+<p>令$S_k&#x3D;${$a_i\in S:s_i&gt;&#x3D;f_k$}为$a_k$结束后开始的任务集合。当我们做出贪心选择选择了$a_1$后，剩下的$S_1$是唯一需要求解的子问题。</p>
+<p>则：如果$a_1$在最优解中，那么原问题的最优解由活动$a_1$及其子问题$S_1$中所有活动组成。</p>
+<h4 id="定理16-1"><a href="#定理16-1" class="headerlink" title="定理	16.1"></a>定理	16.1</h4><p><img src="/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA16-%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/image-20230118231609132.png" srcset="/img/loading.gif" lazyload alt="image-20230118231609132"></p>
+<ul>
+<li>求解活动选择问题的算法可以自顶向下进行计算<ul>
+<li>贪心算法多是这种自顶向下的设计：做出一个选择，然后求解剩下的子问题，而不是自底向上地求解出很多子问题然后再做出选择</li>
+</ul>
+</li>
+</ul>
+<h4 id="递归贪心算法"><a href="#递归贪心算法" class="headerlink" title="递归贪心算法"></a>递归贪心算法</h4><p><img src="/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA16-%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/image-20230118232155924.png" srcset="/img/loading.gif" lazyload alt="image-20230118232155924"></p>
+<ul>
+<li>两个数组s和f表示活动的开始时间和结束时间</li>
+<li>k指出要求解的子问题$S_k$</li>
+<li>n表示有n个活动</li>
+<li>算法返回$S_k$的一个最大兼容活动集<ul>
+<li>假设活动已经排好序，则递归调用RECURSIVE-ACTIVITY-SELECTOR(s,f,0,n)的运行时间为$\theta(n)$。</li>
+</ul>
+</li>
+</ul>
+<h4 id="迭代贪心算法"><a href="#迭代贪心算法" class="headerlink" title="迭代贪心算法"></a>迭代贪心算法</h4><p><img src="/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA16-%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/image-20230118233323821.png" srcset="/img/loading.gif" lazyload alt="image-20230118233323821"></p>
+<ul>
+<li>与递归版本类似，在输入活动已按结束时间排序的情况下，GREEDY-ACTIVITY-SELECTOR的运行时间为$\theta(n)$</li>
+</ul>
+<h2 id="16-2-贪心算法原理"><a href="#16-2-贪心算法原理" class="headerlink" title="16.2 贪心算法原理"></a>16.2 贪心算法原理</h2><p>在上节，我们详细看到了贪心算法是如何以动态规划方法为基础的。</p>
+<ul>
+<li>在活动选择问题中，我们首先定义了子问题$S_{ij}$，其中i和j都是可变的。然后我们发现，如果总是做出贪心选择，则可以将子问题限定为$S_k$的形式</li>
+<li>设计贪心算法的步骤：<ul>
+<li>将最优化问题转化成这样的形式：对其做出一次选择后，只剩下一个子问题需要解决</li>
+<li>证明做出贪心选择后，原问题总是存在最优解，即贪心选择总是安全的</li>
+<li>证明做出贪心选择后，剩余的子问题满足性质：其最优解与贪心选择组合即可得到原问题的最优解，这样就得到了最优子结构</li>
+</ul>
+</li>
+</ul>
+<h4 id="贪心选择性质"><a href="#贪心选择性质" class="headerlink" title="贪心选择性质"></a>贪心选择性质</h4><p>一个动态规划算法是自底向上进行计算的，而一个贪心算法通常是自顶向下的，进行一次又一次选择，将给定问题的实例变得更小，在贪心选择中，我们总是做出当时看来最佳的选择，然后求解剩下唯一的子问题，不依赖将来的选择或是子问题的解。、</p>
+<h4 id="最优子结构"><a href="#最优子结构" class="headerlink" title="最优子结构"></a>最优子结构</h4><p>如果一个问题的最优解包含其子问题的最优解，则称此问题具有最优子结构性质</p>
+<p>当应用于贪心算法时，我们通常使用更为直接的最优子结构</p>
+<p>我们要做的全部工作就是：</p>
+<ul>
+<li>将子问题的最优解与贪心选择组合在一起就能生成原问题的最优解</li>
+</ul>
+<h4 id="贪心对动态规划"><a href="#贪心对动态规划" class="headerlink" title="贪心对动态规划"></a>贪心对动态规划</h4><ul>
+<li><p>0-1背包问题和分数背包问题</p>
+<p><img src="/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA16-%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/image-20230118235155995.png" srcset="/img/loading.gif" lazyload alt="image-20230118235155995"></p>
+</li>
+<li><p>我们用贪心策略可以求解分数背包问题，而不能求解0-1背包问题</p>
+</li>
+<li><p>使用贪心策略解决分数背包问题：</p>
+<ul>
+<li>每个商品的每磅价值：$v_i&#x2F;w_i$，尽可能拿走每磅价值最高的商品，直至达到重量上限W。</li>
+<li>运行时间为$O(nlgn)$</li>
+</ul>
+</li>
+<li><p>这一策略对0-1背包问题无效的原因是空闲的背包 <strong>空间</strong>降低了方案的有效每磅价值</p>
+</li>
+</ul>
+<h2 id="16-3-赫夫曼编码"><a href="#16-3-赫夫曼编码" class="headerlink" title="16.3 赫夫曼编码"></a>16.3 赫夫曼编码</h2><ul>
+<li>使用变长编码可以达到比定长编码好得多的压缩率</li>
+</ul>
+<h4 id="前缀码"><a href="#前缀码" class="headerlink" title="前缀码"></a>前缀码</h4><ul>
+<li><p>prefix code即没有任何码字是其他码字的前缀，其作用是简化解码过程，可以简单识别出开始码字，并将其转化为原字符</p>
+</li>
+<li><p><img src="/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA16-%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/image-20230119130630936.png" srcset="/img/loading.gif" lazyload alt="image-20230119130630936"></p>
+</li>
+<li><p>文件的最优编码方案总是对应一棵满（full）二叉树</p>
+</li>
+<li><p>给定一颗对应前缀码的树T，计算其编码一个文件需要的二进制位数：</p>
+<ul>
+<li>对于字母表C中的每个字符c，c.freq表示c在文件中出现的频率<ul>
+<li>$d_T(c)$表示c的叶节点在树中的深度，也是字符c码字的长度</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>编码文件需要的二进制数为:</p>
+<p><img src="/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA16-%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/image-20230119131001537.png" srcset="/img/loading.gif" lazyload alt="image-20230119131001537"></p>
+</li>
+</ul>
+<h4 id="构造赫夫曼编码"><a href="#构造赫夫曼编码" class="headerlink" title="构造赫夫曼编码"></a>构造赫夫曼编码</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c">HUFFMAN(C)<br><span class="hljs-number">1</span>	n=|C|<br><span class="hljs-number">2</span>	Q=C<br><span class="hljs-number">3</span>	<span class="hljs-keyword">for</span> i=<span class="hljs-number">1</span> to n<span class="hljs-number">-1</span><br><span class="hljs-number">4</span>		allocate a new node z<br><span class="hljs-number">5</span>		z.left=x=EXTRACT-MIN(Q)<br><span class="hljs-number">6</span>		z.right=y=EXTRACT-MIN(Q)<br><span class="hljs-number">7</span>		z.freq=x.freq+y.freq<br><span class="hljs-number">8</span>		INSERT(Q,z)<br><span class="hljs-number">9</span> 	<span class="hljs-keyword">return</span> EXTRACT-MIN(Q)<br></code></pre></td></tr></table></figure>
+
+<p><img src="/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA16-%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/image-20230119140217770.png" srcset="/img/loading.gif" lazyload alt="image-20230119140217770"></p>
+<ul>
+<li>初始队列大小为n&#x3D;6，需要5个合并步骤构造二叉树，最终的二叉树表示最优前缀码</li>
+<li>第二行用C中字符初始最小优先队列Q</li>
+<li>第3-8行的for循环反复从队列中提取两个频率最低的结点x和y，将他们合并为一个新节点，替代他们</li>
+<li>经过n-1次合并后，第9行返回队列中剩下的唯一节点——编码树的根节点</li>
+</ul>
+<h4 id="赫夫曼编码的运行时间"><a href="#赫夫曼编码的运行时间" class="headerlink" title="赫夫曼编码的运行时间"></a>赫夫曼编码的运行时间</h4><ol>
+<li>假设Q是由最小二叉堆实现的</li>
+<li>第二行使用BUILD-MIN-HEAP将Q初始化，花费时间为O(n)</li>
+<li>3-8行的for循环执行了n-1次，且每个堆操作需要O(lgn)，因此循环需要O(nlgn)</li>
+<li>如果将最小二叉堆换为van Embe Boas树，可以将运行时间减少为O(nlglgn)</li>
+</ol>
+<h4 id="赫夫曼算法的正确性"><a href="#赫夫曼算法的正确性" class="headerlink" title="赫夫曼算法的正确性"></a>赫夫曼算法的正确性</h4><h5 id="引理16-2"><a href="#引理16-2" class="headerlink" title="引理16.2"></a>引理16.2</h5><p><img src="/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA16-%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/image-20230119140709143.png" srcset="/img/loading.gif" lazyload alt="image-20230119140709143"></p>
+<p>通过合并来构造最优树的过程，可以从合并出现频率最低的两个字符这样一个贪心选择开始</p>
+<h5 id="引理16-3"><a href="#引理16-3" class="headerlink" title="引理16.3"></a>引理16.3</h5><p><img src="/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA16-%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/image-20230119141013831.png" srcset="/img/loading.gif" lazyload alt="image-20230119141013831"></p>
+<h5 id="定理16-4"><a href="#定理16-4" class="headerlink" title="定理16.4"></a>定理16.4</h5><p>过程HUFFMAN会生成一个最优前缀码</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/" class="category-chain-item">贪心算法</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA/">#算法导论</a>
+      
+        <a href="/tags/%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/">#贪心算法</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>算法导论16-贪心算法</div>
+      <div>http://example.com/2023/01/19/算法导论16-贪心算法/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>ECNU_zhy</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>January 19, 2023</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>Licensed under</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/01/23/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA17-%E6%91%8A%E8%BF%98%E5%88%86%E6%9E%90/" title="算法导论17-摊还分析">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">算法导论17-摊还分析</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/01/19/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E6%9C%9F%E4%B8%AD%E5%A4%8D%E4%B9%A0/" title="算法导论-到最大子数组问题复习">
+                        <span class="hidden-mobile">算法导论-到最大子数组问题复习</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.1/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

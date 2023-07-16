@@ -1,0 +1,859 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/xiaoxin.png">
+  <link rel="icon" href="/img/xiaoxin.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="ECNU_zhy">
+  <meta name="keywords" content="关系数据库设计">
+  
+    <meta name="description" content="数据库系统概念  第八章 关系数据库设计  第一部分1.第一范式 1NF是指数据库表的每一列都是不可分割的基本数据项，同一列中不能有多个值，即实体中的某个属性不能有多个值或不能有重复的属性。（Domain is atomic if its elements are considered to be indivisible units)  non-atomic domains examples:">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据库系统概念 第八章 关系数据库设计 第一部分">
+<meta property="og:url" content="http://example.com/2022/07/16/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/index.html">
+<meta property="og:site_name" content="zhy-blog">
+<meta property="og:description" content="数据库系统概念  第八章 关系数据库设计  第一部分1.第一范式 1NF是指数据库表的每一列都是不可分割的基本数据项，同一列中不能有多个值，即实体中的某个属性不能有多个值或不能有重复的属性。（Domain is atomic if its elements are considered to be indivisible units)  non-atomic domains examples:">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716163425857.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716164704202.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716170812600.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716174237281.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716175734964.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716214444490.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716215150661.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716215350994-16579796318671.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716215441849-16579796828023.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716220206500.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716220442735.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716222136183.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716222644598.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716222949149.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716223205021.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716223442489.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716223455237.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716223510025.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716230502550.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716231844582.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716233622092.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716233420556.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716233632142.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716232310323.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716233831322.png">
+<meta property="article:published_time" content="2022-07-16T15:53:01.000Z">
+<meta property="article:modified_time" content="2022-07-16T15:53:10.406Z">
+<meta property="article:author" content="ECNU_zhy">
+<meta property="article:tag" content="数据库">
+<meta property="article:tag" content="数据库系统概念">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716163425857.png">
+  
+  
+  
+  <title>数据库系统概念 第八章 关系数据库设计 第一部分 - zhy-blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ECNU-zhy</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                Links
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="数据库系统概念 第八章 关系数据库设计 第一部分"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-07-16 23:53" pubdate>
+          July 16, 2022 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.1k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          26 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">数据库系统概念 第八章 关系数据库设计 第一部分</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="数据库系统概念-第八章-关系数据库设计-第一部分"><a href="#数据库系统概念-第八章-关系数据库设计-第一部分" class="headerlink" title="数据库系统概念  第八章 关系数据库设计  第一部分"></a>数据库系统概念  第八章 关系数据库设计  第一部分</h1><h2 id="1-第一范式"><a href="#1-第一范式" class="headerlink" title="1.第一范式"></a>1.第一范式</h2><ol>
+<li><p>1NF是指数据库表的每一列都是不可分割的基本数据项，同一列中不能有多个值，即实体中的某个属性不能有多个值或不能有重复的属性。（Domain is atomic if its elements are considered to be indivisible units)</p>
+</li>
+<li><p>non-atomic domains examples:</p>
+<ul>
+<li>复合属性-a set of names(<strong>复合</strong>属性：可以再划分为更小的部分，也就是能再划分为一些其他属性的属性。比如说：name属性可被设计为一个包括first_name,middle_name,lase_name的复合属性。)</li>
+<li>多值属性-a person’s phones(<strong>多值</strong>属性：在某些情况下对某个特定实体而言，一个属性可能对应一组值。)</li>
+<li>复杂数据类型-面向对象</li>
+</ul>
+</li>
+<li><p>当一个关系模式R的<strong>所有属性的定义域</strong>(domains of all attributes)都是原子的时，R满足第一范式</p>
+</li>
+<li><p>对于关系数据库，所有的关系都应该满足第一范式。</p>
+</li>
+<li><p><strong>1NF (First Normal Form) Rules</strong></p>
+<ul>
+<li>Each table cell should contain a <u>single value</u>.</li>
+<li><u>Each record</u> needs to be unique.</li>
+</ul>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716163425857.png" srcset="/img/loading.gif" lazyload alt="image-20220716163425857"></p>
+</li>
+<li><p>那么，怎么处理非原子的属性值呢？—&gt;</p>
+<ul>
+<li>对于复合属性：将其拆成多个属性</li>
+<li>对于多值属性：<ol>
+<li>拆成多个对应的column</li>
+<li>使用一张单独的表来存（phone（pname，phone））</li>
+<li>使用单个field，person(pname,…,<strong>phones</strong>,…)(当成一个字符串)</li>
+</ol>
+</li>
+</ul>
+<p>非原子策略的缺点：复杂的存储方式，数据的冗余存储，复杂的查询过程</p>
+</li>
+</ol>
+<h2 id="2-关系数据库设计中的隐患（pitfalls）"><a href="#2-关系数据库设计中的隐患（pitfalls）" class="headerlink" title="2.关系数据库设计中的隐患（pitfalls）"></a>2.关系数据库设计中的隐患（pitfalls）</h2><ol>
+<li><p>坏的设计会导致：</p>
+<ul>
+<li>数据冗余</li>
+<li>插入，删除，修改异常</li>
+</ul>
+<p>如：假设我们将instructor   department两张表结合成inst_dept表：</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716164704202.png" srcset="/img/loading.gif" lazyload alt="image-20220716164704202"></p>
+<p>如图，后果是数据冗余，并且当我们想增加一张department表时，要是没有对应的某个老师，也就不能增加了</p>
+<ul>
+<li><p><strong>冗余</strong></p>
+<p>坏处：造成空间浪费和不一致性</p>
+</li>
+<li><p><strong>更新异常</strong></p>
+<p>复杂的更新可能导致不一致性，比如修改dept_name属性的值，许多元组将会被改变</p>
+</li>
+<li><p><strong>插入或删除异常</strong></p>
+<p>为了存储那些department信息不存在的instructor，可以使用null属性值，但是很难进行处理。</p>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="3-分解"><a href="#3-分解" class="headerlink" title="3.分解"></a>3.分解</h2><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716170812600.png" srcset="/img/loading.gif" lazyload alt="image-20220716170812600"></p>
+<p>关系R中所有属性都应出现在分解R1，R2中: $R&#x3D;R_1\cup R_2$</p>
+<p>无损连接分解：$r&#x3D;\prod_{R_1}(r)\bowtie \prod_{R_2}(r)$</p>
+<h4 id="进行分解所要达到的目标："><a href="#进行分解所要达到的目标：" class="headerlink" title="进行分解所要达到的目标："></a>进行分解所要达到的目标：</h4><ol>
+<li>每一个子表中没有数据冗余</li>
+<li>每一个子关系都有良好的范式</li>
+<li>分解是无损分解</li>
+</ol>
+<p>范式理论的依据在于：</p>
+<ul>
+<li>函数依赖</li>
+<li>多值依赖</li>
+</ul>
+<h2 id="4-函数依赖"><a href="#4-函数依赖" class="headerlink" title="4.函数依赖"></a>4.函数依赖</h2><ol>
+<li><p>R是一个关系模式，$\alpha$, $\beta$是R的属性集，并满足$\alpha \subseteq\R \ and \ \beta \subseteq R$  ,  则函数依赖</p>
+<p>$\alpha \rightarrow \beta$   在R上成立当且仅当对于任意合法的关系r(R),当r的两个元组t1，t2在属性$\alpha$上取值相等时，他们在属性$\beta$上取值也相等。即：<br>$$<br>t1[\alpha]&#x3D;t2[\alpha]\Longrightarrow t1[\beta]&#x3D;r2[\beta]<br>$$<br>即，$\beta$函数依赖于$\alpha$函数，而$\alpha 函数决定\beta$</p>
+</li>
+<li><p>函数依赖事实上是一种**<u>完整性约束</u><strong>，</strong><u>描述了关系在特定属性上的值之间的关系</u>**，可以用来judge schema normalization and suggest refinements</p>
+</li>
+<li><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716174237281.png" srcset="/img/loading.gif" lazyload alt="image-20220716174237281"></p>
+</li>
+<li><p>函数依赖是一种key概念的泛化</p>
+<ul>
+<li>K是关系R的superkey（超码）当且仅当K$\rightarrow$R</li>
+<li>K是关系R的candidate key(minimal super key)，当且仅当K$\rightarrow$R and no $\alpha \subset K,\alpha \rightarrow R$</li>
+</ul>
+</li>
+<li><p>函数依赖允许我们在不适用super key的时候表达一致性约束：</p>
+<p>如,inst_dept(<u>ID</u>,name,salary,<u>dept_name</u>,building,budget)</p>
+<p>我们希望以下这些函数依赖成立：dept_name-&gt;building,ID-&gt;building,但是并不希望dept_name-&gt;salary成立</p>
+</li>
+<li><h4 id="函数依赖的用处："><a href="#函数依赖的用处：" class="headerlink" title="函数依赖的用处："></a>函数依赖的用处：</h4><ul>
+<li><p>测试关系在一个函数依赖集F下是否合法，如果合法，则说r满足F</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716175734964.png" srcset="/img/loading.gif" lazyload alt="image-20220716175734964"></p>
+</li>
+<li><p>我们说当在R上的所有合法关系$r_s$满足依赖集F的话，就说R满足F，但是反之不成立</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716214444490.png" srcset="/img/loading.gif" lazyload alt="image-20220716214444490"></p>
+<p>不可能通过找到所有的r（因为这太繁琐了），验证其是否满足F来判断R是否满足F，因此需要有一套推理规则来判断R是否满足F</p>
+</li>
+<li><p>注意：一个关系模式R是一个**<u>属性集</u>**，但是并非所有的属性集都是模式，使用符号r(R)来表示是对于关系r而言的，它指的是具有模式R的关系r，当我们写r(R)时，指的既是关系也是它的模式。</p>
+</li>
+<li><h4 id="平凡和非平凡依赖的定义：-trivial-and-non-trivial-dependency"><a href="#平凡和非平凡依赖的定义：-trivial-and-non-trivial-dependency" class="headerlink" title="平凡和非平凡依赖的定义：(trivial and non-trivial dependency)"></a>平凡和非平凡依赖的定义：(trivial and non-trivial dependency)</h4><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716215150661.png" srcset="/img/loading.gif" lazyload alt="image-20220716215150661"></p>
+</li>
+</ul>
+</li>
+<li><h4 id="函数依赖集的闭包-closure-of-a-set-of-functional-dependencies"><a href="#函数依赖集的闭包-closure-of-a-set-of-functional-dependencies" class="headerlink" title="函数依赖集的闭包:(closure of a set of functional dependencies)"></a>函数依赖集的闭包:(closure of a set of functional dependencies)</h4><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716215350994-16579796318671.png" srcset="/img/loading.gif" lazyload alt="image-20220716215350994"></p>
+</li>
+<li><h4 id="Armstrong’s-Axioms"><a href="#Armstrong’s-Axioms" class="headerlink" title="Armstrong’s Axioms:"></a>Armstrong’s Axioms:</h4><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716215441849-16579796828023.png" srcset="/img/loading.gif" lazyload alt="image-20220716215441849"></p>
+<p>这些规则是保真的和完备的。	</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716220206500.png" srcset="/img/loading.gif" lazyload alt="image-20220716220206500"></p>
+<p>尽大可能地利用传递律，**<u>伪传递律</u>**，合并律</p>
+</li>
+<li><p>Armstrong定理的补充定律：</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716220442735.png" srcset="/img/loading.gif" lazyload alt="image-20220716220442735"></p>
+</li>
+<li><p>计算闭包$F^+$闭包的过程：</p>
+<p>不断地应用Armstrong公理</p>
+</li>
+<li><h4 id="属性集的闭包-Closure-of-Attribute-Sets"><a href="#属性集的闭包-Closure-of-Attribute-Sets" class="headerlink" title="属性集的闭包(Closure of Attribute Sets)"></a>属性集的闭包(Closure of Attribute Sets)</h4><p><strong><u>如何判断$ \alpha$是superkey呢？</u></strong></p>
+<p>一种办法是：首先找到闭包$ F^+$,然后对于$ F^+$中所有的函数依赖$ \alpha \rightarrow \beta_i$，看是否{$ \beta_1\ \beta_2…$}&#x3D;R，但是找到闭包并不容易</p>
+<p>另一种判断的方法是利用属性集的闭包。</p>
+<p>定义:给定一个属性集$ \alpha$，在F下由$\alpha$所直接或间接决定的属性的集合称为属性集的闭包$\alpha^+$。</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716222136183.png" srcset="/img/loading.gif" lazyload alt="image-20220716222136183"></p>
+<p>即，$\beta \subseteq \alpha^+$说明$\beta$是由$\alpha$直接或间接决定的属性，因此$\alpha \rightarrow \beta$</p>
+<p>因此，若**<u>要看$\alpha$是否为超码，需要看R中的所有属性是不是都在属性集的闭包中。</u>**</p>
+<p>找属性集闭包的过程如下图：</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716222644598.png" srcset="/img/loading.gif" lazyload alt="image-20220716222644598"></p>
+<p>例子：</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716222949149.png" srcset="/img/loading.gif" lazyload alt="image-20220716222949149"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716223205021.png" srcset="/img/loading.gif" lazyload alt="image-20220716223205021"></p>
+</li>
+<li><p>属性集闭包的作用：</p>
+<ol>
+<li><p>判断是否为superkey</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716223442489.png" srcset="/img/loading.gif" lazyload alt="image-20220716223442489"></p>
+</li>
+<li><p>验证函数依赖是否成立</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716223455237.png" srcset="/img/loading.gif" lazyload alt="image-20220716223455237"></p>
+</li>
+<li><p>计算F的闭包</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716223510025.png" srcset="/img/loading.gif" lazyload alt="image-20220716223510025"></p>
+</li>
+</ol>
+</li>
+<li><p>正则覆盖(Canonical Cover）</p>
+<p>F的正则覆盖（$F_c$）是闭包与F的闭包相等的最小的函数依赖（FD)集合</p>
+<ul>
+<li><p>没有多余的函数依赖并且没有多余的函数依赖使得$F_c$包含一个多余的属性。</p>
+</li>
+<li><p>左边的属性是唯一的（尽可能使用合并律）</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716230502550.png" srcset="/img/loading.gif" lazyload alt="image-20220716230502550"></p>
+</li>
+<li><p>如何获得$F_c$?  &#x3D;&#x3D;&gt;删除多余属性</p>
+<ol>
+<li><p>删除能够通过其他函数依赖推导得到的函数依赖</p>
+</li>
+<li><p>当函数依赖的箭头**<u>左侧</u>**有多余属性时（F蕴涵$F_c$)</p>
+<p>举例：</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716231844582.png" srcset="/img/loading.gif" lazyload alt="image-20220716231844582"></p>
+<p>即，如果怀疑箭头左侧的某个属性是多余的，便将这个属性去掉，形成$F_c$,然后看从F能否推出</p>
+<p><strong><u>左侧剩下的属性</u></strong>–&gt;<strong><u>右侧的属性</u></strong>,若能推出，则说明这个属性确实是多余的。</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716233622092.png" srcset="/img/loading.gif" lazyload alt="image-20220716233622092"></p>
+</li>
+<li><p>当函数依赖的箭头**<u>右侧</u>**有多余属性时($F_c$蕴涵F)     </p>
+<p>举例：</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716233420556.png" srcset="/img/loading.gif" lazyload alt="image-20220716233420556"></p>
+<p>即，如果怀疑箭头右侧的某个属性是多余的，便将这个属性去掉，形成$F_c$,然后看从$F_c$能否推出**<u>左侧的属性–&gt;右侧将要删除的属性</u>**,若能推出，则说明这个属性确实是多余的。</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716233632142.png" srcset="/img/loading.gif" lazyload alt="image-20220716233632142"></p>
+</li>
+</ol>
+</li>
+<li><p>计算正则覆盖的过程：</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716232310323.png" srcset="/img/loading.gif" lazyload alt="image-20220716232310323"></p>
+</li>
+<li><p>计算正则覆盖的一个例子</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/image-20220716233831322.png" srcset="/img/loading.gif" lazyload alt="image-20220716233831322"></p>
+</li>
+</ul>
+<p>​</p>
+</li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5/" class="category-chain-item">数据库系统概念</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">#数据库</a>
+      
+        <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5/">#数据库系统概念</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>数据库系统概念 第八章 关系数据库设计 第一部分</div>
+      <div>http://example.com/2022/07/16/数据库系统概念第八章  关系数据库设计/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>ECNU_zhy</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>July 16, 2022</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>Licensed under</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/07/21/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%20%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/" title="数据库系统概念 第八章 关系数据库设计 第二部分">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">数据库系统概念 第八章 关系数据库设计 第二部分</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/06/23/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E6%9C%9F%E6%9C%AB%E6%9C%80%E5%90%8E%E9%A2%98%E7%9B%AE/" title="数据库系统概念期末最后题目">
+                        <span class="hidden-mobile">数据库系统概念期末最后题目</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.1/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

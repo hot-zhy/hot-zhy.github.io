@@ -1,0 +1,992 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/xiaoxin.png">
+  <link rel="icon" href="/img/xiaoxin.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="ECNU_zhy">
+  <meta name="keywords" content="OOAD">
+  
+    <meta name="description" content="GRASP-General Responsibility Assignment Software Patterns   通用职责分配软件模式 Creator—创建者Name：Creator Problem由谁来创建某个类的新实例（对象） Solution我们分配给B创建A的实例的职责，当且仅当下面条件中有一条成立：  B contains or compositely aggregates A">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OOAD期末复习——GRASP">
+<meta property="og:url" content="http://example.com/2023/02/12/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0-grasp/index.html">
+<meta property="og:site_name" content="zhy-blog">
+<meta property="og:description" content="GRASP-General Responsibility Assignment Software Patterns   通用职责分配软件模式 Creator—创建者Name：Creator Problem由谁来创建某个类的新实例（对象） Solution我们分配给B创建A的实例的职责，当且仅当下面条件中有一条成立：  B contains or compositely aggregates A">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0-grasp/OOAD.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0-grasp/image-20230212224924436.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0-grasp/image-20230212225515363.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0-grasp/image-20230212232247080.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0-grasp/image-20230212232303863.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0-grasp/image-20230212232446021.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0-grasp/image-20230212232633934.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0-grasp/image-20230212232714481.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0-grasp/image-20230212233057251.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0-grasp/image-20230214093159054.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0-grasp/image-20230214094051691.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0-grasp/image-20230214095926134.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0-grasp/image-20230214100008880.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0-grasp/image-20230214100050522.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0-grasp/image-20230214125531667.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0-grasp/image-20230214125835195.png">
+<meta property="article:published_time" content="2023-02-12T13:33:36.665Z">
+<meta property="article:modified_time" content="2023-02-14T05:23:01.893Z">
+<meta property="article:author" content="ECNU_zhy">
+<meta property="article:tag" content="OOAD">
+<meta property="article:tag" content="期末复习">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0-grasp/OOAD.png">
+  
+  
+  
+  <title>OOAD期末复习——GRASP - zhy-blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ECNU-zhy</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                Links
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="OOAD期末复习——GRASP"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-02-12 21:33" pubdate>
+          February 12, 2023 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          42 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">OOAD期末复习——GRASP</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0-grasp/OOAD.png" srcset="/img/loading.gif" lazyload alt="OOAD"></p>
+<p>GRASP-General Responsibility Assignment Software Patterns </p>
+<p> 通用职责分配软件模式</p>
+<h1 id="Creator—创建者"><a href="#Creator—创建者" class="headerlink" title="Creator—创建者"></a>Creator—创建者</h1><h2 id="Name："><a href="#Name：" class="headerlink" title="Name："></a>Name：</h2><p>Creator</p>
+<h2 id="Problem"><a href="#Problem" class="headerlink" title="Problem"></a>Problem</h2><p>由谁来创建某个类的新实例（对象）</p>
+<h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><p>我们分配给B创建A的实例的职责，当且仅当下面条件中有一条成立：</p>
+<ol>
+<li>B contains or compositely aggregates A</li>
+<li>B records A</li>
+<li>B closely uses A</li>
+<li>B has the initializing data for A that will be passed to A when it is created (B is an expert with respect to A)</li>
+</ol>
+<h2 id="When-not-to-use"><a href="#When-not-to-use" class="headerlink" title="When not to use"></a>When not to use</h2><ul>
+<li>When wants to reuse existing instances for performance purposes (caching)</li>
+<li>创建大批的对象——应该使用工厂模式</li>
+<li>Delegate responsibility further down (委托)</li>
+</ul>
+<h2 id="Benefits"><a href="#Benefits" class="headerlink" title="Benefits"></a>Benefits</h2><ul>
+<li>Existing  associations means created class is in any case visible to creator</li>
+<li>High cohesion</li>
+<li>does not increase coupling</li>
+</ul>
+<h1 id="Information-Expert—信息专家"><a href="#Information-Expert—信息专家" class="headerlink" title="Information Expert—信息专家"></a>Information Expert—信息专家</h1><h2 id="problem"><a href="#problem" class="headerlink" title="problem"></a>problem</h2><p>What is a general principle of assigning responsibility to objects ?</p>
+<h2 id="Solution-1"><a href="#Solution-1" class="headerlink" title="Solution"></a>Solution</h2><p>Assign responsibility to the class that has the information necessary to fulfill responsibility</p>
+<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><ol>
+<li>Clearly state the responsibility</li>
+<li>Look in Design model for relevant classes</li>
+<li>Else look in Domain model and create design classes</li>
+</ol>
+<h2 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h2><ul>
+<li>封装性<ul>
+<li>对象充分利用自身的信息</li>
+<li>支持低耦合</li>
+</ul>
+</li>
+<li>系统行为分布到不同的类<ul>
+<li>支持高内聚</li>
+</ul>
+</li>
+</ul>
+<h1 id="Low-coupling低耦合"><a href="#Low-coupling低耦合" class="headerlink" title="Low coupling低耦合"></a>Low coupling低耦合</h1><h2 id="耦合的定义"><a href="#耦合的定义" class="headerlink" title="耦合的定义"></a>耦合的定义</h2><ul>
+<li>耦合：一个元素与其他元素的联接，感知以及依赖程度的度量</li>
+<li>比较<ul>
+<li>内聚：cohesion：模块内的操作之间联系紧密的程度</li>
+<li>耦合：coupling：两个子模块之间联系的程度</li>
+</ul>
+</li>
+<li>高耦合带来的问题：<ul>
+<li>牵一发而动全身<ul>
+<li>A依赖B，A与B之间有耦合，一旦B变化了，A就会受到影响</li>
+</ul>
+</li>
+<li>元素很难重用</li>
+</ul>
+</li>
+</ul>
+<h2 id="Problem-1"><a href="#Problem-1" class="headerlink" title="Problem"></a>Problem</h2><p>How to support low dependency,low change impact and increase reuse?</p>
+<h2 id="Solution-2"><a href="#Solution-2" class="headerlink" title="Solution"></a>Solution</h2><p>Assign responsibility so coupling remains low </p>
+<ul>
+<li>use this principle to evaluate alternatives</li>
+<li>All other things being equal prefer the low coupling solution</li>
+</ul>
+<p>Information expert support low coupling</p>
+<h2 id="discuss"><a href="#discuss" class="headerlink" title="discuss"></a>discuss</h2><p>低耦合是所有设计决策时自然而然要考虑的原则</p>
+<p>低耦合是一种评估原则，是设计师用来对设计方案进行评价的一种指标</p>
+<p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0-grasp/image-20230212224924436.png" srcset="/img/loading.gif" lazyload alt="image-20230212224924436"></p>
+<p>低耦合支持类的设计相对独立，减少了变化带来的相互影响</p>
+<p>低耦合与其他的原则必须综合考虑</p>
+<p>在继承关系中，子类与父类的耦合十分紧密，因此，能用组合的地方不要用继承</p>
+<p>低耦合不具备可操作性</p>
+<p>极端情况下，类之间没有耦合，不希望这种情况出现</p>
+<p>类之间存在适度的耦合是正常的，必须的</p>
+<p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0-grasp/image-20230212225515363.png" srcset="/img/loading.gif" lazyload alt="image-20230212225515363"></p>
+<h1 id="Controller—控制器"><a href="#Controller—控制器" class="headerlink" title="Controller—控制器"></a>Controller—控制器</h1><h2 id="problem-1"><a href="#problem-1" class="headerlink" title="problem"></a>problem</h2><p>UI应该把捕捉到的系统操作发给领域层的哪个对象呢？</p>
+<p>What first object beyond the UI layer receives and co-ordinates a system operation?</p>
+<h2 id="solution"><a href="#solution" class="headerlink" title="solution"></a>solution</h2><p>Assign responsibility to receive the system operations by an object which </p>
+<ul>
+<li>representing system &#x2F;subsystem &#x2F;device or</li>
+<li>handling just this use case</li>
+</ul>
+<p>Assign responsivity to a class representing one of the following choices:</p>
+<ul>
+<li><p>Facade controller</p>
+<p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0-grasp/image-20230212232247080.png" srcset="/img/loading.gif" lazyload alt="image-20230212232247080"></p>
+</li>
+<li><p>Use case or session controller</p>
+<p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0-grasp/image-20230212232303863.png" srcset="/img/loading.gif" lazyload alt="image-20230212232303863"></p>
+</li>
+</ul>
+<h2 id=""><a href="#" class="headerlink" title=""></a></h2><p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0-grasp/image-20230212232446021.png" srcset="/img/loading.gif" lazyload alt="image-20230212232446021"></p>
+<p>什么时候用外观控制器，什么时候用会话控制器呢？</p>
+<p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0-grasp/image-20230212232633934.png" srcset="/img/loading.gif" lazyload alt="image-20230212232633934"></p>
+<p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0-grasp/image-20230212232714481.png" srcset="/img/loading.gif" lazyload alt="image-20230212232714481"></p>
+<h2 id="控制器的优点"><a href="#控制器的优点" class="headerlink" title="控制器的优点"></a>控制器的优点</h2><ul>
+<li>容易适应ui层的变化</li>
+<li>领域层代码易于重用</li>
+<li>有助于保证应用所需要的操作顺序</li>
+<li>可以对系统的状态进行推理（ui层不保存系统状态）</li>
+</ul>
+<h2 id="bloated-controllers——臃肿的控制器"><a href="#bloated-controllers——臃肿的控制器" class="headerlink" title="bloated controllers——臃肿的控制器"></a>bloated controllers——臃肿的控制器</h2><p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0-grasp/image-20230212233057251.png" srcset="/img/loading.gif" lazyload alt="image-20230212233057251"></p>
+<h1 id="high-Cohesion—高内聚"><a href="#high-Cohesion—高内聚" class="headerlink" title="high Cohesion—高内聚"></a>high Cohesion—高内聚</h1><h2 id="Problem-2"><a href="#Problem-2" class="headerlink" title="Problem"></a>Problem</h2><p>How to keep objects focused ,understandable and manageable ,and as a side effect support low coupling</p>
+<h2 id="solution-1"><a href="#solution-1" class="headerlink" title="solution"></a>solution</h2><p>Assign responsibility so cohesion remains high</p>
+<h2 id="usage"><a href="#usage" class="headerlink" title="usage"></a>usage</h2><ul>
+<li>used as a evaluation tool</li>
+<li>更多的是一种理念，没有具体的可操作原则</li>
+</ul>
+<h2 id="cohesion-defined"><a href="#cohesion-defined" class="headerlink" title="cohesion defined"></a>cohesion defined</h2><ul>
+<li>衡量概念之间相关度的两个指标<ul>
+<li>内聚：模块内元素之间联系紧密的程度，比如，一个类内部的操作之间</li>
+<li>耦合：两个模块之间联系的强度</li>
+</ul>
+</li>
+<li>内聚的最佳实践<ul>
+<li>一个对象完成的功能不是太多</li>
+<li>这些功能都是同一类别的</li>
+<li>例如，教授的主要任务就是教学，研究员的主要任务就是科研</li>
+</ul>
+</li>
+</ul>
+<h2 id="类低内聚"><a href="#类低内聚" class="headerlink" title="类低内聚"></a>类低内聚</h2><h3 id="症状"><a href="#症状" class="headerlink" title="症状"></a>症状</h3><ul>
+<li>做了太多相互无关的动作</li>
+<li>做了太多工作</li>
+</ul>
+<h3 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h3><ul>
+<li>大粒度的抽象</li>
+<li>做了太多本应该委托给其他类去做的工作</li>
+</ul>
+<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><ul>
+<li>难以理解</li>
+<li>难以重用</li>
+<li>难以维护</li>
+<li>没有稳定的时刻，总是在修改(通常都会高耦合)</li>
+</ul>
+<h2 id="summary"><a href="#summary" class="headerlink" title="summary"></a>summary</h2><p>高内聚的类</p>
+<ul>
+<li>有较少数量的工作，操作的性质基本一致，不会做太多的事情</li>
+<li>如果同类别的工作太多，则会定义新的类分担任务，相互间合作</li>
+</ul>
+<p>高内聚的类有许多优点:</p>
+<ul>
+<li>易于理解</li>
+<li>易于维护</li>
+<li>易于重用</li>
+</ul>
+<p>高内聚也是一种评估性原则，用于评估所有的设计决策是否合适</p>
+<h1 id="Polymorphism—多态"><a href="#Polymorphism—多态" class="headerlink" title="Polymorphism—多态"></a>Polymorphism—多态</h1><h2 id="problem-2"><a href="#problem-2" class="headerlink" title="problem"></a>problem</h2><p>如何处理依据类型不同而有不同行为的一类需求</p>
+<h2 id="solution-2"><a href="#solution-2" class="headerlink" title="solution"></a>solution</h2><p>使用多态操作为依据类型变化的行为进行职责分配</p>
+<h2 id="corollary"><a href="#corollary" class="headerlink" title="corollary"></a>corollary</h2><ul>
+<li>不要去测试对象的类型或条件逻辑，并以此选择相应的行为</li>
+<li>即，不要使用条件逻辑，而是为不同的类定义相同名字的方法</li>
+<li>不同的类实现了相同的接口，或者由一个共同的父类</li>
+</ul>
+<h1 id="Pure-Fabrication—纯虚构"><a href="#Pure-Fabrication—纯虚构" class="headerlink" title="Pure Fabrication—纯虚构"></a>Pure Fabrication—纯虚构</h1><h2 id="problem-3"><a href="#problem-3" class="headerlink" title="problem"></a>problem</h2><p>依据一些原则获得的解决方案不合适的情况下，既不想违反低耦合，高内聚，也不想违反其他的原则，如何把职责分配给对象？</p>
+<h2 id="solution-3"><a href="#solution-3" class="headerlink" title="solution"></a>solution</h2><p>把高度内聚的职责分配给虚构出来的一个类，这个类在领域模型中没有对应的概念</p>
+<h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0-grasp/image-20230214093159054.png" srcset="/img/loading.gif" lazyload alt="image-20230214093159054"></p>
+<h2 id="纯虚构原则"><a href="#纯虚构原则" class="headerlink" title="纯虚构原则"></a>纯虚构原则</h2><ul>
+<li>拎出来的系统可重用</li>
+<li>符合高内聚低耦合</li>
+<li>多数情况下是按照功能类定义新的类，所以是一种以功能为中心的对象</li>
+<li>如果功能的相关性比较高的情况下可满足高内聚</li>
+</ul>
+<h1 id="Indirection—间接"><a href="#Indirection—间接" class="headerlink" title="Indirection—间接"></a>Indirection—间接</h1><h2 id="problem-4"><a href="#problem-4" class="headerlink" title="problem"></a>problem</h2><p>把职责分配到哪里可以避免两个或多个对象之间的直接耦合？如何解耦对象以保证较高的可重用性？</p>
+<h2 id="solution-4"><a href="#solution-4" class="headerlink" title="solution"></a>solution</h2><p>把职责分配给一个中介对象，隔离对象与其他构件或者服务，使他们不产生直接耦合</p>
+<p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0-grasp/image-20230214094051691.png" srcset="/img/loading.gif" lazyload alt="image-20230214094051691"></p>
+<h1 id="protected-variations—隔离变化"><a href="#protected-variations—隔离变化" class="headerlink" title="protected variations—隔离变化"></a>protected variations—隔离变化</h1><h2 id="problem-5"><a href="#problem-5" class="headerlink" title="problem"></a>problem</h2><p>如何设计对象、系统和子系统，使得这些成分里面的变化因素，不稳定因素不会对系统造成意想不到的影响？</p>
+<h2 id="solution-5"><a href="#solution-5" class="headerlink" title="solution"></a>solution</h2><p>标识出能够预计的变化点或不稳定点，职责分配的时候创建一个稳定的接口，把他们与系统的其余部分隔离开来</p>
+<h2 id="需要注意的两种可能的变化点"><a href="#需要注意的两种可能的变化点" class="headerlink" title="需要注意的两种可能的变化点"></a>需要注意的两种可能的变化点</h2><ul>
+<li>变化点：在当前系统或者需求中已经存在了</li>
+<li>演化点：推测的类型变化可能发生在今后，但在当前的需求中</li>
+</ul>
+<h1 id="OCP—开-闭原则"><a href="#OCP—开-闭原则" class="headerlink" title="OCP—开-闭原则"></a>OCP—开-闭原则</h1><h2 id="设计变坏的前兆"><a href="#设计变坏的前兆" class="headerlink" title="设计变坏的前兆"></a>设计变坏的前兆</h2><ul>
+<li>僵硬性<ul>
+<li>难以更改代码</li>
+<li>从管理角度，拒绝任何的变化成为一种制度</li>
+</ul>
+</li>
+<li>易碎性<ul>
+<li>即使是小小的改动也是会导致级联型的后果</li>
+<li>代码在意想不到的地方终止</li>
+</ul>
+</li>
+<li>固定性<ul>
+<li>代码纠缠在一起根本不可能重用</li>
+</ul>
+</li>
+<li>粘滞性<ul>
+<li>宁愿重新编写也不愿意修改</li>
+</ul>
+</li>
+</ul>
+<h2 id="设计变坏的原因"><a href="#设计变坏的原因" class="headerlink" title="设计变坏的原因"></a>设计变坏的原因</h2><ul>
+<li>需求不断在变化</li>
+<li>设计的问题：依赖管理失衡</li>
+</ul>
+<h2 id="开-闭原则"><a href="#开-闭原则" class="headerlink" title="开-闭原则"></a>开-闭原则</h2><ul>
+<li>软件系统应当允许功能扩展（即开放性）open for extension</li>
+<li>但是不允许修改原有的代码（即关闭性）closed for modification</li>
+</ul>
+<p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0-grasp/image-20230214095926134.png" srcset="/img/loading.gif" lazyload alt="image-20230214095926134"></p>
+<p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0-grasp/image-20230214100008880.png" srcset="/img/loading.gif" lazyload alt="image-20230214100008880"></p>
+<p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0-grasp/image-20230214100050522.png" srcset="/img/loading.gif" lazyload alt="image-20230214100050522"></p>
+<h2 id="ocp的启发"><a href="#ocp的启发" class="headerlink" title="ocp的启发"></a>ocp的启发</h2><ul>
+<li>定义所有的对象、数据为私有的</li>
+<li>不要使用全局变量</li>
+</ul>
+<h2 id="summary-1"><a href="#summary-1" class="headerlink" title="summary"></a>summary</h2><ul>
+<li>ocp解决软件的僵硬性和易碎性</li>
+<li>我们应当尝试设计永远不需要修改的模块</li>
+<li>系统行为的扩展只需要增加新的代码，不能修改已有的代码</li>
+<li>模块不允许修改已有的代码，而这种修改会影响客户端</li>
+</ul>
+<h1 id="能用组合的地方不要用继承"><a href="#能用组合的地方不要用继承" class="headerlink" title="能用组合的地方不要用继承"></a>能用组合的地方不要用继承</h1><h2 id="关于类的继承"><a href="#关于类的继承" class="headerlink" title="关于类的继承"></a>关于类的继承</h2><ul>
+<li>可以使用继承，但设计师必须确信使用继承是很好的解决方案时才使用</li>
+</ul>
+<h2 id="组合的特点"><a href="#组合的特点" class="headerlink" title="组合的特点"></a>组合的特点</h2><p>对象组合</p>
+<ul>
+<li>没有打破封装性</li>
+</ul>
+<ol>
+<li>对象组合是一种动态&#x2F;运行时绑定</li>
+<li>在运行时切换对象引用，就可以改变行为</li>
+<li>整体与部分之间只有接口边界关联，耦合较低<ul>
+<li>对私有数据不存在“窥视与拨弄”</li>
+<li>不存在大量无用代码一类的负担</li>
+</ul>
+</li>
+<li>各部分的职责明确<ul>
+<li>每个对象清晰地集中在少量的任务上</li>
+<li>只要阅读了接口，就可以了解系统</li>
+<li>容易独立测试<ul>
+<li>使用得当，将导致更可靠的设计</li>
+</ul>
+</li>
+<li>每个类依然苗条（高内聚）<ul>
+<li>避免巨无霸这种反模式的现象，即一个类似乎完成了几乎全部的功能</li>
+</ul>
+</li>
+<li>重用的几率大增</li>
+</ul>
+</li>
+</ol>
+<h1 id="操作契约"><a href="#操作契约" class="headerlink" title="操作契约"></a>操作契约</h1><h2 id="什么是操作契约"><a href="#什么是操作契约" class="headerlink" title="什么是操作契约"></a>什么是操作契约</h2><ul>
+<li>a way to describe use cases in more detail</li>
+<li>part of the Use Case Model</li>
+</ul>
+<h2 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h2><ul>
+<li>operation：操作名称与参数</li>
+<li>cross references：操作所属的用例</li>
+<li>preconditions：前置条件</li>
+<li>postconditions：当操作完成后，领域模型里面的对象应该保证的状态<ul>
+<li>后置条件描述了领域对象状态的变化<ol>
+<li>是否创建、删除了对象</li>
+<li>对象间的关系是否发生变化</li>
+<li>对象的属性是否发生变化</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<p>操作契约比较细节地、精确地描述了一个操作应当承担的职责</p>
+<p>在定义契约的过程中，经常触发对领域模型的修改</p>
+<ul>
+<li>记录新的概念类、属性</li>
+<li>领域模型中新的关系</li>
+</ul>
+<h1 id="系统顺序图"><a href="#系统顺序图" class="headerlink" title="系统顺序图"></a>系统顺序图</h1><h2 id="系统顺序图与顺序图的区别"><a href="#系统顺序图与顺序图的区别" class="headerlink" title="系统顺序图与顺序图的区别"></a>系统顺序图与顺序图的区别</h2><ul>
+<li>SSD：to emphasize to treat system as black boxes</li>
+<li>SD: be used to illustrate the design of interacting software objects to fulfill work</li>
+</ul>
+<h1 id="面向对象分析方法—名词法"><a href="#面向对象分析方法—名词法" class="headerlink" title="面向对象分析方法—名词法"></a>面向对象分析方法—名词法</h1><h2 id="analysis-phase"><a href="#analysis-phase" class="headerlink" title="analysis phase"></a>analysis phase</h2><ul>
+<li>系统规格说明，也称为逻辑结构，是开发人员眼中的系统</li>
+<li>大的、复杂的系统的开发，有两种主要的分析方法：<ul>
+<li>面向功能的分析——把系统划分为模块</li>
+<li>面向对象分析——模块功能的实现</li>
+</ul>
+</li>
+</ul>
+<h2 id="面向对象分析的步骤"><a href="#面向对象分析的步骤" class="headerlink" title="面向对象分析的步骤"></a>面向对象分析的步骤</h2><ol>
+<li>识别对象</li>
+<li>组织对象</li>
+<li>定义对象之间的关系</li>
+<li>定义对象的操作 （设计阶段）</li>
+<li>定义对象内部细节</li>
+</ol>
+<h2 id="三种面向对象分析的方法"><a href="#三种面向对象分析的方法" class="headerlink" title="三种面向对象分析的方法"></a>三种面向对象分析的方法</h2><ul>
+<li>名词法——</li>
+<li>分析模型——boundaries entities control</li>
+<li>CRC——类、职责、协作</li>
+</ul>
+<p>目标：识别对象、定义对象之间的关系</p>
+<h2 id="名词法"><a href="#名词法" class="headerlink" title="名词法"></a>名词法</h2><ul>
+<li>重用或修改已有的模型</li>
+<li>借助行业、公司内部法的“概念类列表”    Concept Category list        Check list</li>
+<li>在需求描述中查询名词或名词短语</li>
+</ul>
+<p>面向对象分析与结构化分析之间的最大差异是：</p>
+<p>前者根据对象划分系统，而后者根据功能</p>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><ul>
+<li>在问题领域的文本描述中，标识出名词和名词短语，把他们作为候选的概念类或属性</li>
+<li>对发现的名词进行分析，辨别是合适的概念类吗，概念可以合并吗</li>
+<li>定义概念类之间的关系</li>
+<li>定义概念类的属性</li>
+</ul>
+<h1 id="分析模型法"><a href="#分析模型法" class="headerlink" title="分析模型法"></a>分析模型法</h1><p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0-grasp/image-20230214125531667.png" srcset="/img/loading.gif" lazyload alt="image-20230214125531667"></p>
+<ul>
+<li><p>实体类 entity</p>
+<p>identifying entity objects</p>
+<p>an entity  object models information that shows the state of a system </p>
+</li>
+<li><p>边界类 boundary</p>
+<p>identitying interface objects</p>
+<p>a boundary &#x2F; interface object models input and output operations that process them</p>
+</li>
+<li><p>控制类 control</p>
+<p>identifying control objects</p>
+<p>a control object models functionality &#x2F; operations regarding to validate and decide whether to process and pass information from the interface object to the entity object or the way around</p>
+</li>
+</ul>
+<p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0-grasp/image-20230214125835195.png" srcset="/img/loading.gif" lazyload alt="image-20230214125835195"></p>
+<h1 id="职责驱动的设计-responsibility-driven-design"><a href="#职责驱动的设计-responsibility-driven-design" class="headerlink" title="职责驱动的设计(responsibility driven design)"></a>职责驱动的设计(responsibility driven design)</h1>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/OOAD/" class="category-chain-item">OOAD</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/OOAD/">#OOAD</a>
+      
+        <a href="/tags/%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/">#期末复习</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>OOAD期末复习——GRASP</div>
+      <div>http://example.com/2023/02/12/ooad期末复习-grasp/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>ECNU_zhy</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>February 12, 2023</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>Licensed under</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/02/15/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/" title="非关系数据库期末复习">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">非关系数据库期末复习</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/02/09/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/" title="OOAD期末复习——Gof设计模式">
+                        <span class="hidden-mobile">OOAD期末复习——Gof设计模式</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.1/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

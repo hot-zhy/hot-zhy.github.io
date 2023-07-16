@@ -1,0 +1,978 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/xiaoxin.png">
+  <link rel="icon" href="/img/xiaoxin.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="ECNU_zhy">
+  <meta name="keywords" content="题目">
+  
+    <meta name="description" content="1.   2. 3. 4. 5. 6. 7.  8. 9. 10. 11. 12. 13.  14. 15.  delete:   15.1. Examine the schedule given below. There are four transactions, T1, T2, T3, and T4.   16.    17.          18. 许多应用选择在数据库之外的文件系统中来">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据库系统概念题目">
+<meta property="og:url" content="http://example.com/2022/08/17/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/index.html">
+<meta property="og:site_name" content="zhy-blog">
+<meta property="og:description" content="1.   2. 3. 4. 5. 6. 7.  8. 9. 10. 11. 12. 13.  14. 15.  delete:   15.1. Examine the schedule given below. There are four transactions, T1, T2, T3, and T4.   16.    17.          18. 许多应用选择在数据库之外的文件系统中来">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220816204214307-16606537355031.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220816214558553.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220816232850919.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220816233202879.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220816234444629.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220816235137927.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220816235655619.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220817000252947.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220817000642216.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220817000627501.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220817000841097.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220817001000893.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220817001203510.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220817001755982.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220817002005611.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220817134352745.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220817134402922.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220817135856430.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220817140943761.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220817141359017.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220817142255650.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220823140322750.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220817144422988.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220818114324495.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220818114258443.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220818114346171.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220818114549028.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220818114824359.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220818115149616.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220818115211501.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220818115311229.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220818115337782.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220818115503576.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220818115538004.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220818115805470.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220818115855770.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220818134630558.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220818134713877.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220821151128498.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220821151417490.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220821152054475.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220821152753614.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220821153331302.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220821153601951.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220821153705919.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220821153920792.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220821154126175.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220821154553416.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220821155618346.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220821155813828.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220821155943614.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220821160045941.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220821160148536.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220821160307665.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220821160529836.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220821160842188.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220821161423141.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220821163952061.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220821163913043.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822092721266.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822093842209.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822094024676.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822094048604.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822094313217.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822094623642.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822094731882.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822094955473.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822095112670.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822095141727.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822095232355.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822095329304.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822095418392.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822095532923.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822095702798.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822100131675.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822100555579.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822101027651.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822102905318.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822102916429.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822103913945.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822104640579.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/SouthEast.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/SouthEast-16611370536543.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822105803588.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822110033106.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822110504889.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822111828826.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822111813373.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822131227212.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822132337250.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822133301979.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822134345629.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822134855513.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822135626171.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822140136208.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822140152965.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822140736739.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822140757526.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822141518344.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822141732710.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822143503719.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822144045830.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822144757452.png">
+<meta property="article:published_time" content="2022-08-16T16:41:11.000Z">
+<meta property="article:modified_time" content="2022-08-23T06:03:24.604Z">
+<meta property="article:author" content="ECNU_zhy">
+<meta property="article:tag" content="数据库">
+<meta property="article:tag" content="数据库系统概念">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220816204214307-16606537355031.png">
+  
+  
+  
+  <title>数据库系统概念题目 - zhy-blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ECNU-zhy</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                Links
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="数据库系统概念题目"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-08-17 00:41" pubdate>
+          August 17, 2022 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.3k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          36 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">数据库系统概念题目</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="1"><a href="#1" class="headerlink" title="1."></a>1.</h1><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220816204214307-16606537355031.png" srcset="/img/loading.gif" lazyload alt="image-20220816204214307"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220816214558553.png" srcset="/img/loading.gif" lazyload alt="image-20220816214558553"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220816232850919.png" srcset="/img/loading.gif" lazyload alt="image-20220816232850919"></p>
+<h1 id="2"><a href="#2" class="headerlink" title="2."></a>2.</h1><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220816233202879.png" srcset="/img/loading.gif" lazyload alt="image-20220816233202879"></p>
+<h1 id="3"><a href="#3" class="headerlink" title="3."></a>3.</h1><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220816234444629.png" srcset="/img/loading.gif" lazyload alt="image-20220816234444629"></p>
+<h1 id="4"><a href="#4" class="headerlink" title="4."></a>4.</h1><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220816235137927.png" srcset="/img/loading.gif" lazyload alt="image-20220816235137927"></p>
+<h1 id="5"><a href="#5" class="headerlink" title="5."></a>5.</h1><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220816235655619.png" srcset="/img/loading.gif" lazyload alt="image-20220816235655619"></p>
+<h1 id="6"><a href="#6" class="headerlink" title="6."></a>6.</h1><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220817000252947.png" srcset="/img/loading.gif" lazyload alt="image-20220817000252947"></p>
+<h1 id="7"><a href="#7" class="headerlink" title="7."></a>7.</h1><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220817000642216.png" srcset="/img/loading.gif" lazyload alt="image-20220817000642216"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220817000627501.png" srcset="/img/loading.gif" lazyload alt="image-20220817000627501"></p>
+<h1 id="8"><a href="#8" class="headerlink" title="8."></a>8.</h1><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220817000841097.png" srcset="/img/loading.gif" lazyload alt="image-20220817000841097"></p>
+<h1 id="9"><a href="#9" class="headerlink" title="9."></a>9.</h1><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220817001000893.png" srcset="/img/loading.gif" lazyload alt="image-20220817001000893"></p>
+<h1 id="10"><a href="#10" class="headerlink" title="10."></a>10.</h1><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220817001203510.png" srcset="/img/loading.gif" lazyload alt="image-20220817001203510"></p>
+<h1 id="11"><a href="#11" class="headerlink" title="11."></a>11.</h1><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220817001755982.png" srcset="/img/loading.gif" lazyload alt="image-20220817001755982"></p>
+<h1 id="12"><a href="#12" class="headerlink" title="12."></a>12.</h1><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220817002005611.png" srcset="/img/loading.gif" lazyload alt="image-20220817002005611"></p>
+<h1 id="13"><a href="#13" class="headerlink" title="13."></a>13.</h1><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220817134352745.png" srcset="/img/loading.gif" lazyload alt="image-20220817134352745"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220817134402922.png" srcset="/img/loading.gif" lazyload alt="image-20220817134402922"></p>
+<h1 id="14"><a href="#14" class="headerlink" title="14."></a>14.</h1><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220817135856430.png" srcset="/img/loading.gif" lazyload alt="image-20220817135856430"></p>
+<h1 id="15"><a href="#15" class="headerlink" title="15."></a>15.</h1><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220817140943761.png" srcset="/img/loading.gif" lazyload alt="image-20220817140943761"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220817141359017.png" srcset="/img/loading.gif" lazyload alt="image-20220817141359017"></p>
+<p>delete:</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220817142255650.png" srcset="/img/loading.gif" lazyload alt="image-20220817142255650"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220823140322750.png" srcset="/img/loading.gif" lazyload alt="image-20220823140322750"></p>
+<h1 id="15-1"><a href="#15-1" class="headerlink" title="15."></a>15.</h1><p><strong>1.</strong> Examine the schedule given below. There are four transactions, T1, T2, T3, and T4. </p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220817144422988.png" srcset="/img/loading.gif" lazyload alt="image-20220817144422988"></p>
+<h1 id="16"><a href="#16" class="headerlink" title="16."></a>16.</h1><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220818114324495.png" srcset="/img/loading.gif" lazyload alt="image-20220818114324495"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220818114258443.png" srcset="/img/loading.gif" lazyload alt="image-20220818114258443"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220818114346171.png" srcset="/img/loading.gif" lazyload alt="image-20220818114346171"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220818114549028.png" srcset="/img/loading.gif" lazyload alt="image-20220818114549028"><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220818114824359.png" srcset="/img/loading.gif" lazyload alt="image-20220818114824359"></p>
+<h1 id="17"><a href="#17" class="headerlink" title="17."></a>17.</h1><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220818115149616.png" srcset="/img/loading.gif" lazyload alt="image-20220818115149616"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220818115211501.png" srcset="/img/loading.gif" lazyload alt="image-20220818115211501"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220818115311229.png" srcset="/img/loading.gif" lazyload alt="image-20220818115311229"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220818115337782.png" srcset="/img/loading.gif" lazyload alt="image-20220818115337782"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220818115503576.png" srcset="/img/loading.gif" lazyload alt="image-20220818115503576"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220818115538004.png" srcset="/img/loading.gif" lazyload alt="image-20220818115538004"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220818115805470.png" srcset="/img/loading.gif" lazyload alt="image-20220818115805470"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220818115855770.png" srcset="/img/loading.gif" lazyload alt="image-20220818115855770"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220818134630558.png" srcset="/img/loading.gif" lazyload alt="image-20220818134630558"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220818134713877.png" srcset="/img/loading.gif" lazyload alt="image-20220818134713877"></p>
+<h1 id="18"><a href="#18" class="headerlink" title="18."></a>18.</h1><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220821151128498.png" srcset="/img/loading.gif" lazyload alt="image-20220821151128498"></p>
+<p>许多应用选择在数据库之外的文件系统中来存储特别大的对象，比如视频数据。在这种情况下，应用程序可以将文件名存储为数据库中记录的一个属性。</p>
+<p>一些数据库支持文件系统和数据库的集成，以此来满足约束，并且确保访问授权被执行。文件能够通过文件系统接口和数据库SQL接口进行访问。</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220821151417490.png" srcset="/img/loading.gif" lazyload alt="image-20220821151417490"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220821152054475.png" srcset="/img/loading.gif" lazyload alt="image-20220821152054475"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220821152753614.png" srcset="/img/loading.gif" lazyload alt="image-20220821152753614"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220821153331302.png" srcset="/img/loading.gif" lazyload alt="image-20220821153331302"></p>
+<p>Denormalization is a database optimization technique in which we add redundant data to one or more tables. This can help us avoid costly joins in a relational database. Note that <em>denormalization</em> does not mean ‘reversing normalization’ or ‘not to normalize’. It is an optimization technique that is applied after normalization.</p>
+<p>Denormalization, then, strikes a different compromise. Under denormalization, we decide that we’re okay with some redundancy and some extra effort to update the database in order to get the efficiency advantages of fewer joins.</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220821153601951.png" srcset="/img/loading.gif" lazyload alt="image-20220821153601951"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220821153705919.png" srcset="/img/loading.gif" lazyload alt="image-20220821153705919"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220821153920792.png" srcset="/img/loading.gif" lazyload alt="image-20220821153920792"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220821154126175.png" srcset="/img/loading.gif" lazyload alt="image-20220821154126175"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220821154553416.png" srcset="/img/loading.gif" lazyload alt="image-20220821154553416"></p>
+<h1 id="19"><a href="#19" class="headerlink" title="19."></a>19.</h1><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220821155618346.png" srcset="/img/loading.gif" lazyload alt="image-20220821155618346"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220821155813828.png" srcset="/img/loading.gif" lazyload alt="image-20220821155813828"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220821155943614.png" srcset="/img/loading.gif" lazyload alt="image-20220821155943614"></p>
+<p>、<img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220821160045941.png" srcset="/img/loading.gif" lazyload alt="image-20220821160045941"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220821160148536.png" srcset="/img/loading.gif" lazyload alt="image-20220821160148536"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220821160307665.png" srcset="/img/loading.gif" lazyload alt="image-20220821160307665"></p>
+<h1 id="20"><a href="#20" class="headerlink" title="20."></a>20.</h1><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220821160529836.png" srcset="/img/loading.gif" lazyload alt="image-20220821160529836"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220821160842188.png" srcset="/img/loading.gif" lazyload alt="image-20220821160842188"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220821161423141.png" srcset="/img/loading.gif" lazyload alt="image-20220821161423141"></p>
+<h1 id="21"><a href="#21" class="headerlink" title="21."></a>21.</h1><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220821163952061.png" srcset="/img/loading.gif" lazyload alt="image-20220821163952061"></p>
+<p>注意要用弱实体集：</p>
+<p>​	<img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220821163913043.png" srcset="/img/loading.gif" lazyload alt="image-20220821163913043"></p>
+<h1 id="22"><a href="#22" class="headerlink" title="22."></a>22.</h1><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822092721266.png" srcset="/img/loading.gif" lazyload alt="image-20220822092721266"></p>
+<h1 id="23"><a href="#23" class="headerlink" title="23."></a>23.</h1><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822093842209.png" srcset="/img/loading.gif" lazyload alt="image-20220822093842209"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822094024676.png" srcset="/img/loading.gif" lazyload alt="image-20220822094024676"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822094048604.png" srcset="/img/loading.gif" lazyload alt="image-20220822094048604"></p>
+<h1 id="24"><a href="#24" class="headerlink" title="24."></a>24.</h1><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822094313217.png" srcset="/img/loading.gif" lazyload alt="image-20220822094313217"></p>
+<h1 id="25"><a href="#25" class="headerlink" title="25."></a>25.</h1><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822094623642.png" srcset="/img/loading.gif" lazyload alt="image-20220822094623642"></p>
+<h1 id="26"><a href="#26" class="headerlink" title="26."></a>26.</h1><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822094731882.png" srcset="/img/loading.gif" lazyload alt="image-20220822094731882"></p>
+<h1 id="27"><a href="#27" class="headerlink" title="27."></a>27.</h1><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822094955473.png" srcset="/img/loading.gif" lazyload alt="image-20220822094955473"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822095112670.png" srcset="/img/loading.gif" lazyload alt="image-20220822095112670"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822095141727.png" srcset="/img/loading.gif" lazyload alt="image-20220822095141727"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822095232355.png" srcset="/img/loading.gif" lazyload alt="image-20220822095232355"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822095329304.png" srcset="/img/loading.gif" lazyload alt="image-20220822095329304"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822095418392.png" srcset="/img/loading.gif" lazyload alt="image-20220822095418392"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822095532923.png" srcset="/img/loading.gif" lazyload alt="image-20220822095532923"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822095702798.png" srcset="/img/loading.gif" lazyload alt="image-20220822095702798"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822100131675.png" srcset="/img/loading.gif" lazyload alt="image-20220822100131675"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822100555579.png" srcset="/img/loading.gif" lazyload alt="image-20220822100555579"></p>
+<h1 id="28"><a href="#28" class="headerlink" title="28."></a>28.</h1><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822101027651.png" srcset="/img/loading.gif" lazyload alt="image-20220822101027651"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822102905318.png" srcset="/img/loading.gif" lazyload alt="image-20220822102905318"></p>
+<p>ER图转化为database schema：</p>
+<p>Product(P_num, Name, Price, Quantity)                   PK:(P_num)</p>
+<p>Service(<strong>P_num</strong>, Type, Charge)                                   PK(P_num, Type), FK(P_num)</p>
+<p>Employee(PID, First_name, Last_name, Home_phone)              PK(PID)</p>
+<p>Customer(CID, First_name, Last_name, Street, Post_code)            PK(CID)</p>
+<p>多值属性可以单独写个表：</p>
+<p><strong>Customer_phone(CID, Phone_number)                           PK(CID, Phone_number), FK(CID)</strong></p>
+<p>Sales(P_num, CID, PID, date, invoice_num)                                  PK(P_num, CID, PID)                   FK:(CID),(PID),(P_num)</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822102916429.png" srcset="/img/loading.gif" lazyload alt="image-20220822102916429"></p>
+<ul>
+<li>弱实体的表示<ul>
+<li><strong>两层矩形框</strong></li>
+</ul>
+</li>
+<li>标识性联系<ul>
+<li><strong>两层菱形框</strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="弱实体集"><a href="#弱实体集" class="headerlink" title="弱实体集"></a>弱实体集</h4><ul>
+<li>弱实体集（Weak Entity Set）<ul>
+<li>一个实体集的所有属性都不足以形成主码</li>
+</ul>
+</li>
+<li>标识性联系（identifying relationship）<ul>
+<li>弱实体集与其拥有者之间的联系</li>
+<li>弱实体集与强实体集之间是一对多的联系</li>
+</ul>
+</li>
+<li>弱实体集必然存在依赖于强实体集</li>
+<li><strong>存在依赖并不总会导致一个弱实体集</strong>，从属实体集可以有自己的主码</li>
+</ul>
+<h4 id="弱实体集的分辨符"><a href="#弱实体集的分辨符" class="headerlink" title="弱实体集的分辨符"></a>弱实体集的分辨符</h4><ul>
+<li>分辨符（Discriminator)<ul>
+<li>弱实体集中用于区别依赖于某个特定强实体集的属性集合，也称作部分码（partial key)</li>
+</ul>
+</li>
+<li>弱实体集的主码 &#x3D; 强实体集的主码+ 弱实体集的分辨符<ul>
+<li>“还款” 主码＝贷款号＋还款号</li>
+</ul>
+</li>
+</ul>
+<h4 id="弱实体集在-ER-图中的表示"><a href="#弱实体集在-ER-图中的表示" class="headerlink" title="弱实体集在 ER 图中的表示"></a>弱实体集在 ER 图中的表示</h4><ul>
+<li><strong>弱实体集</strong>以<strong>双边框的矩形</strong>表示</li>
+<li><strong>标识性联系</strong>以<strong>双边框的菱形</strong>表示</li>
+<li><strong>弱实体集的分辨符</strong>用<strong>下划虚线</strong>标明</li>
+<li>从联系集用<strong>双线（全部参与）</strong>连接弱实体集，用<strong>箭头（一对多联系）</strong>指向强实体集</li>
+</ul>
+<h4 id="何时引入弱实体集"><a href="#何时引入弱实体集" class="headerlink" title="何时引入弱实体集"></a>何时引入弱实体集</h4><ul>
+<li>作为层次结构的一部分</li>
+<li>实体集的一些多值、复合属性可以抽取出来作为弱实体集<ul>
+<li>贷款的还款属性</li>
+</ul>
+</li>
+<li>如果弱实体集不但参与和强实体集之间的标识性联系，而且参与和其它实体集的联系，或者弱实体集本身含有很多属性，则将其表述为弱实体集</li>
+</ul>
+<h1 id="29"><a href="#29" class="headerlink" title="29."></a>29.</h1><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822103913945.png" srcset="/img/loading.gif" lazyload alt="image-20220822103913945"></p>
+<p>数据库是数据的集成组合，通常大到必须存储在磁盘或磁带等辅助存储设备上。这些数据可以作为操作系统系统文件的集合进行维护，也可以存储在DBMS（数据库管理系统）中。使用DBMS的优点是：</p>
+<ul>
+<li>数据独立性和高效的数据访问</li>
+<li>缩短应用程序开发时间</li>
+<li>数据的一致性和安全性</li>
+<li>数据的管理和权限</li>
+<li>并发访问和故障恢复</li>
+<li>The database stores <strong>structured and related</strong> data in a table format for <strong>easy insertion, deletion, and update</strong> operations. It provides <strong>indexing, sorting, transaction processing(using SQL), and a simple client-server integration mechanism.</strong></li>
+<li>On the other hand, a traditional file control system has <strong>unstructured and unrelated data.</strong> The file system is good if you are searching for files as the operating system indexed those files, but if you want to store data in a <strong>text file</strong> then those data will be unstructured and difficult to fetch which is one of the main disadvantages has over the database system.</li>
+</ul>
+<h1 id="30"><a href="#30" class="headerlink" title="30."></a>30.</h1><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822104640579.png" srcset="/img/loading.gif" lazyload alt="image-20220822104640579"></p>
+<p>什么时候用聚集索引比用稀疏索引要好？</p>
+<p>聚集索引和非聚集索引的根本区别是<strong>表中记录的物理顺序和索引的排列顺序是否一致</strong></p>
+<p><strong>聚集索引</strong>的表中记录的物理顺序与索引的排列顺序一致</p>
+<p>优点是查询速度快，因为一旦具有第一个索引值的记录被找到，具有连续索 引值的记录也一定物理的紧跟其后。</p>
+<p>缺点是对表进行修改速度较慢，这是为了保持表中的记录的物理顺序与索引 的顺序一致，而把记录插入到数据页的相应位置，必须在数据页中进行数据重排，降低了执行速度。在插入新记录时数据文件为了维持 B+Tree 的特性而频繁的 分裂调整，十分低效。</p>
+<p><strong>建议使用聚集索引的场合为：</strong></p>
+<p><strong>A.某列包含了小数目的不同值。</strong></p>
+<p><strong>B.排序和范围查找。 非聚集索引的记录的物理顺序和索引的顺序不一致。</strong></p>
+<p>其他方面的区别：</p>
+<p>1.聚集索引和非聚集索引都采用了 B+树的结构，但非聚集索引的叶子层并 不与实际的数据页相重叠，而采用叶子层包含一个指向表中的记录在数据页中 的指针的方式。<strong>聚集索引的叶节点就是数据节点，而非聚集索引的叶节点仍然 是索引节点。</strong></p>
+<p>2.非聚集索引添加记录时，不会引起数据顺序的重组。</p>
+<p><strong>建议使用非聚集索引的场合为：</strong></p>
+<p>a.此列包含了大数目的不同值；</p>
+<p>b.频繁更新的列</p>
+<p>聚集索引对于那些<strong>经常要搜索范围值的列</strong>特别有效。<u>使用聚集索引找到包含第一个值的行后，便可以确保包含后续索引值的行在物理相邻</u>。例如，如果应用程序执行 的一个查询经常检索某一日期范围内的记录，则使用聚集索引可以迅速找到包含开始日期的行，然后<strong>检索表中所有相邻的行</strong>，直到到达结束日期。这样有助于提高此 类查询的性能。同样，如果对从表中检索的数据进行排序时经常要用到某一列，则可以将该表在该列上聚集（物理排序），<strong>避免每次查询该列时都进行排序</strong>，从而节 省成本。</p>
+<p><strong>聚集索引的使用场合为：</strong><br>　　<strong>a.查询命令的回传结果是以该字段为排序依据的；</strong><br>　　<strong>b.查询的结果返回一个区间的值；</strong><br>　　<strong>c.查询的结果返回某值相同的大量结果集。</strong><br><strong>聚集索引会降低 insert，和update操作的性能，所以，是否使用聚集索引要全面衡量。</strong> </p>
+<p><strong>非聚集索引的使用场合为：</strong><br>　　<strong>a.查询所获数据量较少时；</strong><br>　　<strong>b.某字段中的数据的唯一性比较高时；</strong></p>
+<p><strong>非聚集索引必须是稠密索引</strong></p>
+<p>稠密索引能够比稀疏索引更快的定位一条记录。但是，稀疏索引相比于稠密索引的优点是：它所占空间更小，且插入和删除时的维护开销也小。</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/SouthEast.png" srcset="/img/loading.gif" lazyload alt="这里写图片描述"></p>
+<p>稀疏索引：相对于稠密索引，稀疏索引<strong>只为某些搜索码值建立索引记录</strong>；在搜索时，找到其最大的搜索码值小于或等于所查找记录的搜索码值的索引项，然后从该记录开始向后顺序查询直到找到为止。</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/SouthEast-16611370536543.png" srcset="/img/loading.gif" lazyload alt="这里写图片描述"></p>
+<h1 id="31"><a href="#31" class="headerlink" title="31."></a>31.</h1><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822105803588.png" srcset="/img/loading.gif" lazyload alt="image-20220822105803588"></p>
+<p>最多在一个文件上创建一个聚集索引。</p>
+<p>有的时候，我们可能不会创建任何聚集索引，因为没有查询需要使用聚集索引来获得足够的性能，并且聚集索引的维护成本比非聚集索引要高。</p>
+<h1 id="32"><a href="#32" class="headerlink" title="32."></a>32.</h1><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822110033106.png" srcset="/img/loading.gif" lazyload alt="image-20220822110033106"></p>
+<p>假设有一个永远不会失败的数据库系统。 此系统是否需要恢复管理器？ 为什么？</p>
+<p>（可能发生的是事务故障，而不是系统故障和介质故障，那么还是需要恢复recovery manager解决事务故障，进行中止事务的回滚）</p>
+<p>即使在这种情况下，恢复管理器也需要执行<strong>中止事务的回滚</strong></p>
+<p><strong>中止事务：</strong>事务在执行过程中发生故障，不能执行完成的事务。可以进行事务回滚，保持数据库的一致性。</p>
+<p><strong>事务回滚：</strong>将中止事务对数据库的更新操作撤销称为事务回滚。</p>
+<p>已提交事务：成功执行完成的事务称为已提交事务。已提交的事务不能进行回滚操作，必须由程序员手工执行一个补偿事务才能撤销提交的事务对数据库的影响。</p>
+<h1 id="33"><a href="#33" class="headerlink" title="33."></a>33.</h1><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822110504889.png" srcset="/img/loading.gif" lazyload alt="image-20220822110504889"></p>
+<ul>
+<li>易失性存储：驻留在易失性存储中的信息通常无法在系统崩溃后幸存下来。 访问易失性存储的速度非常快。</li>
+<li>非易失性存储：驻留在非易失性存储中的信息<strong>在系统崩溃后仍然存在。</strong></li>
+<li>稳定性存储：稳定存储中的信息永不丢失</li>
+</ul>
+<ol>
+<li><strong>系统故障</strong>是指<strong>操作系统或DBMS代码错误、特定类型的硬件错误（如CPU故障）或突然停电等原因</strong>，使得系统要重新启动。发生系统故障时，所有正在运行的事务都非正常终止，内存中数据库缓冲区的信息全部丢失，但外部存储设备上的数据未受影响 [6] 。</li>
+<li><strong>事务故障</strong>是指某个事务在运行过程中由于种种原因未能运行至终止点( COMMIT或ROLLBACK)，发生故障 [6] 。事务故障的常见原因包括输入数据有误、运算溢出、违反了完整性限制、应用程序出错、并行事务发生死锁等 [6] 。</li>
+<li><strong>系统故障</strong>称为“软故障”(SoftCrash)。<strong>介质故障</strong>称为“硬故障”(HardCrash)。介质故障是指由于<strong>磁盘损坏、磁头碰撞、瞬时强磁场干扰</strong>等原因，使得存储在外存中的数据部分丢失或全部丢失 [6] 。</li>
+</ol>
+<h1 id="34"><a href="#34" class="headerlink" title="34."></a>34.</h1><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822111828826.png" srcset="/img/loading.gif" lazyload alt="image-20220822111828826"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822111813373.png" srcset="/img/loading.gif" lazyload alt="image-20220822111813373"></p>
+<p><strong>The keys for the relationships are:</strong></p>
+<p><strong>EditsFor(writer_id)</strong></p>
+<p><strong>WritesFor(magazine_id,writer_id)</strong></p>
+<p>DeliversTo(magazine_id,city_name)</p>
+<p>LivesIn(city_name,subscriber_id)</p>
+<p>Fans(subscriber_id,writer_id)</p>
+<h1 id="35"><a href="#35" class="headerlink" title="35."></a>35.</h1><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822131227212.png" srcset="/img/loading.gif" lazyload alt="image-20220822131227212"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822132337250.png" srcset="/img/loading.gif" lazyload alt="image-20220822132337250"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822133301979.png" srcset="/img/loading.gif" lazyload alt="image-20220822133301979"></p>
+<h1 id="36"><a href="#36" class="headerlink" title="36."></a>36.</h1><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822134345629.png" srcset="/img/loading.gif" lazyload alt="image-20220822134345629"></p>
+<h1 id="37"><a href="#37" class="headerlink" title="37."></a>37.</h1><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822134855513.png" srcset="/img/loading.gif" lazyload alt="image-20220822134855513"></p>
+<h1 id="38"><a href="#38" class="headerlink" title="38."></a>38.</h1><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822135626171.png" srcset="/img/loading.gif" lazyload alt="image-20220822135626171"></p>
+<h1 id="39"><a href="#39" class="headerlink" title="39."></a>39.</h1><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822140136208.png" srcset="/img/loading.gif" lazyload alt="image-20220822140136208"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822140152965.png" srcset="/img/loading.gif" lazyload alt="image-20220822140152965"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822140736739.png" srcset="/img/loading.gif" lazyload alt="image-20220822140736739"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822140757526.png" srcset="/img/loading.gif" lazyload alt="image-20220822140757526"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822141518344.png" srcset="/img/loading.gif" lazyload alt="image-20220822141518344"></p>
+<h1 id="40"><a href="#40" class="headerlink" title="40."></a>40.</h1><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822141732710.png" srcset="/img/loading.gif" lazyload alt="image-20220822141732710"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822143503719.png" srcset="/img/loading.gif" lazyload alt="image-20220822143503719"></p>
+<h1 id="41"><a href="#41" class="headerlink" title="41."></a>41.</h1><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822144045830.png" srcset="/img/loading.gif" lazyload alt="image-20220822144045830"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E9%A2%98%E7%9B%AE/image-20220822144757452.png" srcset="/img/loading.gif" lazyload alt="image-20220822144757452"></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5/" class="category-chain-item">数据库系统概念</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">#数据库</a>
+      
+        <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5/">#数据库系统概念</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>数据库系统概念题目</div>
+      <div>http://example.com/2022/08/17/数据库系统概念题目/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>ECNU_zhy</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>August 17, 2022</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>Licensed under</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/08/17/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC14%E7%AB%A0%E5%B9%B6%E5%8F%91%E6%8E%A7%E5%88%B6%E4%B8%8E%E6%81%A2%E5%A4%8D/" title="">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile"></span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/08/16/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC13%E7%AB%A0%20%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86/" title="数据库系统概念 第13章 事务管理">
+                        <span class="hidden-mobile">数据库系统概念 第13章 事务管理</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.1/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

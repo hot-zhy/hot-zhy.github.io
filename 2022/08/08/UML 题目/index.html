@@ -1,0 +1,767 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/xiaoxin.png">
+  <link rel="icon" href="/img/xiaoxin.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="ECNU_zhy">
+  <meta name="keywords" content="UML,题目">
+  
+    <meta name="description" content="1. 2. 3.  4. 5. 6,7. 8.  9.  10. 11. ​		用例可能有变体。 在所有有趣的系统中，您会发现用例是其他用例的专用版本、包含在其他用例中的用例以及扩展其他核心用例行为的用例。 您可以通过根据这三种关系来组织一组用例的常见、可重用行为来分解它们。 ​		用例执行一些有形的工作。 从给定参与者的角度来看，用例会做一些对参与者有价值的事情，例如计算结果、生成新对象或更改另">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UML复习题目">
+<meta property="og:url" content="http://example.com/2022/08/08/UML%20%E9%A2%98%E7%9B%AE/index.html">
+<meta property="og:site_name" content="zhy-blog">
+<meta property="og:description" content="1. 2. 3.  4. 5. 6,7. 8.  9.  10. 11. ​		用例可能有变体。 在所有有趣的系统中，您会发现用例是其他用例的专用版本、包含在其他用例中的用例以及扩展其他核心用例行为的用例。 您可以通过根据这三种关系来组织一组用例的常见、可重用行为来分解它们。 ​		用例执行一些有形的工作。 从给定参与者的角度来看，用例会做一些对参与者有价值的事情，例如计算结果、生成新对象或更改另">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/images/UML%20%E9%A2%98%E7%9B%AE/image-20220807195145970.png">
+<meta property="og:image" content="http://example.com/images/UML%20%E9%A2%98%E7%9B%AE/image-20220807223017212.png">
+<meta property="og:image" content="http://example.com/images/UML%20%E9%A2%98%E7%9B%AE/image-20220807224555736.png">
+<meta property="og:image" content="http://example.com/images/UML%20%E9%A2%98%E7%9B%AE/image-20220807235847443.png">
+<meta property="og:image" content="http://example.com/images/UML%20%E9%A2%98%E7%9B%AE/image-20220807225250171.png">
+<meta property="og:image" content="http://example.com/images/UML%20%E9%A2%98%E7%9B%AE/image-20220807230454289.png">
+<meta property="og:image" content="http://example.com/images/UML%20%E9%A2%98%E7%9B%AE/image-20220807231911756.png">
+<meta property="og:image" content="http://example.com/images/UML%20%E9%A2%98%E7%9B%AE/image-20220807235435965.png">
+<meta property="og:image" content="http://example.com/images/UML%20%E9%A2%98%E7%9B%AE/image-20220807235501901.png">
+<meta property="og:image" content="http://example.com/images/UML%20%E9%A2%98%E7%9B%AE/image-20220808001501508.png">
+<meta property="og:image" content="http://example.com/images/UML%20%E9%A2%98%E7%9B%AE/image-20220808001546394.png">
+<meta property="og:image" content="http://example.com/images/UML%20%E9%A2%98%E7%9B%AE/image-20220808001840278.png">
+<meta property="og:image" content="http://example.com/images/UML%20%E9%A2%98%E7%9B%AE/image-20220808001930382.png">
+<meta property="og:image" content="http://example.com/images/UML%20%E9%A2%98%E7%9B%AE/image-20220808002248163.png">
+<meta property="og:image" content="http://example.com/images/UML%20%E9%A2%98%E7%9B%AE/image-20220815214947048.png">
+<meta property="og:image" content="http://example.com/images/UML%20%E9%A2%98%E7%9B%AE/image-20220829205501755.png">
+<meta property="og:image" content="http://example.com/images/UML%20%E9%A2%98%E7%9B%AE/image-20220829205901968.png">
+<meta property="og:image" content="http://example.com/images/UML%20%E9%A2%98%E7%9B%AE/image-20220829211228923.png">
+<meta property="og:image" content="http://example.com/images/UML%20%E9%A2%98%E7%9B%AE/image-20220829213239016.png">
+<meta property="og:image" content="http://example.com/images/UML%20%E9%A2%98%E7%9B%AE/image-20220830110032695.png">
+<meta property="og:image" content="http://example.com/images/UML%20%E9%A2%98%E7%9B%AE/image-20220829234019230.png">
+<meta property="og:image" content="http://example.com/images/UML%20%E9%A2%98%E7%9B%AE/image-20220830000651166.png">
+<meta property="og:image" content="http://example.com/images/UML%20%E9%A2%98%E7%9B%AE/image-20220830001635055.png">
+<meta property="og:image" content="http://example.com/images/UML%20%E9%A2%98%E7%9B%AE/image-20220830002551282.png">
+<meta property="article:published_time" content="2022-08-07T16:24:55.000Z">
+<meta property="article:modified_time" content="2022-08-30T15:42:20.624Z">
+<meta property="article:author" content="ECNU_zhy">
+<meta property="article:tag" content="UML">
+<meta property="article:tag" content="题目">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/images/UML%20%E9%A2%98%E7%9B%AE/image-20220807195145970.png">
+  
+  
+  
+  <title>UML复习题目 - zhy-blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ECNU-zhy</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                Links
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="UML复习题目"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-08-08 00:24" pubdate>
+          August 8, 2022 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.6k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          14 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">UML复习题目</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="1"><a href="#1" class="headerlink" title="1."></a>1.</h1><p><img src="/images/UML%20%E9%A2%98%E7%9B%AE/image-20220807195145970.png" srcset="/img/loading.gif" lazyload alt="image-20220807195145970"></p>
+<h1 id="2"><a href="#2" class="headerlink" title="2."></a>2.</h1><p><img src="/images/UML%20%E9%A2%98%E7%9B%AE/image-20220807223017212.png" srcset="/img/loading.gif" lazyload alt="image-20220807223017212"></p>
+<h1 id="3"><a href="#3" class="headerlink" title="3."></a>3.</h1><p><img src="/images/UML%20%E9%A2%98%E7%9B%AE/image-20220807224555736.png" srcset="/img/loading.gif" lazyload alt="image-20220807224555736"></p>
+<p><img src="/images/UML%20%E9%A2%98%E7%9B%AE/image-20220807235847443.png" srcset="/img/loading.gif" lazyload alt="image-20220807235847443"></p>
+<h1 id="4"><a href="#4" class="headerlink" title="4."></a>4.</h1><p><img src="/images/UML%20%E9%A2%98%E7%9B%AE/image-20220807225250171.png" srcset="/img/loading.gif" lazyload alt="image-20220807225250171"></p>
+<h1 id="5"><a href="#5" class="headerlink" title="5."></a>5.</h1><p><img src="/images/UML%20%E9%A2%98%E7%9B%AE/image-20220807230454289.png" srcset="/img/loading.gif" lazyload alt="image-20220807230454289"></p>
+<h1 id="6-7"><a href="#6-7" class="headerlink" title="6,7."></a>6,7.</h1><p><img src="/images/UML%20%E9%A2%98%E7%9B%AE/image-20220807231911756.png" srcset="/img/loading.gif" lazyload alt="image-20220807231911756"></p>
+<h1 id="8"><a href="#8" class="headerlink" title="8."></a>8.</h1><p><img src="/images/UML%20%E9%A2%98%E7%9B%AE/image-20220807235435965.png" srcset="/img/loading.gif" lazyload alt="image-20220807235435965"></p>
+<p><img src="/images/UML%20%E9%A2%98%E7%9B%AE/image-20220807235501901.png" srcset="/img/loading.gif" lazyload alt="image-20220807235501901"></p>
+<h1 id="9"><a href="#9" class="headerlink" title="9."></a>9.</h1><p><img src="/images/UML%20%E9%A2%98%E7%9B%AE/image-20220808001501508.png" srcset="/img/loading.gif" lazyload alt="image-20220808001501508"></p>
+<p><img src="/images/UML%20%E9%A2%98%E7%9B%AE/image-20220808001546394.png" srcset="/img/loading.gif" lazyload alt="image-20220808001546394"></p>
+<h1 id="10"><a href="#10" class="headerlink" title="10."></a>10.</h1><p><img src="/images/UML%20%E9%A2%98%E7%9B%AE/image-20220808001840278.png" srcset="/img/loading.gif" lazyload alt="image-20220808001840278"></p>
+<h1 id="11"><a href="#11" class="headerlink" title="11."></a>11.</h1><p><img src="/images/UML%20%E9%A2%98%E7%9B%AE/image-20220808001930382.png" srcset="/img/loading.gif" lazyload alt="image-20220808001930382"></p>
+<p>​		用例可能有变体。 在所有有趣的系统中，您会发现用例是其他用例的专用版本、包含在其他用例中的用例以及扩展其他核心用例行为的用例。 您可以通过根据这三种关系来组织一组用例的常见、可重用行为来分解它们。</p>
+<p>​		用例执行一些有形的工作。 从给定参与者的角度来看，用例会做一些对参与者有价值的事情，例如计算结果、生成新对象或更改另一个对象的状态。</p>
+<h1 id="12"><a href="#12" class="headerlink" title="12."></a>12.</h1><p><img src="/images/UML%20%E9%A2%98%E7%9B%AE/image-20220808002248163.png" srcset="/img/loading.gif" lazyload alt="image-20220808002248163"></p>
+<h1 id="13"><a href="#13" class="headerlink" title="13"></a>13</h1><p><img src="/images/UML%20%E9%A2%98%E7%9B%AE/image-20220815214947048.png" srcset="/img/loading.gif" lazyload alt="image-20220815214947048"></p>
+<h1 id="14"><a href="#14" class="headerlink" title="14."></a>14.</h1><ol>
+<li>接口为类或构件设定一个外部行为特性的规范，对类或构件的修改不改变这个行为规范，就可以保证其他与之关联的部分，乃至整个系统能够正常工作</li>
+<li>这样的规范，在UML中被称为接口</li>
+<li>接口为构件指定外部行为特征，从而能够实现软件系统的构件化，即，遵循同一个接口的构件可以相互替换</li>
+<li>接口不同于类和类型，它不描述任何实现（因此不包含任何实现操作的方法）</li>
+<li>接口是一组操作的集合，这组操作用于描述类或构件的一个服务</li>
+<li>接口是连接逻辑模型和设计模型的桥梁</li>
+<li>构件是系统中逻辑的并且可替换的部分，它遵循并提供对一组接口的实现</li>
+</ol>
+<h1 id="15-顺序图和类图之间的关系和区别"><a href="#15-顺序图和类图之间的关系和区别" class="headerlink" title="15.顺序图和类图之间的关系和区别"></a>15.顺序图和类图之间的关系和区别</h1><p>Describe the relationship between Class diagram and Sequence diagram ? </p>
+<h2 id="类图："><a href="#类图：" class="headerlink" title="类图："></a>类图：</h2><ul>
+<li>类图展示了一组<strong>类</strong>，接口，协作以及它们之间的关系</li>
+<li>类图用于对系统静态设计视图建模</li>
+<li>类图通常包含以下内容：<ol>
+<li>类</li>
+<li>接口</li>
+<li>依赖，泛化，关联，实现关系</li>
+</ol>
+</li>
+<li>类图用于对系统的静态设计视图建模，这种视图主要支持<strong>系统的功能需求</strong>，即系统要提供给最终用户的服务。</li>
+</ul>
+<h2 id="顺序图："><a href="#顺序图：" class="headerlink" title="顺序图："></a>顺序图：</h2><ul>
+<li>顺序图是强调消息时间顺序的交互图</li>
+<li>顺序图是用于对系统的动态方面建模</li>
+<li>交互图表现的是一个<strong>交互</strong>，由<strong>一组对象和它们之间的关系</strong>组成，包括它们之间可能<strong>传递的消息</strong></li>
+<li>在多数情况下， 交互图包括对类，接口，构件和节点的具体的或原型化的实例以及它们之间传递的消息进行建模</li>
+<li>交互图可以独立地可视化，详述，构造和文档化一个特定的对象群体的动态方面， 也可以对用况的特定的控制流进行建模。</li>
+</ul>
+<p><strong>Class</strong> diagrams show the main concepts and entities and how they are “conceptually” connected</p>
+<p><strong>Sequence</strong> diagrams show what the classes “do” (what the system needs to do) interacting with each other class</p>
+<p><strong>一个类的行为&#x2F;服务，是通过操作表示的，在交互图中可以看到对象在执行这些操作</strong></p>
+<p><strong>建模时，先在类中定义操作，然后在顺序图中为对象选择操作。</strong></p>
+<h1 id="16-顺序图和用例图之间的关系和区别"><a href="#16-顺序图和用例图之间的关系和区别" class="headerlink" title="16.顺序图和用例图之间的关系和区别"></a>16.顺序图和用例图之间的关系和区别</h1><p>用例是对一组动作序列的描述，系统执行这些动作序列来为参与者提供一个可观察的结果值</p>
+<p>必须仔细考虑每个用例代表的动态行为的内容，使得每个用例都能产生一个有价值的结果</p>
+<p>用例图是表达用例和系统参与者及其之间关系的载体</p>
+<p><strong>顺序图可作为用例描述的载体</strong></p>
+<p><strong>在不同的场景中，可以附加不同的交互图或状态图以精确描述对应的事件流</strong></p>
+<p>用例模型包括：</p>
+<ul>
+<li>参与者</li>
+<li>用例</li>
+<li>用例图</li>
+<li>系统边界</li>
+<li>用例描述</li>
+</ul>
+<h1 id="17-通信图和顺序图之间的区别和联系"><a href="#17-通信图和顺序图之间的区别和联系" class="headerlink" title="17.通信图和顺序图之间的区别和联系"></a>17.通信图和顺序图之间的区别和联系</h1><ul>
+<li>顺序图强调消息的时间顺序</li>
+<li>通信图强调接收和发送消息的对象的组织结构</li>
+<li>它们在语义上是等价的，可以相互转换</li>
+</ul>
+<h1 id="18-顺序图和状态图之间的区别和联系"><a href="#18-顺序图和状态图之间的区别和联系" class="headerlink" title="18.顺序图和状态图之间的区别和联系"></a>18.顺序图和状态图之间的区别和联系</h1><ul>
+<li>状态图考虑的是<strong>单个实体的动态行为</strong></li>
+<li>状态机说明对象在它的生命期中<strong>，响应事件所经历的状态序列以及它们对每个事件的响应</strong>，而状态图显示了一个状态机，它强调从状态到状态的控制流</li>
+<li>顺序图是<strong>对共同工作的对象群体的行为建模</strong></li>
+<li>活动图强调从活动到活动的控制流，有多个业务角色</li>
+<li>状态图是<strong>强调对象潜在的状态和这些状态之间的迁移</strong></li>
+</ul>
+<h1 id="19"><a href="#19" class="headerlink" title="19"></a>19</h1><p><img src="/images/UML%20%E9%A2%98%E7%9B%AE/image-20220829205501755.png" srcset="/img/loading.gif" lazyload alt="image-20220829205501755"></p>
+<h1 id="20"><a href="#20" class="headerlink" title="20"></a>20</h1><p><img src="/images/UML%20%E9%A2%98%E7%9B%AE/image-20220829205901968.png" srcset="/img/loading.gif" lazyload alt="image-20220829205901968"></p>
+<p>活动图可以单独对对象群体的动态行为进行可视化，详述，构造和文档化；或者活动图可以被用来对一个操作的控制流建模。<strong>然而交互图强调从对象到对象的控制流，活动图强调从步骤到步骤的控制流。</strong>一个活动是行为的持续的结构化执行。</p>
+<h1 id="21"><a href="#21" class="headerlink" title="21"></a>21</h1><p><img src="/images/UML%20%E9%A2%98%E7%9B%AE/image-20220829211228923.png" srcset="/img/loading.gif" lazyload alt="image-20220829211228923"></p>
+<h1 id="22"><a href="#22" class="headerlink" title="22"></a>22</h1><p><img src="/images/UML%20%E9%A2%98%E7%9B%AE/image-20220829213239016.png" srcset="/img/loading.gif" lazyload alt="image-20220829213239016"></p>
+<p><img src="/images/UML%20%E9%A2%98%E7%9B%AE/image-20220830110032695.png" srcset="/img/loading.gif" lazyload alt="image-20220830110032695">，</p>
+<p>类图：</p>
+<p><img src="/images/UML%20%E9%A2%98%E7%9B%AE/image-20220829234019230.png" srcset="/img/loading.gif" lazyload alt="image-20220829234019230"></p>
+<p>活动图：</p>
+<p><img src="/images/UML%20%E9%A2%98%E7%9B%AE/image-20220830000651166.png" srcset="/img/loading.gif" lazyload alt="image-20220830000651166"></p>
+<p><img src="/images/UML%20%E9%A2%98%E7%9B%AE/image-20220830001635055.png" srcset="/img/loading.gif" lazyload alt="image-20220830001635055"></p>
+<p><img src="/images/UML%20%E9%A2%98%E7%9B%AE/image-20220830002551282.png" srcset="/img/loading.gif" lazyload alt="image-20220830002551282"></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/UML/" class="category-chain-item">UML</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/UML/">#UML</a>
+      
+        <a href="/tags/%E9%A2%98%E7%9B%AE/">#题目</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>UML复习题目</div>
+      <div>http://example.com/2022/08/08/UML 题目/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>ECNU_zhy</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>August 8, 2022</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>Licensed under</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/08/08/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC6%E7%AB%A0%20%E5%BD%A2%E5%BC%8F%E5%8C%96%E5%85%B3%E7%B3%BB%E6%9F%A5%E8%AF%A2%E8%AF%AD%E8%A8%80%20%E9%A2%98%E7%9B%AE/" title="数据库系统概念 第6章 形式化关系查询语言 题目">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">数据库系统概念 第6章 形式化关系查询语言 题目</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/08/05/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC11%E7%AB%A0%20%E7%B4%A2%E5%BC%95/" title="数据库系统概念 第11章 索引">
+                        <span class="hidden-mobile">数据库系统概念 第11章 索引</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.1/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

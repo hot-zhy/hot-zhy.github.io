@@ -1,0 +1,850 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/xiaoxin.png">
+  <link rel="icon" href="/img/xiaoxin.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="ECNU_zhy">
+  <meta name="keywords" content="查询处理和查询优化">
+  
+    <meta name="description" content="一.概述 查询处理的步骤   在查询处理开始之前，系统必须将查询语句翻译成可使用的形式，诸如SQL这样的语言并不适合于查询的系统内部表示。因此，系统在查询处理中必须采取的第一步操作是把查询语句翻译成系统的内部表示形式，该翻译过程类似于编译器的语法分析器所做的工作。   优化器   优化器是选择更加高效的执行计划     查询优化：在所有等价的执行计划中选择代价最低的     带有“如何执行”注释的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据库系统概念 第12章 查询处理和查询优化">
+<meta property="og:url" content="http://example.com/2022/08/13/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/index.html">
+<meta property="og:site_name" content="zhy-blog">
+<meta property="og:description" content="一.概述 查询处理的步骤   在查询处理开始之前，系统必须将查询语句翻译成可使用的形式，诸如SQL这样的语言并不适合于查询的系统内部表示。因此，系统在查询处理中必须采取的第一步操作是把查询语句翻译成系统的内部表示形式，该翻译过程类似于编译器的语法分析器所做的工作。   优化器   优化器是选择更加高效的执行计划     查询优化：在所有等价的执行计划中选择代价最低的     带有“如何执行”注释的">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220807164244838.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220807165309700.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220807165505462.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220807165709308.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220807165918465.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220807170213948.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220807170526201.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220807164937864.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220807172247225.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220807172544272.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220807172816726.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220812111425489.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220812112735068.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220812113846591.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220812115423308.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220812143902204.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220812144708962.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220812145812393.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220812151023187.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220812151754902.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220812152149785.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220812153204183.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220812154150549.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220812155305182.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220812160637621.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220812161404335.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220812184136881.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220812185648530.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220813140859372.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220813142834613.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220813143405884.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220813150352745.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220818151245127.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220818151339259.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220818151438678.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220818151514309.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220818151702361.png">
+<meta property="og:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220818151955047.png">
+<meta property="article:published_time" content="2022-08-13T02:18:23.000Z">
+<meta property="article:modified_time" content="2022-08-18T14:32:40.960Z">
+<meta property="article:author" content="ECNU_zhy">
+<meta property="article:tag" content="数据库">
+<meta property="article:tag" content="数据库系统概念">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220807164244838.png">
+  
+  
+  
+  <title>数据库系统概念 第12章 查询处理和查询优化 - zhy-blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ECNU-zhy</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                Links
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="数据库系统概念 第12章 查询处理和查询优化"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-08-13 10:18" pubdate>
+          August 13, 2022 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.5k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          38 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">数据库系统概念 第12章 查询处理和查询优化</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="一-概述"><a href="#一-概述" class="headerlink" title="一.概述"></a>一.概述</h1><ol>
+<li><p>查询处理的步骤</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220807164244838.png" srcset="/img/loading.gif" lazyload alt="image-20220807164244838"></p>
+</li>
+<li><p>在查询处理开始之前，系统必须将查询语句翻译成可使用的形式，诸如SQL这样的语言并不适合于查询的系统内部表示。因此，系统在查询处理中必须采取的第一步操作是把查询语句翻译成系统的内部表示形式，该翻译过程类似于编译器的语法分析器所做的工作。</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220807165309700.png" srcset="/img/loading.gif" lazyload alt="image-20220807165309700"></p>
+</li>
+<li><p>优化器</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220807165505462.png" srcset="/img/loading.gif" lazyload alt="image-20220807165505462"></p>
+</li>
+<li><p>优化器是选择更加高效的执行计划</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220807165709308.png" srcset="/img/loading.gif" lazyload alt="image-20220807165709308"></p>
+</li>
+<li><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220807165918465.png" srcset="/img/loading.gif" lazyload alt="image-20220807165918465"></p>
+</li>
+<li><p>查询优化：在所有等价的执行计划中选择代价最低的</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220807170213948.png" srcset="/img/loading.gif" lazyload alt="image-20220807170213948"></p>
+</li>
+<li><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220807170526201.png" srcset="/img/loading.gif" lazyload alt="image-20220807170526201"></p>
+</li>
+<li><p>带有“如何执行”注释的关系代数运算称为“执行原语”。用于执行一个查询的原语操作序列称为“查询执行计划”（query-execution plan)，如下图展示了一个执行计划，图中为选择运算指定了一个特定的索引，“查询执行引擎”（query-execution engine)接收一个查询执行计划，执行该计划并把结果返回给查询。</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220807164937864.png" srcset="/img/loading.gif" lazyload alt="image-20220807164937864"></p>
+</li>
+</ol>
+<h1 id="二-查询代价的度量-measures-of-query-cost"><a href="#二-查询代价的度量-measures-of-query-cost" class="headerlink" title="二.查询代价的度量(measures of query cost)"></a>二.查询代价的度量(measures of query cost)</h1><ol>
+<li>对于一个查询可能存在<strong>多种执行计划</strong>，重要的是能够根据他们的估计代价来选择不同的备选方案，并选择最佳的方案，为此，我们必须<strong>估计单个运算的代价，并结合它们来得到一个查询计划的代价</strong></li>
+<li><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220807172247225.png" srcset="/img/loading.gif" lazyload alt="image-20220807172247225"></li>
+<li><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220807172544272.png" srcset="/img/loading.gif" lazyload alt="image-20220807172544272"></li>
+<li><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220807172816726.png" srcset="/img/loading.gif" lazyload alt="image-20220807172816726"></li>
+</ol>
+<h1 id="三-关系代数运算的执行"><a href="#三-关系代数运算的执行" class="headerlink" title="三.关系代数运算的执行"></a>三.关系代数运算的执行</h1><h2 id="1-选择运算-selection-operation"><a href="#1-选择运算-selection-operation" class="headerlink" title="1.选择运算(selection operation)"></a>1.选择运算(selection operation)</h2><h3 id="（1）文件扫描的使用和索引的选择"><a href="#（1）文件扫描的使用和索引的选择" class="headerlink" title="（1）文件扫描的使用和索引的选择"></a>（1）文件扫描的使用和索引的选择</h3><p>在查询处理中，文件扫描是数据访问的最低级别的运算，文件扫描是定位和检索满足选择条件的记录的搜索算法，在关系系统中，若关系保存在一个单独的专用文件中，则采用文件扫描就可以读取整个关系。</p>
+<p>索引结构称为<strong>存取路径</strong>，因为他们提供了定位和存取数据的一条路径。</p>
+<p>使用索引的算法称为<strong>索引扫描</strong></p>
+<p>考虑一个关系上的选择运算，该选择的所有元组都共同存储在一个文件中。执行选择最直接的方式是：A1线性搜索</p>
+<ul>
+<li><p>A1线性搜索</p>
+<p>在线性搜索中，系统扫描每一个文件块，并对所有记录都进行测试，看他们是否满足选择条件。需做一次初始搜索来访问文件的第一个块。</p>
+<p>虽然线性搜索算法比用于实现选择运算的其他算法速度要慢，但它可用于任何文件，而不用管文件的顺序，索引的可用性，以及选择运算的性质。我们将要学习的其他算法并不能适用于所有情况，但在可用的情况下它们一般都比线性搜索要快。</p>
+</li>
+<li><p>A2  B+树<strong>聚集索引</strong>，码上的等值比较(primary key on candidate key ,equality)</p>
+<p>利用主索引，码属性的等值比较，通过使用该索引检索出满足相应等值条件的单条记录</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220812111425489.png" srcset="/img/loading.gif" lazyload alt="image-20220812111425489"></p>
+</li>
+<li><p>A3 B+树<strong>聚集索引</strong>，非码上的等值比较(primary index ,on non-candidate key,equality)</p>
+<p>当选择条件指定的是一个基于非码属性A的等值比较时，我们可以通过使用聚集索引来检索到<strong>多条记录</strong>。与前一种情况唯一不同的是，在这种情况下可能需要获取多条记录。然而，因为文件是依据搜索码进行排序的，所以这些记录在文件中必然是<strong>连续存储</strong>的。Retrieve multiple records-duplicate</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220812112735068.png" srcset="/img/loading.gif" lazyload alt="image-20220812112735068"></p>
+</li>
+<li><p>A4  B+树<strong>辅助索引</strong>，等值比较(<strong>equality on search-key of secondary index</strong>)</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220812113846591.png" srcset="/img/loading.gif" lazyload alt="image-20220812113846591"></p>
+</li>
+<li><p>A5聚集索引，比较</p>
+</li>
+<li><p>A6辅助索引，比较</p>
+</li>
+</ul>
+<ol>
+<li>下面是一些常见的选择运算所需要的时间开销，这里我们假设一个文件中有$b_r$个磁盘块，如果选择操作使用了B+树索引，那么$h_i$代表树的高度<ul>
+<li>线性搜索：线性搜索就是搜索整个文件中的block，找到所有满足条件的。它效率低但是大部分类型的搜索它都能工作</li>
+<li>索引搜索：索引定义了一条从根到所搜索记录的一条路径，这条路径很短，只需要几次磁盘访问。并且大部分数据库系统将索引树的所有叶子节点放到内存的缓存中，这把寻找路径工作的磁盘访问次数降低到了一次，因为相比叶子节点，非叶子节点在所有节点中的占比通常不超过1%(下一层节点数相比上一层节点数有指数级增加，而B+树的)</li>
+</ul>
+</li>
+</ol>
+<h3 id="（2）涉及比较的选择"><a href="#（2）涉及比较的选择" class="headerlink" title="（2）涉及比较的选择"></a>（2）涉及比较的选择</h3><ol>
+<li><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220812115423308.png" srcset="/img/loading.gif" lazyload alt="image-20220812115423308"></p>
+<p>对于A≥v，我们在<strong>索引</strong>中寻找值v，以检索出文件中满足A≥v的首个元组。从该元组开始直到文件末尾进行一次文件扫描就可返回满足该条件的所有元组（代价类似于A3）</p>
+<p>对于A&lt;v,我们只是从文件头开始使用简单的文件扫描，并且一直到遇上（但不包含）首个满足A&gt;v的元组为止，在这种情况下，索引没有什么用处</p>
+</li>
+<li><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220812143902204.png" srcset="/img/loading.gif" lazyload alt="image-20220812143902204"></p>
+<p>辅助索引提供了指向记录的指针，但为了得到实际的记录，我们需要通过使用指针来获取记录。由于连续的记录可能位于不同的磁盘块上，因此<strong>在这一步每获取一条记录都可能需要一次IO操作</strong>。和前面一样，每次IO操作都需要一次磁盘寻道和一次块传输。如果检索到的记录的数量很多，使<strong>用辅助索引的代价甚至可能比使用线性搜索还要大。</strong>因此，<strong>辅助索引应该仅在选择得到的记录非常少时使用</strong>。</p>
+</li>
+<li><p>复杂选择的实现</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220812144708962.png" srcset="/img/loading.gif" lazyload alt="image-20220812144708962"></p>
+<ul>
+<li><p>A7(conjunctive selection using one index使用一个索引的合取选择)</p>
+<p>首先判断对于其中<strong>一个简单条件</strong>中的一个属性是否存在一条存取路径可用。若存在，则可以用A2-A6中的一种选择算法来检索满足该条件的记录。然后在<strong>内存缓冲区</strong>中，通过测试每条检索到的记录是否满足其余的简单条件来最终完成这个运算</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220812145812393.png" srcset="/img/loading.gif" lazyload alt="image-20220812145812393"></p>
+</li>
+<li><p>A8(conjunctive selection using composite index使用组合索引的合取选择)</p>
+<p>对于某些合取选择可能可以使用合适的组合索引(composite index,即多个属性上的一个索引)。如果选择指定的是多个或多个属性上的等值条件，并且在这些属性字段的组合上又存在组合索引，则可以直接搜索该索引。索引的类型将决定使用A2，A3或A4算法中的哪一个。</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220812151023187.png" srcset="/img/loading.gif" lazyload alt="image-20220812151023187"></p>
+</li>
+<li><p>A9(conjunctive selection by insertion of identifiers使用标识交集的合取选择)</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220812151754902.png" srcset="/img/loading.gif" lazyload alt="image-20220812151754902"></p>
+</li>
+<li><p>A10(disjunctive selection by union of identifiers使用标识并集的析取选择)</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220812152149785.png" srcset="/img/loading.gif" lazyload alt="image-20220812152149785"></p>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="2-排序-sorting"><a href="#2-排序-sorting" class="headerlink" title="2.排序(sorting)"></a>2.排序(sorting)</h2><p>数据排序在数据库系统中发挥着重要的作用，原因有两个：</p>
+<ul>
+<li>首先，SQL查询会指明对输出进行排序</li>
+<li>对于查询处理而言同等重要的是，有几种关系运算，比如连接运算，如果对输入关系先进行排序，能够得到高效的实现</li>
+</ul>
+<p>We may build an index on the relation,and then <strong>use the index to read the relation in sorted order</strong> .But this is only <strong>logically</strong> ,not <strong>physically</strong> ordered the relation,and may lead to <strong>one disk block access for each tuple.</strong></p>
+<p>由于记录数量可能比磁盘块的数量多得多，因此这样做的代价会非常昂贵。出于这样的原因，有时需要在物理上对记录进行排序</p>
+<ul>
+<li><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220812153204183.png" srcset="/img/loading.gif" lazyload alt="image-20220812153204183"></li>
+</ul>
+<h3 id="（1）外排序-归并算法"><a href="#（1）外排序-归并算法" class="headerlink" title="（1）外排序-归并算法"></a>（1）外排序-归并算法</h3><ol>
+<li><p>在第一阶段，创建好多个排好序的归并段（run），每个归并段都是排过序的，但仅包含关系的部分记录</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220812154150549.png" srcset="/img/loading.gif" lazyload alt="image-20220812154150549"></p>
+</li>
+<li><p>在第二阶段，对归并段进行归并。暂且假定归并段的总数N小于M，因此我们可以为每一个归并段分配一个块，并且还有剩下的空间能为输出保留一个块：</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220812155305182.png" srcset="/img/loading.gif" lazyload alt="image-20220812155305182"></p>
+</li>
+<li><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220812160637621.png" srcset="/img/loading.gif" lazyload alt="image-20220812160637621"></p>
+</li>
+<li><p>初始趟（pass）以如下方式工作：它对接下来的M-1个归并段进行合并（如前面第2项所述以得到单个归并段作为下一趟（pass）的输入。然后，它对接下来的M-1个归并段进行类似的合并，如此下去，直到它处理完所有的初始归并段为止。此时，归并段的数量减少为原来的1&#x2F;(M-1)。如果归并后的归并段数量仍大于或等于M，则以第一趟创建的归并段作为输入进行下一趟输入。每一趟归并后归并段的数量均减少为原来的1&#x2F;(M-1)。如有需要，归并段将不断重复，直到归并段数量小于M为止，然后最后一趟排序输出</p>
+</li>
+<li><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220812161404335.png" srcset="/img/loading.gif" lazyload alt="image-20220812161404335"></p>
+</li>
+</ol>
+<h3 id="（2）外排序-归并的代价分析"><a href="#（2）外排序-归并的代价分析" class="headerlink" title="（2）外排序-归并的代价分析"></a>（2）外排序-归并的代价分析</h3><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220812184136881.png" srcset="/img/loading.gif" lazyload alt="image-20220812184136881"></p>
+<h2 id="3-连接运算-join-operation"><a href="#3-连接运算-join-operation" class="headerlink" title="3.连接运算(join operation)"></a>3.连接运算(join operation)</h2><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220812185648530.png" srcset="/img/loading.gif" lazyload alt="image-20220812185648530"></p>
+<p>我们主要计算一个连接算法的磁盘搜索次数和磁盘读取次数。</p>
+<p>磁盘搜索次数就是磁盘的磁头需要移动到正确位置的次数，磁盘读取次数就是磁盘块传输到内存中的次数。</p>
+<ol>
+<li><p><strong>nested-loop join(嵌套-循环连接)</strong></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220813140859372.png" srcset="/img/loading.gif" lazyload alt="image-20220813140859372"></p>
+</li>
+<li><p><strong>block nested-loop join(块嵌套-循环连接)</strong></p>
+<p>因缓冲区太小而内存中不能完全容纳任何一个关系时，如果我们以基于每个块的方式而不是每个元组的方式来处理关系，那么仍然可以省却不少块的访问。</p>
+<p>内层关系的每个块与外层关系的每个块形成一对。在每个块对的内部，一个块中的每个元组与另一个块中的每个元组形成一对，以生成全体元组对。和前面一样，满足连接条件的所有元组对被添加到结果中。</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220813142834613.png" srcset="/img/loading.gif" lazyload alt="image-20220813142834613"></p>
+<p>嵌套-循环和块嵌套-循环的性能可以进一步地改进：</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220813143405884.png" srcset="/img/loading.gif" lazyload alt="image-20220813143405884"></p>
+</li>
+<li><p><strong>index nested-loop join(索引嵌套-循环连接)</strong></p>
+<p>​		在嵌套-循环连接中，若在内层循环地连接属性上有<strong>索引</strong>可用，则可以用索引查找来代替文件扫描。<strong>对于外层关系r中地每一个元组$t_r$，可以利用索引来查找s中将与元组$t_r$满足连接条件的元组。</strong></p>
+<p>​		如果在等值比较连接中，内层循环的关系中在连接属性上有索引，那么相当于对于每一个外层的元组，对内层进行一次索引搜索。</p>
+<p>​		这样总共的磁盘访问次数是：$b_r+n_r\times c_r$，$c_r$是<strong>对内层进行索引搜索的平均磁盘访问次数</strong>，磁盘搜索次数也是$b_r+n_r\times c_r$，$c_s$是<strong>对内层进行索引搜索的平均磁盘搜索次数</strong>。其实它们是一样的，<strong>因为这里的每一次磁盘访问都需要磁盘搜索，所以它们的次数一致。</strong></p>
+<p>​		时间代价是：$b_r(t_s+t_r)+n_r\times c$</p>
+<p>​		还是上面student和takes的例子，使用索引嵌套循环链接，磁盘访问次数是：$100+5000\times 5&#x3D;25100$，这里的5是假设的，磁盘搜索次数也是25100，<strong>块传输次数减少，但磁盘搜索次数变多了许多，磁盘搜索比磁盘读取更加耗时，所以这种直接使用索引的算法大部分情况下还不如之前。</strong></p>
+</li>
+<li><p><strong>merge-join(归并连接)</strong></p>
+<p>归并排序连接算法的前提是，两个表各自按照连接属性进行<strong>排序</strong>。它的思想就是利用<strong>两个表针对连接属性的有序性</strong>，将两个表中具有相同连接属性的元组找出来，然后<strong>只</strong>针对这些元组进行拼接。该算法中，使用<code>JoinAttrs</code>代表两个表的连接属性。</p>
+<p>大部分情况下，数据库系统不会为了使用归并排序连接而对两个连接表手动进行排序，但当两个表（或其中一个）已经排好序了，那么有可能使用归并排序连接。</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220813150352745.png" srcset="/img/loading.gif" lazyload alt="image-20220813150352745"></p>
+<p>效率估算时，我们假设两个表已经按照连接属性排序。</p>
+<p>磁盘访问次数：$b_r+b_s$<br>磁盘搜索次数：不考虑缓冲也是$b_r+b_s$，考虑缓冲之后，假设为每个关系分配$b_b$个缓冲块，那么磁盘搜索次数就是$\left \lceil b_r&#x2F;b_b \right \rceil +\left \lceil b_s&#x2F;b_b \right \rceil$</p>
+<h3 id="效率估算"><a href="#效率估算" class="headerlink" title="效率估算"></a><strong>效率估算</strong></h3><p>还是student和takes的例子，磁盘访问次数100+400&#x3D;500，最坏条件下$b_b$&#x3D;1，磁盘搜索次数100+400&#x3D;500</p>
+<h3 id="未排序情况"><a href="#未排序情况" class="headerlink" title="未排序情况"></a><strong>未排序情况</strong></h3><p>结合上面外部归并排序算法的例子，可以估算出当参与连接的关系未排序时，需要<strong>主动排序</strong>再进行归并连接时的算法效率。</p>
+</li>
+<li><p><strong>Hash-join(散列连接)</strong></p>
+</li>
+</ol>
+<h2 id="4-其他运算-other-operations"><a href="#4-其他运算-other-operations" class="headerlink" title="4.其他运算(other operations)"></a>4.其他运算(other operations)</h2><p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220818151245127.png" srcset="/img/loading.gif" lazyload alt="image-20220818151245127"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220818151339259.png" srcset="/img/loading.gif" lazyload alt="image-20220818151339259"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220818151438678.png" srcset="/img/loading.gif" lazyload alt="image-20220818151438678"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220818151514309.png" srcset="/img/loading.gif" lazyload alt="image-20220818151514309"></p>
+<p>磁盘IO一直是制约查询处理速度提高的瓶颈。通常，IO代价被认为是估计查询处理代价的合理度量</p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220818151702361.png" srcset="/img/loading.gif" lazyload alt="image-20220818151702361"></p>
+<p><img src="/images/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC12%E7%AB%A0%20%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/image-20220818151955047.png" srcset="/img/loading.gif" lazyload alt="image-20220818151955047"></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5/" class="category-chain-item">数据库系统概念</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">#数据库</a>
+      
+        <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5/">#数据库系统概念</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>数据库系统概念 第12章 查询处理和查询优化</div>
+      <div>http://example.com/2022/08/13/数据库系统概念第12章 查询处理和查询优化/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>ECNU_zhy</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>August 13, 2022</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>Licensed under</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/08/14/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E9%A2%98%E7%9B%AE/" title="并行程序设计题目">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">并行程序设计题目</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/08/08/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC6%E7%AB%A0%20%E5%BD%A2%E5%BC%8F%E5%8C%96%E5%85%B3%E7%B3%BB%E6%9F%A5%E8%AF%A2%E8%AF%AD%E8%A8%80%20%E9%A2%98%E7%9B%AE/" title="数据库系统概念 第6章 形式化关系查询语言 题目">
+                        <span class="hidden-mobile">数据库系统概念 第6章 形式化关系查询语言 题目</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.1/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

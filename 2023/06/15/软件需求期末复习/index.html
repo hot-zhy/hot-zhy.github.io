@@ -1,0 +1,1245 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/xiaoxin.png">
+  <link rel="icon" href="/img/xiaoxin.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="ECNU_zhy">
+  <meta name="keywords" content="软件需求">
+  
+    <meta name="description" content="Chapter 1-2:fallen_leaf:requirements level :leaves:requirements development and management :maple_leaf:good requirements characteristic :four_leaf_clover:requirement baseline Different Requirement lev">
+<meta property="og:type" content="article">
+<meta property="og:title" content="软件需求期末复习">
+<meta property="og:url" content="http://example.com/2023/06/15/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/index.html">
+<meta property="og:site_name" content="zhy-blog">
+<meta property="og:description" content="Chapter 1-2:fallen_leaf:requirements level :leaves:requirements development and management :maple_leaf:good requirements characteristic :four_leaf_clover:requirement baseline Different Requirement lev">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615105246322.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615105844047.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615110133430.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615110323156.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615110519987.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615110654845.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615110720757.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615111008092.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615121117661.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615121146246.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615121215489.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615121316339.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615121651448.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615121826949.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615121928381.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615122011823.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615122216660.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615122631024.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615122953047.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615124509800.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615124602592.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615153310911.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615213727598.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615214134460.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230616215849877.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230616220202979.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230616220903610.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230616221140423.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230616221556627.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230616222028191.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230616222352914.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230616222707343.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230616223222117.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230616223826720.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230616224622827.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230616224651877.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230616224719224.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230616225509336.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230616225802172.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230616225920738.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230616230204646.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230616230342337.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230616230709354.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230616230809548.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230616230928277.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230616231229772.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617094220383.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617094250986.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617094329690.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617094434423.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617094638818.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617095138071.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617095305954.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617095451595.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617100105467.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617100228739.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617112811805.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617112934482.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617113124340.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617113204922.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617113248263.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617113431325.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617113510447.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617113550622.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617113806324.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617113850316.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617113928321.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617113949892.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617114054613.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617114225310.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617114418380.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617114551171.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617125257146.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617125340410.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617125711715.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617130019996.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617130119308.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617130158838.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617130453511.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617130544560.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617130620422.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617130746237.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617130810743.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617130825734.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617213847296.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617213925185.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617214113760.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617214149914.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230618113931578.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230618114057283.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230618114253999.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230618114608435.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230618114956214.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230618115159391.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230618115235083.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617122335275.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617122830186.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617123107168.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617123240713.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617123608968.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617124357304.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617124412102.png">
+<meta property="og:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617124835746.png">
+<meta property="article:published_time" content="2023-06-15T02:55:55.000Z">
+<meta property="article:modified_time" content="2023-06-20T07:28:21.554Z">
+<meta property="article:author" content="ECNU_zhy">
+<meta property="article:tag" content="期末复习">
+<meta property="article:tag" content="软件需求">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615105246322.png">
+  
+  
+  
+  <title>软件需求期末复习 - zhy-blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ECNU-zhy</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                Links
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="软件需求期末复习"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-06-15 10:55" pubdate>
+          June 15, 2023 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          11k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          89 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">软件需求期末复习</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Chapter-1-2"><a href="#Chapter-1-2" class="headerlink" title="Chapter 1-2"></a>Chapter 1-2</h1><p>:fallen_leaf:requirements level</p>
+<p>:leaves:requirements development and management</p>
+<p>:maple_leaf:good requirements characteristic</p>
+<p>:four_leaf_clover:requirement baseline</p>
+<h2 id="Different-Requirement-levels"><a href="#Different-Requirement-levels" class="headerlink" title="Different Requirement levels"></a>Different Requirement levels</h2><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615105246322.png" srcset="/img/loading.gif" lazyload alt="image-20230615105246322" style="zoom:80%;" />
+
+<h2 id="What-is-a-requirements"><a href="#What-is-a-requirements" class="headerlink" title="What is a requirements"></a>What is a requirements</h2><h3 id="In-user-view"><a href="#In-user-view" class="headerlink" title="In user view"></a>In user view</h3><p>A condition or capability needed by a user to solve a problem or achieve an objective</p>
+<h3 id="in-developer-view"><a href="#in-developer-view" class="headerlink" title="in developer view"></a>in developer view</h3><p>A condition or capability that must be met or possessed by a system or system component to satisfy a contract , standard, specification, or other formally imposed document </p>
+<h3 id="levels-of-requirements"><a href="#levels-of-requirements" class="headerlink" title="levels of requirements"></a>levels of requirements</h3><p><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615105844047.png" srcset="/img/loading.gif" lazyload alt="image-20230615105844047"></p>
+<h4 id="business-requirements"><a href="#business-requirements" class="headerlink" title="business requirements"></a>business requirements</h4><p>Business requirements represent high-level objectives of the organization or customer who requests the system </p>
+<img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615110133430.png" srcset="/img/loading.gif" lazyload alt="image-20230615110133430" style="zoom:67%;" />
+
+<h4 id="user-requirements"><a href="#user-requirements" class="headerlink" title="user requirements"></a>user requirements</h4><ul>
+<li>user requirements describe user goals or tasks that users must be able to perform with the product</li>
+<li>ways of representation:<ol>
+<li>use cases</li>
+<li>scenario descriptions</li>
+<li>event-response tables</li>
+</ol>
+</li>
+<li><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615110323156.png" srcset="/img/loading.gif" lazyload alt="image-20230615110323156" style="zoom:67%;" /></li>
+</ul>
+<h4 id="functional-requirements"><a href="#functional-requirements" class="headerlink" title="functional requirements"></a>functional requirements</h4><ul>
+<li>functional requirements specify the software functionality that the developers must build into the product to enable users to accomplish their tasks,thereby satisfying the business requirements</li>
+<li><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615110519987.png" srcset="/img/loading.gif" lazyload alt="image-20230615110519987" style="zoom:67%;" /></li>
+</ul>
+<h4 id="system-requirements"><a href="#system-requirements" class="headerlink" title="system requirements"></a>system requirements</h4><p>system requirements describe the top-level requirements for a product that contains multiple- that is , a system</p>
+<img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615110654845.png" srcset="/img/loading.gif" lazyload alt="image-20230615110654845" style="zoom:67%;" />
+
+<h4 id="business-rules"><a href="#business-rules" class="headerlink" title="business rules"></a>business rules</h4><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615110720757.png" srcset="/img/loading.gif" lazyload alt="image-20230615110720757" style="zoom:67%;" />
+
+<ul>
+<li>business rules includes corporate policies , govenment regulations , industry standard , accounting practices , and computional algotithms</li>
+<li>business rules exit outside the boundaries of any specific software systems</li>
+<li>业务规则本身不是软件需求</li>
+<li>它们经常决定系统为了切合相关规则而必须包含哪些功能</li>
+<li><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615111008092.png" srcset="/img/loading.gif" lazyload alt="image-20230615111008092" style="zoom:50%;" /></li>
+</ul>
+<h4 id="non-functional-requirements"><a href="#non-functional-requirements" class="headerlink" title="non-functional requirements"></a>non-functional requirements</h4><p>non-functional requirements includes performance goals amd descriptions of quality attributes</p>
+<ul>
+<li>non-functinoal requirements includes <strong>performance goals</strong> and <strong>descriptions of quality attributes</strong></li>
+<li><strong>quality attributes</strong>  describe the product’s characristics in various dimensions that are important either to users or developers</li>
+</ul>
+<h4 id="software-requirements-specification-SRS"><a href="#software-requirements-specification-SRS" class="headerlink" title="software requirements specification (SRS)"></a>software requirements specification (SRS)</h4><ul>
+<li>describes as fully as necessary the expected behavior of the software system</li>
+<li>used in developments , testing , quality assurance, project management, and related project functions</li>
+<li>contains functinal and non-functional requirements</li>
+</ul>
+<h4 id="feature"><a href="#feature" class="headerlink" title="feature"></a>feature</h4><ul>
+<li><strong>a set of  logically related functional requirements</strong> that provides a capability to the user and enables the satisfaction of a business objective</li>
+<li><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615121117661.png" srcset="/img/loading.gif" lazyload alt="image-20230615121117661" style="zoom:50%;" /></li>
+<li><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615121146246.png" srcset="/img/loading.gif" lazyload alt="image-20230615121146246" style="zoom:50%;" /></li>
+<li><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615121215489.png" srcset="/img/loading.gif" lazyload alt="image-20230615121215489" style="zoom:50%;" /></li>
+<li><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615121316339.png" srcset="/img/loading.gif" lazyload alt="image-20230615121316339" style="zoom:67%;" /></li>
+</ul>
+<h4 id="what-requirements-are-not"><a href="#what-requirements-are-not" class="headerlink" title="what requirements are not"></a>what requirements are not</h4><ul>
+<li>design detail</li>
+<li>implementation detail</li>
+<li>project plan information</li>
+<li>testing information</li>
+</ul>
+<h4 id="software-engineering-domain"><a href="#software-engineering-domain" class="headerlink" title="software engineering domain"></a>software engineering domain</h4><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615121651448.png" srcset="/img/loading.gif" lazyload alt="image-20230615121651448" style="zoom:67%;" />
+
+<h4 id="A-requirements-developments-process"><a href="#A-requirements-developments-process" class="headerlink" title="A requirements developments process"></a>A requirements developments process</h4><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615121826949.png" srcset="/img/loading.gif" lazyload alt="image-20230615121826949" style="zoom:67%;" />
+
+<h5 id="Elicitation"><a href="#Elicitation" class="headerlink" title="Elicitation"></a>Elicitation</h5><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615121928381.png" srcset="/img/loading.gif" lazyload alt="image-20230615121928381" style="zoom:50%;" />
+
+<h5 id="Requirements-Modeling-and-Analysis"><a href="#Requirements-Modeling-and-Analysis" class="headerlink" title="Requirements Modeling and  Analysis"></a>Requirements Modeling and  Analysis</h5><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615122011823.png" srcset="/img/loading.gif" lazyload alt="image-20230615122011823" style="zoom:50%;" />
+
+<h5 id="Specification-and-Validation"><a href="#Specification-and-Validation" class="headerlink" title="Specification and Validation"></a>Specification and Validation</h5><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615122216660.png" srcset="/img/loading.gif" lazyload alt="image-20230615122216660" style="zoom:50%;" />
+
+<h4 id="requirement-management"><a href="#requirement-management" class="headerlink" title="requirement management"></a>requirement management</h4><ul>
+<li><strong>establishing and maintaining</strong> an agreement with the customer on the requirements for the software project</li>
+<li>the <strong>agreement</strong> is embodied in the wirtten <strong>requirements specifications and the models</strong></li>
+</ul>
+<h5 id="major-requirements-management-activities"><a href="#major-requirements-management-activities" class="headerlink" title="major requirements management activities"></a>major requirements management activities</h5><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615122631024.png" srcset="/img/loading.gif" lazyload alt="image-20230615122631024" style="zoom:67%;" />
+
+<h4 id="boundary-between-development-and-management"><a href="#boundary-between-development-and-management" class="headerlink" title="boundary between development and management"></a>boundary between development and management</h4><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615122953047.png" srcset="/img/loading.gif" lazyload alt="image-20230615122953047" style="zoom:67%;" />
+
+<h4 id="when-bad-requirements-happen-to-nice-people"><a href="#when-bad-requirements-happen-to-nice-people" class="headerlink" title="when bad requirements happen to nice people"></a>when bad requirements happen to nice people</h4><ul>
+<li>insuffcient user involvement</li>
+<li>creeping user requirements</li>
+<li>ambiguous requirements</li>
+<li>gold plating</li>
+<li>minimal specification</li>
+<li>overlooked user classes</li>
+<li>inaccurate planning</li>
+</ul>
+<h4 id="benefits-from-a-high-quality-requirements-process-star-star-of-david"><a href="#benefits-from-a-high-quality-requirements-process-star-star-of-david" class="headerlink" title="benefits from a high-quality requirements process:star::star_of_david:"></a>benefits from a high-quality requirements process:star::star_of_david:</h4><ul>
+<li><strong>fewer requirements defects</strong></li>
+<li><strong>reduced development rework</strong></li>
+<li><strong>fewer unnecessary features</strong></li>
+<li><strong>lower enhancement costs</strong></li>
+<li><strong>faster development</strong></li>
+<li><strong>fewer miscommunications</strong></li>
+<li><strong>reduced scope creep</strong></li>
+<li><strong>reduced project chaos</strong></li>
+<li><strong>more accurate system-testing estimates</strong></li>
+<li><strong>higher customer and team member satisfaction</strong></li>
+</ul>
+<h3 id="requirements-from-the-customer’s-perspective"><a href="#requirements-from-the-customer’s-perspective" class="headerlink" title="requirements from the customer’s perspective"></a>requirements from the customer’s perspective</h3><h4 id="what-is-customer"><a href="#what-is-customer" class="headerlink" title="what is customer?"></a>what is customer?</h4><p>software customers includes those <strong>project stakeholders</strong> who <strong>request, pay for , select, specify, use or receive the output generated</strong> by a software product</p>
+<h1 id="Chapter-3-4"><a href="#Chapter-3-4" class="headerlink" title="Chapter 3-4"></a>Chapter 3-4</h1><p>:star:Concepts of RE</p>
+<p>:label:Role of requirement analyst</p>
+<p>:fallen_leaf:good practice for RE</p>
+<ol>
+<li>Knowledge</li>
+<li>Project management </li>
+<li>Requirements management</li>
+<li>Elicitation</li>
+<li>Analysis</li>
+<li>Specification</li>
+<li>Validation</li>
+</ol>
+<h3 id="levels-of-requirements-1"><a href="#levels-of-requirements-1" class="headerlink" title="levels of requirements"></a>levels of requirements</h3><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615124509800.png" srcset="/img/loading.gif" lazyload alt="image-20230615124509800" style="zoom:67%;" />
+
+<img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615124602592.png" srcset="/img/loading.gif" lazyload alt="image-20230615124602592" style="zoom:67%;" />
+
+<h3 id="good-practices-for-RE"><a href="#good-practices-for-RE" class="headerlink" title="good practices for RE"></a>good practices for RE</h3><p>requirements developments process</p>
+<img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615153310911.png" srcset="/img/loading.gif" lazyload alt="image-20230615153310911" style="zoom:80%;" />
+
+
+
+<h3 id="role-of-requirements-analyst"><a href="#role-of-requirements-analyst" class="headerlink" title="role of requirements analyst"></a>role of requirements analyst</h3><ul>
+<li>记录员：记录客户需求</li>
+<li>分析员：与客户一起分析问题，完善需求</li>
+<li>引导员：引导客户需求</li>
+</ul>
+<h4 id="Role-of-requirements-analyst"><a href="#Role-of-requirements-analyst" class="headerlink" title="Role of requirements analyst"></a>Role of requirements analyst</h4><ul>
+<li>Project Sponsor : Business requirements</li>
+<li>Project management: Size and complexity information</li>
+<li>User representatives:User requirements </li>
+<li>Testing:functional and non-functional requirements </li>
+<li>Development:functional and non-funtional requirements</li>
+<li>Other stakeholders:Expectations and constraints</li>
+</ul>
+<h4 id="Essential-Analyst-knowledge"><a href="#Essential-Analyst-knowledge" class="headerlink" title="Essential Analyst knowledge"></a>Essential Analyst knowledge</h4><ul>
+<li>breath of knowledge</li>
+<li>apply requirements engineering techniques in the context of various software development life cycles</li>
+<li>rich tool kit techniques available and know when to use which one</li>
+</ul>
+<h1 id="vison-and-document"><a href="#vison-and-document" class="headerlink" title="vison and document"></a>vison and document</h1><h2 id="Why-vison-and-scope"><a href="#Why-vison-and-scope" class="headerlink" title="Why vison and scope"></a>Why vison and scope</h2><p>a clear vison and scope is critical</p>
+<h3 id="definite-business-requirements"><a href="#definite-business-requirements" class="headerlink" title="definite business requirements"></a>definite business requirements</h3><ul>
+<li>业务需求是指的一组信息，描述的是需要，在此需要的指导下，一个或多个项目交付一个解决方案和符合预期的最终业务结果</li>
+<li><strong>业务需求的组成部分：</strong><ol>
+<li><strong>业务机会</strong></li>
+<li><strong>业务目标</strong></li>
+<li><strong>成功标准</strong></li>
+<li><strong>愿景声明</strong></li>
+</ol>
+</li>
+</ul>
+<h3 id="Vision-and-scope"><a href="#Vision-and-scope" class="headerlink" title="Vision and scope"></a>Vision and scope</h3><ol>
+<li><p><strong>Product vision</strong></p>
+<ul>
+<li>align all stakeholders in a common direction</li>
+<li>describes what the product is about and what it eventually could become</li>
+</ul>
+</li>
+<li><p><strong>Project scope</strong></p>
+<ul>
+<li>the statement of scope draws the boundary between what’s in and what’s out</li>
+</ul>
+</li>
+<li><p>vision encompasses the scope for each planned release</p>
+<img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615213727598.png" srcset="/img/loading.gif" lazyload alt="image-20230615213727598" style="zoom:50%;" /></li>
+</ol>
+<h2 id="What-is-vision-and-scope-document"><a href="#What-is-vision-and-scope-document" class="headerlink" title="What is vision and scope document"></a>What is vision and scope document</h2><ol>
+<li><p>collects the <strong>business</strong> requirements into a single document that sets the stage for the subsequent development work</p>
+</li>
+<li><p>named</p>
+<ul>
+<li>project charter</li>
+<li>business case document</li>
+<li>market requirements document</li>
+</ul>
+</li>
+<li><p>roles involved</p>
+<img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230615214134460.png" srcset="/img/loading.gif" lazyload alt="image-20230615214134460" style="zoom:50%;" />
+</li>
+<li></li>
+</ol>
+<h2 id="范围可视化表示"><a href="#范围可视化表示" class="headerlink" title="范围可视化表示"></a>范围可视化表示</h2><h1 id="Requirements-Elicitation-6-7"><a href="#Requirements-Elicitation-6-7" class="headerlink" title="Requirements Elicitation 6-7"></a>Requirements Elicitation 6-7</h1><h2 id="Finding-the-Voice-of-the-Customer"><a href="#Finding-the-Voice-of-the-Customer" class="headerlink" title="Finding the Voice of the Customer"></a>Finding the Voice of the Customer</h2><p>To find the voice of the customer, take the following steps :</p>
+<img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230616215849877.png" srcset="/img/loading.gif" lazyload alt="image-20230616215849877" style="zoom:67%;" />
+
+<h3 id="User-classes-imp-star-of-david-dizzy"><a href="#User-classes-imp-star-of-david-dizzy" class="headerlink" title="User classes:imp::star_of_david::dizzy:"></a>User classes:imp::star_of_david::dizzy:</h3><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230616220202979.png" srcset="/img/loading.gif" lazyload alt="image-20230616220202979" style="zoom:67%;" />
+
+<ul>
+<li>他们使用的平台</li>
+<li>他们的母语</li>
+<li>他们是直接还是间接和系统交互</li>
+</ul>
+<h3 id="Some-questions"><a href="#Some-questions" class="headerlink" title="Some questions"></a>Some questions</h3><ul>
+<li>Does every user class equal important to you </li>
+<li>does each user class have its own set of requirements</li>
+<li>is every user class a human being(可能是代理软件)</li>
+</ul>
+<h3 id="User-profiles"><a href="#User-profiles" class="headerlink" title="User profiles"></a>User profiles</h3><h3 id="An-example-about-user-classes"><a href="#An-example-about-user-classes" class="headerlink" title="An example about user classes"></a>An example about user classes</h3><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230616220903610.png" srcset="/img/loading.gif" lazyload alt="image-20230616220903610" style="zoom:67%;" />
+
+<h3 id="How-to-deal-with-requirements-conflicts"><a href="#How-to-deal-with-requirements-conflicts" class="headerlink" title="How to deal with requirements conflicts"></a>How to deal with requirements conflicts</h3><h3 id="Who-makes-the-decisions"><a href="#Who-makes-the-decisions" class="headerlink" title="Who makes the decisions"></a>Who makes the decisions</h3><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230616221140423.png" srcset="/img/loading.gif" lazyload alt="image-20230616221140423" style="zoom:67%;" />
+
+<h2 id="Hear-the-voice-of-the-Customer"><a href="#Hear-the-voice-of-the-Customer" class="headerlink" title="Hear the voice of the Customer"></a>Hear the voice of the Customer</h2><p>Begin by planning the project’s requirements elicitation activities </p>
+<h3 id="Cyclic-nature-of-requirements-elicitation-analysis-and-specification"><a href="#Cyclic-nature-of-requirements-elicitation-analysis-and-specification" class="headerlink" title="Cyclic nature of requirements elicitation, analysis and  specification"></a>Cyclic nature of requirements elicitation, analysis and  specification</h3><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230616221556627.png" srcset="/img/loading.gif" lazyload alt="image-20230616221556627" style="zoom:50%;" />
+
+<h3 id="Activities-for-a-single-requirements-elicitation-session"><a href="#Activities-for-a-single-requirements-elicitation-session" class="headerlink" title="Activities for a single requirements elicitation session"></a>Activities for a single requirements elicitation session</h3><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230616222028191.png" srcset="/img/loading.gif" lazyload alt="image-20230616222028191" style="zoom:67%;" />
+
+<h3 id="需求获取技巧-star-star2-sailboat"><a href="#需求获取技巧-star-star2-sailboat" class="headerlink" title="需求获取技巧:star::star2::sailboat:"></a>需求获取技巧:star::star2::sailboat:</h3><ol>
+<li><p>访谈</p>
+<ul>
+<li>建立融洽的关系</li>
+<li>不脱离范围</li>
+<li>提前准备好问题和稻草人模型</li>
+<li>提出看法</li>
+<li>主动倾听</li>
+</ul>
+</li>
+<li><p>工作坊</p>
+</li>
+<li><p>焦点小组</p>
+<img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230616222352914.png" srcset="/img/loading.gif" lazyload alt="image-20230616222352914" style="zoom:50%;" />
+</li>
+<li><p>观察</p>
+<p>选择<strong>重要或高风险</strong>的任务以及若干个用户类别来观察</p>
+</li>
+<li><p>问卷调查</p>
+<p>针对大群体用户进行调查并了解其需要的方式，最大的问题是问卷设计</p>
+</li>
+<li><p><strong>系统接口分析</strong></p>
+<ul>
+<li><p><strong>检查哪些系统与你的系统相关联</strong></p>
+</li>
+<li><p><strong>解释的功能需求涉及系统之间的数据和服务交换</strong></p>
+</li>
+<li><p><strong>关联图和生态系统图</strong></p>
+<p><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230616222707343.png" srcset="/img/loading.gif" lazyload alt="image-20230616222707343"></p>
+</li>
+</ul>
+</li>
+<li><p>用户界面分析</p>
+<ul>
+<li>最好与现有系统直接交互</li>
+<li>屏幕截图</li>
+<li>找出潜在特性</li>
+</ul>
+</li>
+<li><p>文档分析</p>
+<ul>
+<li>最有用的文档包括需求规格说明、业务过程、课程学习总结以及现有的或者类似程序的用户手册</li>
+</ul>
+</li>
+</ol>
+<h3 id="制定项目需求获取计划"><a href="#制定项目需求获取计划" class="headerlink" title="制定项目需求获取计划"></a>制定项目需求获取计划</h3><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230616223222117.png" srcset="/img/loading.gif" lazyload alt="image-20230616223222117" style="zoom:50%;" />
+
+<h3 id="Some-cautions-about-Elicitation"><a href="#Some-cautions-about-Elicitation" class="headerlink" title="Some cautions about Elicitation"></a>Some cautions about Elicitation</h3><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230616223826720.png" srcset="/img/loading.gif" lazyload alt="image-20230616223826720" style="zoom:50%;" />
+
+<h3 id="Finding-missing-requirements"><a href="#Finding-missing-requirements" class="headerlink" title="Finding missing requirements"></a>Finding missing requirements</h3><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230616224622827.png" srcset="/img/loading.gif" lazyload alt="image-20230616224622827" style="zoom:50%;" />
+
+<h3 id="A-CRUD-matrix-star"><a href="#A-CRUD-matrix-star" class="headerlink" title="A CRUD matrix :star:"></a>A CRUD matrix :star:</h3><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230616224651877.png" srcset="/img/loading.gif" lazyload alt="image-20230616224651877" style="zoom:50%;" />
+
+<img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230616224719224.png" srcset="/img/loading.gif" lazyload alt="image-20230616224719224" style="zoom:50%;" />
+
+<h3 id="How-do-you-know-when-you’re-done"><a href="#How-do-you-know-when-you’re-done" class="headerlink" title="How do you know when you’re done?"></a>How do you know when you’re done?</h3><p>create a **checklist ** of common functional areas to consider for your projects</p>
+<h3 id="Classfying-Customer-Input-star"><a href="#Classfying-Customer-Input-star" class="headerlink" title="Classfying Customer Input :star:"></a>Classfying Customer Input :star:</h3><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230616225509336.png" srcset="/img/loading.gif" lazyload alt="image-20230616225509336" style="zoom:67%;" />
+
+<h4 id="Business-requirements"><a href="#Business-requirements" class="headerlink" title="Business requirements"></a>Business requirements</h4><p>Anything that describes the <strong>financial,marketplace,or other business benefit</strong> that either <strong>customers or the developing organization</strong> wish to <strong>gain</strong> from the product is a business requirement </p>
+<img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230616225802172.png" srcset="/img/loading.gif" lazyload alt="image-20230616225802172" style="zoom:50%;" />
+
+<h4 id="Business-Rules"><a href="#Business-Rules" class="headerlink" title="Business Rules"></a>Business Rules</h4><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230616225920738.png" srcset="/img/loading.gif" lazyload alt="image-20230616225920738" style="zoom:50%;" />
+
+<h4 id="Functional-requirements"><a href="#Functional-requirements" class="headerlink" title="Functional requirements"></a>Functional requirements</h4><ul>
+<li>describes the obserable behaviors </li>
+<li>derived from system requirements, user requirements, business rules, and other sources make up the bulk of the SRS</li>
+</ul>
+<img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230616230204646.png" srcset="/img/loading.gif" lazyload alt="image-20230616230204646" style="zoom:50%;" />
+
+<h4 id="External-interface-requirements"><a href="#External-interface-requirements" class="headerlink" title="External interface requirements"></a>External interface requirements</h4><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230616230342337.png" srcset="/img/loading.gif" lazyload alt="image-20230616230342337" style="zoom:50%;" />
+
+<h4 id="Constraints"><a href="#Constraints" class="headerlink" title="Constraints"></a>Constraints</h4><ul>
+<li>design and implementation constraints legitimately restrict the options available to the developer</li>
+<li>devices with embedded software often must respect physical constraints such as size , weight , and interface connections</li>
+<li>Record it and respect its validity</li>
+</ul>
+<img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230616230709354.png" srcset="/img/loading.gif" lazyload alt="image-20230616230709354" style="zoom:67%;" />
+
+<img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230616230809548.png" srcset="/img/loading.gif" lazyload alt="image-20230616230809548" style="zoom:67%;" />
+
+<h4 id="Data-definitions"><a href="#Data-definitions" class="headerlink" title="Data definitions"></a>Data definitions</h4><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230616230928277.png" srcset="/img/loading.gif" lazyload alt="image-20230616230928277" style="zoom:67%;" />
+
+<h4 id="Solution-ideas"><a href="#Solution-ideas" class="headerlink" title="Solution ideas"></a>Solution ideas</h4><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230616231229772.png" srcset="/img/loading.gif" lazyload alt="image-20230616231229772" style="zoom:67%;" />
+
+<h1 id="Requirements-Elicitation-8-9"><a href="#Requirements-Elicitation-8-9" class="headerlink" title="Requirements Elicitation 8-9"></a>Requirements Elicitation 8-9</h1><h2 id="Understanding-user-requirements-use-case-amp-user-story"><a href="#Understanding-user-requirements-use-case-amp-user-story" class="headerlink" title="Understanding user requirements(use case &amp; user story)"></a>Understanding user requirements(use case &amp; user story)</h2><h3 id="常见的需求抽取方法"><a href="#常见的需求抽取方法" class="headerlink" title="常见的需求抽取方法"></a>常见的需求抽取方法</h3><ul>
+<li>以用户为中心</li>
+<li>以使用为中心</li>
+<li>场景、用例、用户故事</li>
+</ul>
+<h3 id="用户故事"><a href="#用户故事" class="headerlink" title="用户故事"></a>用户故事</h3><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617094220383.png" srcset="/img/loading.gif" lazyload alt="image-20230617094220383" style="zoom:67%;" />
+
+<h4 id="example"><a href="#example" class="headerlink" title="example"></a>example</h4><p><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617094250986.png" srcset="/img/loading.gif" lazyload alt="image-20230617094250986"></p>
+<h3 id="用例和用户故事"><a href="#用例和用户故事" class="headerlink" title="用例和用户故事"></a>用例和用户故事</h3><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617094329690.png" srcset="/img/loading.gif" lazyload alt="image-20230617094329690" style="zoom:67%;" />
+
+<p>:star::star:</p>
+<h4 id="什么时候使用用例和用户故事"><a href="#什么时候使用用例和用户故事" class="headerlink" title="什么时候使用用例和用户故事"></a>什么时候使用用例和用户故事</h4><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617094434423.png" srcset="/img/loading.gif" lazyload alt="image-20230617094434423" style="zoom:67%;" />
+
+<h4 id="用例和用户故事的不同走向"><a href="#用例和用户故事的不同走向" class="headerlink" title="用例和用户故事的不同走向"></a>用例和用户故事的不同走向</h4><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617094638818.png" srcset="/img/loading.gif" lazyload alt="image-20230617094638818" style="zoom:67%;" />
+
+<p>use case model&#x3D;use case diagram+use case description</p>
+<h3 id="Good-use-case-test"><a href="#Good-use-case-test" class="headerlink" title="Good use case test"></a>Good use case test</h3><ul>
+<li>Boss test</li>
+<li>Elementary Business Process(EBP)</li>
+<li>Size test</li>
+</ul>
+<h3 id="stadium-用例和业务规则的关系"><a href="#stadium-用例和业务规则的关系" class="headerlink" title=":stadium:用例和业务规则的关系"></a>:stadium:用例和业务规则的关系</h3><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617095138071.png" srcset="/img/loading.gif" lazyload alt="image-20230617095138071" style="zoom:50%;" />
+
+<h3 id="fallen-leaf-use-case-and-functional-requirements"><a href="#fallen-leaf-use-case-and-functional-requirements" class="headerlink" title=":fallen_leaf:use case and functional requirements"></a>:fallen_leaf:use case and functional requirements</h3><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617095305954.png" srcset="/img/loading.gif" lazyload alt="image-20230617095305954" style="zoom:50%;" />
+
+<h3 id="How-to-document-the-functional-requirements-associated-with-a-use-case"><a href="#How-to-document-the-functional-requirements-associated-with-a-use-case" class="headerlink" title="How to document the functional requirements associated with a use case"></a>How to document the functional requirements associated with a use case</h3><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617095451595.png" srcset="/img/loading.gif" lazyload alt="image-20230617095451595" style="zoom:50%;" />
+
+<h3 id="Benefits-of-use-cases"><a href="#Benefits-of-use-cases" class="headerlink" title="Benefits of use cases"></a>Benefits of use cases</h3><ul>
+<li><strong>task-centric</strong> and <strong>user-centric</strong> perspective</li>
+<li>helps with requirements <strong>prioritization</strong></li>
+<li>reveals some of the important <strong>domain objects and their responsibilities</strong> to each other</li>
+</ul>
+<h4 id="avoid"><a href="#avoid" class="headerlink" title="avoid"></a>avoid</h4><ul>
+<li>too many use cases</li>
+<li>highly complex use cases</li>
+<li>including user interface design</li>
+<li>including data definitions </li>
+<li>users’ can’t understand</li>
+<li>excessive use of includes and extends relationships</li>
+</ul>
+<h2 id="playing-by-the-rules-type-of-rules"><a href="#playing-by-the-rules-type-of-rules" class="headerlink" title="playing by the rules (type of rules)"></a>playing by the rules (type of rules)</h2><h3 id="what-is-business-rules"><a href="#what-is-business-rules" class="headerlink" title="what is business rules"></a>what is business rules</h3><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617100105467.png" srcset="/img/loading.gif" lazyload alt="image-20230617100105467" style="zoom:67%;" />
+
+<h3 id="规则和软件的关系"><a href="#规则和软件的关系" class="headerlink" title="规则和软件的关系"></a>规则和软件的关系</h3><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617100228739.png" srcset="/img/loading.gif" lazyload alt="image-20230617100228739" style="zoom:67%;" />
+
+<h3 id="How-business-rules-can-influence-various-types-of-requirements"><a href="#How-business-rules-can-influence-various-types-of-requirements" class="headerlink" title="How business rules can influence various types of requirements"></a>How business rules can influence various types of requirements</h3><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617112811805.png" srcset="/img/loading.gif" lazyload alt="image-20230617112811805" style="zoom:80%;" />
+
+<h3 id="业务规则分类法"><a href="#业务规则分类法" class="headerlink" title="业务规则分类法"></a>业务规则分类法</h3><h4 id=""><a href="#" class="headerlink" title=""></a><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617112934482.png" srcset="/img/loading.gif" lazyload alt="image-20230617112934482" style="zoom:67%;" /></h4><h3 id="The-rules-of-the-Business-star-star-star-star"><a href="#The-rules-of-the-Business-star-star-star-star" class="headerlink" title="The rules of the Business:star::star::star::star:"></a>The rules of the Business:star::star::star::star:</h3><p><strong>A business rule is a statement that defines or constraints some aspect of the business</strong></p>
+<p>a business rule is a statement that defines or constraints some aspect of the business</p>
+<p><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617113124340.png" srcset="/img/loading.gif" lazyload alt="image-20230617113124340"></p>
+<h4 id="Facts-true-about-the-business"><a href="#Facts-true-about-the-business" class="headerlink" title="Facts(true about the business)"></a>Facts(true about the business)</h4><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617113204922.png" srcset="/img/loading.gif" lazyload alt="image-20230617113204922" style="zoom:67%;" />
+
+<h4 id="Constraints-restrict-the-actions-that-the-system-or-its-users-may-perform"><a href="#Constraints-restrict-the-actions-that-the-system-or-its-users-may-perform" class="headerlink" title="Constraints(restrict the actions that the system or its users may perform)"></a>Constraints(restrict the actions that the system or its users may perform)</h4><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617113248263.png" srcset="/img/loading.gif" lazyload alt="image-20230617113248263" style="zoom:67%;" />
+
+<p>业务规则约束即使不能直接映射到功能，也能为软件开发传递一些隐性的信息 </p>
+<p>约束性业务规则有时可以用<strong>角色以及授权矩阵</strong>来表示：</p>
+<img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617113431325.png" srcset="/img/loading.gif" lazyload alt="image-20230617113431325" style="zoom:67%;" />
+
+<h4 id="Action-Enablers-trigger-some-activity"><a href="#Action-Enablers-trigger-some-activity" class="headerlink" title="Action Enablers(trigger some activity)"></a>Action Enablers(trigger some activity)</h4><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617113510447.png" srcset="/img/loading.gif" lazyload alt="image-20230617113510447" style="zoom:67%;" />
+
+<h4 id="Inferences-establish-some-new-knowledge"><a href="#Inferences-establish-some-new-knowledge" class="headerlink" title="Inferences(establish some new knowledge)"></a>Inferences(establish some new knowledge)</h4><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617113550622.png" srcset="/img/loading.gif" lazyload alt="image-20230617113550622" style="zoom:67%;" />
+
+<h4 id="Computations-are-performed-using-specific-mathematical-formulas-or-algorithms"><a href="#Computations-are-performed-using-specific-mathematical-formulas-or-algorithms" class="headerlink" title="Computations(are performed using specific mathematical formulas or algorithms)"></a>Computations(are performed using specific mathematical formulas or algorithms)</h4><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617113806324.png" srcset="/img/loading.gif" lazyload alt="image-20230617113806324" style="zoom:67%;" />
+
+<h4 id="使用表格描述运算类业务规则"><a href="#使用表格描述运算类业务规则" class="headerlink" title="使用表格描述运算类业务规则"></a>使用表格描述运算类业务规则</h4><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617113850316.png" srcset="/img/loading.gif" lazyload alt="image-20230617113850316" style="zoom:50%;" />
+
+<h4 id="原子业务规则"><a href="#原子业务规则" class="headerlink" title="原子业务规则"></a>原子业务规则</h4><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617113928321.png" srcset="/img/loading.gif" lazyload alt="image-20230617113928321" style="zoom:50%;" />
+
+<img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617113949892.png" srcset="/img/loading.gif" lazyload alt="image-20230617113949892" style="zoom:50%;" />
+
+<h3 id="documenting-business-rules"><a href="#documenting-business-rules" class="headerlink" title="documenting business rules"></a>documenting business rules</h3><h4 id="Sample-Business-Rules-Catalog"><a href="#Sample-Business-Rules-Catalog" class="headerlink" title="Sample Business Rules Catalog"></a>Sample Business Rules Catalog</h4><p><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617114054613.png" srcset="/img/loading.gif" lazyload alt="image-20230617114054613"></p>
+<h4 id="Discovering-Business-Rules"><a href="#Discovering-Business-Rules" class="headerlink" title="Discovering Business Rules"></a>Discovering Business Rules</h4><p>Discovering business rules by asking questions from different perspectives</p>
+<img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617114225310.png" srcset="/img/loading.gif" lazyload alt="image-20230617114225310" style="zoom:67%;" />
+
+<h4 id="business-rules-and-req"><a href="#business-rules-and-req" class="headerlink" title="business rules and req"></a>business rules and req</h4><ul>
+<li>Determine whick business rule must be implemented in the software</li>
+<li>some rules will lead to <strong>use case</strong>s and hence to <strong>functinal requirements</strong> that enforces the rule</li>
+</ul>
+<img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617114418380.png" srcset="/img/loading.gif" lazyload alt="image-20230617114418380" style="zoom:50%;" />
+
+<h4 id="How-to-define-the-relation"><a href="#How-to-define-the-relation" class="headerlink" title="How to define the relation?"></a>How to define the relation?</h4><p>define the links between a functional requirement and its parent business rules in the following ways:</p>
+<img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617114551171.png" srcset="/img/loading.gif" lazyload alt="image-20230617114551171" style="zoom:67%;" />
+
+
+
+<h1 id="Document-chapter-10-11"><a href="#Document-chapter-10-11" class="headerlink" title="Document chapter 10-11"></a>Document chapter 10-11</h1><h1 id="requirements-modeling"><a href="#requirements-modeling" class="headerlink" title="requirements modeling"></a>requirements modeling</h1><h1 id="Specifying-data-requirements"><a href="#Specifying-data-requirements" class="headerlink" title="Specifying data requirements"></a>Specifying data requirements</h1><h1 id="beyond-functionality"><a href="#beyond-functionality" class="headerlink" title="beyond functionality"></a>beyond functionality</h1><h1 id="Requirements-validation"><a href="#Requirements-validation" class="headerlink" title="Requirements validation"></a>Requirements validation</h1><h1 id="requirements-validation"><a href="#requirements-validation" class="headerlink" title="requirements validation"></a>requirements validation</h1><h2 id="risk-reduction-through-prototying"><a href="#risk-reduction-through-prototying" class="headerlink" title="risk reduction through prototying"></a>risk reduction through prototying</h2><h3 id="Prototyping-major-purpose"><a href="#Prototyping-major-purpose" class="headerlink" title="Prototyping major purpose"></a>Prototyping major purpose</h3><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617125257146.png" srcset="/img/loading.gif" lazyload alt="image-20230617125257146" style="zoom: 67%;" />
+
+<h3 id="when-to-use-prototyping"><a href="#when-to-use-prototyping" class="headerlink" title="when to use prototyping?"></a>when to use prototyping?</h3><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617125340410.png" srcset="/img/loading.gif" lazyload alt="image-20230617125340410" style="zoom:67%;" />
+
+<h3 id="Overview-concepts-used-in-prototyping"><a href="#Overview-concepts-used-in-prototyping" class="headerlink" title="Overview-concepts used in prototyping"></a>Overview-concepts used in prototyping</h3><h4 id="Mock-ups-水平原型"><a href="#Mock-ups-水平原型" class="headerlink" title="Mock-ups(水平原型)"></a>Mock-ups(水平原型)</h4><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617125711715.png" srcset="/img/loading.gif" lazyload alt="image-20230617125711715" style="zoom:67%;" />
+
+<h4 id="Proof-of-Concepts-垂直原型"><a href="#Proof-of-Concepts-垂直原型" class="headerlink" title="Proof of Concepts(垂直原型)"></a>Proof of Concepts(垂直原型)</h4><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617130019996.png" srcset="/img/loading.gif" lazyload alt="image-20230617130019996" style="zoom:67%;" />
+
+<img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617130119308.png" srcset="/img/loading.gif" lazyload alt="image-20230617130119308" style="zoom:67%;" />
+
+<h4 id="Throwaway-Prototypes-抛弃式原型"><a href="#Throwaway-Prototypes-抛弃式原型" class="headerlink" title="Throwaway Prototypes(抛弃式原型)"></a>Throwaway Prototypes(抛弃式原型)</h4><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617130158838.png" srcset="/img/loading.gif" lazyload alt="image-20230617130158838" style="zoom:67%;" />
+
+<h4 id="Evolutionary-Prototypes-演化式模型"><a href="#Evolutionary-Prototypes-演化式模型" class="headerlink" title="Evolutionary Prototypes(演化式模型)"></a>Evolutionary Prototypes(演化式模型)</h4><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617130453511.png" srcset="/img/loading.gif" lazyload alt="image-20230617130453511" style="zoom:67%;" />
+
+<h4 id="Paper-and-Electionic-Prototypes-纸和电子原型"><a href="#Paper-and-Electionic-Prototypes-纸和电子原型" class="headerlink" title="Paper and Electionic Prototypes(纸和电子原型)"></a>Paper and Electionic Prototypes(纸和电子原型)</h4><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617130544560.png" srcset="/img/loading.gif" lazyload alt="image-20230617130544560" style="zoom:67%;" />
+
+<img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617130620422.png" srcset="/img/loading.gif" lazyload alt="image-20230617130620422" style="zoom:67%;" />
+
+<h3 id="working-with-prototypes"><a href="#working-with-prototypes" class="headerlink" title="working with prototypes"></a>working with prototypes</h3><h4 id="Activity-sequence-from-use-cases-to-user-interface-design-using-a-throwaway-prototype"><a href="#Activity-sequence-from-use-cases-to-user-interface-design-using-a-throwaway-prototype" class="headerlink" title="Activity sequence from use cases to user interface design using a throwaway prototype"></a>Activity sequence from use cases to user interface design using a throwaway prototype</h4><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617130746237.png" srcset="/img/loading.gif" lazyload alt="image-20230617130746237" style="zoom:67%;" />
+
+<img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617130810743.png" srcset="/img/loading.gif" lazyload alt="image-20230617130810743" style="zoom:50%;" />
+
+<img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617130825734.png" srcset="/img/loading.gif" lazyload alt="image-20230617130825734" style="zoom:50%;" />
+
+<h3 id="Prototype-Evaluation"><a href="#Prototype-Evaluation" class="headerlink" title="Prototype Evaluation"></a>Prototype Evaluation</h3><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617213847296.png" srcset="/img/loading.gif" lazyload alt="image-20230617213847296" style="zoom:67%;" />
+
+<h3 id="The-risks-of-Prototyping"><a href="#The-risks-of-Prototyping" class="headerlink" title="The risks of Prototyping"></a>The risks of Prototyping</h3><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617213925185.png" srcset="/img/loading.gif" lazyload alt="image-20230617213925185" style="zoom:67%;" />
+
+<h3 id="Prototyping-success-factors"><a href="#Prototyping-success-factors" class="headerlink" title="Prototyping success factors"></a>Prototyping success factors</h3><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617214113760.png" srcset="/img/loading.gif" lazyload alt="image-20230617214113760" style="zoom:67%;" />
+
+<img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617214149914.png" srcset="/img/loading.gif" lazyload alt="image-20230617214149914" style="zoom:67%;" />
+
+<h2 id="setting-requirements-priorities"><a href="#setting-requirements-priorities" class="headerlink" title="setting requirements priorities"></a>setting requirements priorities</h2><h3 id="为什么要设置项目的优先级"><a href="#为什么要设置项目的优先级" class="headerlink" title="为什么要设置项目的优先级"></a>为什么要设置项目的优先级</h3><p>Prioritization is a way to deal with competing demands for <strong>limited resources.</strong></p>
+<h3 id="如何设定项目的优先级"><a href="#如何设定项目的优先级" class="headerlink" title="如何设定项目的优先级"></a>如何设定项目的优先级</h3><h4 id="some-prioritization-techniques"><a href="#some-prioritization-techniques" class="headerlink" title="some prioritization techniques"></a>some prioritization techniques</h4><h5 id="requirements-prioritization-based-on-importance-and-urgency"><a href="#requirements-prioritization-based-on-importance-and-urgency" class="headerlink" title="requirements prioritization based on importance and urgency"></a>requirements prioritization based on importance and urgency</h5><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230618113931578.png" srcset="/img/loading.gif" lazyload alt="image-20230618113931578" style="zoom:67%;" />
+
+<h2 id="validating-the-requirements"><a href="#validating-the-requirements" class="headerlink" title="validating the requirements"></a>validating the requirements</h2><h3 id="The-V-model-of-software-development"><a href="#The-V-model-of-software-development" class="headerlink" title="The V model of software development"></a>The V model of software development</h3><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230618114057283.png" srcset="/img/loading.gif" lazyload alt="image-20230618114057283" style="zoom:67%;" />
+
+<h3 id="Target-of-Validation"><a href="#Target-of-Validation" class="headerlink" title="Target of Validation"></a>Target of Validation</h3><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230618114253999.png" srcset="/img/loading.gif" lazyload alt="image-20230618114253999" style="zoom:67%;" />
+
+<p>To ensure the SRS is correct&#x2F;satisfy various needs&#x2F;complete and of high quality&#x2F;consistent&#x2F;provide a adequate basis to proceed with design and construction&#x2F;software requirements are correctly derived from system requirements,business rules or other resources.</p>
+<h3 id="Review-Requirements"><a href="#Review-Requirements" class="headerlink" title="Review 	Requirements"></a>Review 	Requirements</h3><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230618114608435.png" srcset="/img/loading.gif" lazyload alt="image-20230618114608435" style="zoom:67%;" />
+
+<ul>
+<li>peer deskcheck </li>
+<li>passaround</li>
+<li>walkthrough</li>
+<li>inspection</li>
+</ul>
+<h3 id="Inspection-stages"><a href="#Inspection-stages" class="headerlink" title="Inspection stages"></a>Inspection stages</h3><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230618114956214.png" srcset="/img/loading.gif" lazyload alt="image-20230618114956214" style="zoom:67%;" />
+
+<h3 id="defect-checklists"><a href="#defect-checklists" class="headerlink" title="defect checklists"></a>defect checklists</h3><p>develop a defect checklist for each type of SRS</p>
+<h3 id="requirements-review-challenges"><a href="#requirements-review-challenges" class="headerlink" title="requirements review challenges"></a>requirements review challenges</h3><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230618115159391.png" srcset="/img/loading.gif" lazyload alt="image-20230618115159391" style="zoom:67%;" />
+
+<p>潜在问题：</p>
+<img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230618115235083.png" srcset="/img/loading.gif" lazyload alt="image-20230618115235083" style="zoom:67%;" />
+
+<h1 id="requirements-management"><a href="#requirements-management" class="headerlink" title="requirements management"></a>requirements management</h1><p>软件需求的管理要落实到每条需求</p>
+<p>After Eclicitation, analysis, Specification, Validation,we have:</p>
+<p>vision and scope document</p>
+<p>use-case</p>
+<p>SRS</p>
+<p>data dictionary</p>
+<p>analysis model</p>
+<p>After Elicitation, analysis, Specification, Validation，we  have :</p>
+<ul>
+<li>vision and scope document</li>
+<li>use-case</li>
+<li>SRS</li>
+<li>data dictionary</li>
+<li>analysis model</li>
+</ul>
+<p>The above artifacts define the <strong>baseline</strong> for the development</p>
+<h2 id="The-requirements-Baseline"><a href="#The-requirements-Baseline" class="headerlink" title="The requirements Baseline"></a>The requirements Baseline</h2><h3 id="Definition"><a href="#Definition" class="headerlink" title="Definition"></a>Definition</h3><p>The requirements baseline is the set of functinoal and non-functional requirements that the development team has committed to implement in a specific release.</p>
+<img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617122335275.png" srcset="/img/loading.gif" lazyload alt="image-20230617122335275" style="zoom:67%;" />
+
+<h3 id="boundary-between-development-and-management-1"><a href="#boundary-between-development-and-management-1" class="headerlink" title="boundary between  development and management"></a>boundary between  development and management</h3><p><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617122830186.png" srcset="/img/loading.gif" lazyload alt="image-20230617122830186"></p>
+<h3 id="star-major-requirements-management-activities"><a href="#star-major-requirements-management-activities" class="headerlink" title=":star:major requirements management activities"></a>:star:major requirements management activities</h3><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617123107168.png" srcset="/img/loading.gif" lazyload alt="image-20230617123107168" style="zoom:67%;" />
+
+<h3 id="根源：需求变更"><a href="#根源：需求变更" class="headerlink" title="根源：需求变更"></a>根源：需求变更</h3><p>changes affects a lot:</p>
+<p>The project can respond to new or changed requirements:</p>
+<img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617123240713.png" srcset="/img/loading.gif" lazyload alt="image-20230617123240713" style="zoom:67%;" />
+
+<h2 id="Change-happens"><a href="#Change-happens" class="headerlink" title="Change happens"></a>Change happens</h2><ul>
+<li>requirement change is not negative</li>
+<li>requirement change is inevitable<ul>
+<li>enhancement</li>
+<li>business process changes</li>
+</ul>
+</li>
+<li>Practitioners need to develop appropriate techniques for handling changes</li>
+</ul>
+<h2 id="Sample-template-for-a-change-control-process-description"><a href="#Sample-template-for-a-change-control-process-description" class="headerlink" title="Sample template for a change-control process description"></a>Sample template for a change-control process description</h2><img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617123608968.png" srcset="/img/loading.gif" lazyload alt="image-20230617123608968" style="zoom:67%;" />
+
+<h3 id="Roles-and-responsibilities"><a href="#Roles-and-responsibilities" class="headerlink" title="Roles and responsibilities"></a>Roles and responsibilities</h3><ul>
+<li>CCB Chair : Chairperson of the <strong>change control board</strong>;generally has final decison-making authority if the CCB does not reach agreement; selects the Evaluater and Modifier for each change request</li>
+<li>CCB:<strong>The group</strong> that decides to <strong>approve or reject</strong> proposed changes for a specific project</li>
+<li>Evaluater:<img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617124357304.png" srcset="/img/loading.gif" lazyload alt="image-20230617124357304" style="zoom:50%;" /></li>
+<li>Modifier:<img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617124412102.png" srcset="/img/loading.gif" lazyload alt="image-20230617124412102" style="zoom:50%;" /></li>
+<li>Originator: someone who submits a new change request</li>
+<li>Request Receiver: The person to whom new requests are submitted</li>
+<li>Verifier:The person who determines whether the changes was made correctly</li>
+</ul>
+<p>CCB Chair</p>
+<p>CCB</p>
+<p>Evaluater</p>
+<p>Modifier</p>
+<p>Originator</p>
+<p>Request Receiver</p>
+<p>Verifier</p>
+<h3 id="Change-Request-Status"><a href="#Change-Request-Status" class="headerlink" title="Change-Request Status"></a>Change-Request Status</h3><p>State-transition for a change request:</p>
+<img src="/images/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230617124835746.png" srcset="/img/loading.gif" lazyload alt="image-20230617124835746" style="zoom:80%;" />
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82/" class="category-chain-item">软件需求</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/">#期末复习</a>
+      
+        <a href="/tags/%E8%BD%AF%E4%BB%B6%E9%9C%80%E6%B1%82/">#软件需求</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>软件需求期末复习</div>
+      <div>http://example.com/2023/06/15/软件需求期末复习/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>ECNU_zhy</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>June 15, 2023</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>Licensed under</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/06/21/Lexical-Analysis(CC++)-%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/" title="">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile"></span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/03/12/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E2%80%94%E2%80%94%E7%AC%AC%E4%BA%8C%E7%AB%A0/" title="编译原理——第二章">
+                        <span class="hidden-mobile">编译原理——第二章</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.1/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

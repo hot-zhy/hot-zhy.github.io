@@ -1,0 +1,939 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/xiaoxin.png">
+  <link rel="icon" href="/img/xiaoxin.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="ECNU_zhy">
+  <meta name="keywords" content="非关系数据库">
+  
+    <meta name="description" content="Hbase in action读书笔记 10205101530-赵晗瑜  Chapter 2.2.3 工作机制：HBase写路径 在Hbase中增加新行&#x2F;修改已有的行时，内部流程是怎样的？:imp:  Hbase接到命令 将写入动作记录在WAL(预写式日志 write-ahead log&#x2F;Hlog)和MemStore（内存里的写入缓冲区） 确认写入后，认为写动作完成   为什么">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hbase in action读书笔记">
+<meta property="og:url" content="http://example.com/2022/11/07/hbase%20in%20action%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="zhy-blog">
+<meta property="og:description" content="Hbase in action读书笔记 10205101530-赵晗瑜  Chapter 2.2.3 工作机制：HBase写路径 在Hbase中增加新行&#x2F;修改已有的行时，内部流程是怎样的？:imp:  Hbase接到命令 将写入动作记录在WAL(预写式日志 write-ahead log&#x2F;Hlog)和MemStore（内存里的写入缓冲区） 确认写入后，认为写动作完成   为什么">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/images/hbase%20in%20action%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/image-20221106183638114.png">
+<meta property="og:image" content="http://example.com/images/hbase%20in%20action%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/image-20221106184918063.png">
+<meta property="og:image" content="http://example.com/images/hbase%20in%20action%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/image-20221107185356949.png">
+<meta property="og:image" content="http://example.com/images/hbase%20in%20action%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/image-20221106204800786.png">
+<meta property="og:image" content="http://example.com/images/hbase%20in%20action%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/image-20221106205351197.png">
+<meta property="og:image" content="http://example.com/images/hbase%20in%20action%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/image-20221106210702782.png">
+<meta property="article:published_time" content="2022-11-07T14:54:45.000Z">
+<meta property="article:modified_time" content="2022-11-07T14:55:02.979Z">
+<meta property="article:author" content="ECNU_zhy">
+<meta property="article:tag" content="非关系数据库">
+<meta property="article:tag" content="HBase">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/images/hbase%20in%20action%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/image-20221106183638114.png">
+  
+  
+  
+  <title>Hbase in action读书笔记 - zhy-blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ECNU-zhy</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                Links
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Hbase in action读书笔记"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-11-07 22:54" pubdate>
+          November 7, 2022 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.7k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          31 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Hbase in action读书笔记</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 align="center">Hbase in action读书笔记</h1>
+<h2 align="right">10205101530-赵晗瑜</h2>
+
+<h2 id="Chapter-2-2-3-工作机制：HBase写路径"><a href="#Chapter-2-2-3-工作机制：HBase写路径" class="headerlink" title="Chapter 2.2.3 工作机制：HBase写路径"></a>Chapter 2.2.3 工作机制：HBase写路径</h2><ol>
+<li><p><strong>在Hbase中增加新行&#x2F;修改已有的行时，内部流程是怎样的？</strong>:imp:</p>
+<ul>
+<li>Hbase接到命令</li>
+<li>将写入动作记录在WAL(预写式日志 write-ahead log&#x2F;Hlog)和MemStore（内存里的写入缓冲区）</li>
+<li>确认写入后，认为写动作完成</li>
+</ul>
+</li>
+<li><p><strong>为什么要把把写入动作记录在这两个地方？</strong></p>
+<ul>
+<li>为了保证数据的持久化</li>
+</ul>
+</li>
+<li><p><strong>什么是Hfile？</strong>:star:</p>
+<ul>
+<li>Hfile是Hbase使用的底层存储格式，对应于列族(一个列族可以有多个Hfile，但一个Hfile不能存储多个列族的数据)，当MemStore填满后，其中的数据会刷写到硬盘，生成一个Hfile</li>
+</ul>
+</li>
+<li><p><strong>WAL的作用是什么？</strong>:star:</p>
+<ul>
+<li>Hbase是在写动作完成之前先写入WAL，而如果服务器宕机，没有从MemStore里写到Hfile的数据将可以通过<strong>回放WAL</strong>来恢复(Hbase内部机制中的恢复流程部分)</li>
+</ul>
+</li>
+<li><p><strong>图示Hbase写路径原理</strong>:alien:</p>
+<img src="/images/hbase%20in%20action%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/image-20221106183638114.png" srcset="/img/loading.gif" lazyload alt="image-20221106183638114" style="zoom:67%;" />
+</li>
+<li><p><strong>为什么不建议禁用WAL？</strong></p>
+<p>不写入WAL会在RegionServer故障时增加丢失数据的风险，关闭WAL，出现故障时Hbase可能无法恢复数据，没有刷写到硬盘的所有写入数据都会丢失。</p>
+</li>
+</ol>
+<h2 id="Chapter-2-2-5-工作机制：Hbase读路径"><a href="#Chapter-2-2-5-工作机制：Hbase读路径" class="headerlink" title="Chapter 2.2.5 工作机制：Hbase读路径"></a>Chapter 2.2.5 工作机制：Hbase读路径</h2><p><img src="/images/hbase%20in%20action%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/image-20221106184918063.png" srcset="/img/loading.gif" lazyload alt="image-20221106184918063"></p>
+<ol>
+<li><strong>为什么要有BlockCache?</strong><ul>
+<li>BlockCache设计用来保存从Hfile里读入内存的频繁访问的数据，避免频繁的硬盘读，每个列族都有自己的BlockCache(使用了:L LRU缓存技术)</li>
+</ul>
+</li>
+<li><strong>Hfile的物理存放形式是什么？</strong><ul>
+<li>Hfile物理存放形式是一个Block的序列外加这些Block的索引。这意味着，从Hbase里读取一个Block需要现在索引上查找一次该Block，然后从硬盘取出</li>
+</ul>
+</li>
+<li><strong>什么时候用小一点的Block？</strong><ul>
+<li>如果主要用于 <strong>随机查询</strong>，可能需要细粒度的索引。</li>
+</ul>
+</li>
+<li><strong>什么时候用大一点的Block？</strong><ul>
+<li>如果经常用于顺序扫描，一次读取多个Block，可能需要大一点儿的Block。Block变大意味着索引项变少，索引变小，因此节省内存</li>
+</ul>
+</li>
+<li><strong>从Hbase读取一行的流程是怎样的？</strong>:imp:<ul>
+<li><strong>首先检查MemStore等待修改的队列</strong></li>
+<li><strong>然后检查BlockCache看包含该行的Block是否最近被访问过</strong></li>
+<li><strong>最后访问硬盘上的Hfile</strong></li>
+</ul>
+</li>
+<li><strong>note</strong><ul>
+<li>Hfile存放某个时刻MemStore刷写的快照。一个完整的行的数据可能存放在多个Hfile里，为了读出完整行，Hbase可能需要读取包含该行信息的所有Hfile</li>
+</ul>
+</li>
+</ol>
+<h2 id="Chapter-4-2-反规范化（De-normalization）是Hbase世界里的词语"><a href="#Chapter-4-2-反规范化（De-normalization）是Hbase世界里的词语" class="headerlink" title="Chapter 4.2 反规范化（De-normalization）是Hbase世界里的词语"></a>Chapter 4.2 反规范化（De-normalization）是Hbase世界里的词语</h2><blockquote>
+<p>规范化为写做优化，而反规范化为读做优化。		—— <em>HBase In Action</em></p>
+</blockquote>
+<ul>
+<li><p><strong>规范化：</strong></p>
+<ul>
+<li>优点：<ul>
+<li>减少数据冗余，节约存储空间</li>
+<li>加快了增、删、改的速度，不用担心更新时需要更新所有副本的复杂性</li>
+</ul>
+</li>
+<li>缺点：<ul>
+<li>查询需要使用JOIN连接，影响查询速度</li>
+</ul>
+</li>
+</ul>
+<p><strong>反规范化：</strong>增加冗余数据。</p>
+<ul>
+<li><p>优点：</p>
+<ul>
+<li>加快查询速度，避免开销很大的JOIN操作</li>
+</ul>
+</li>
+<li><p>缺点：</p>
+<ul>
+<li>更新、增加数据更困难</li>
+<li>数据存在冗余，需要更大的存储空间</li>
+<li>数据不一致问题</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ol>
+<li><p><strong>使用推贴为例，阐述反规范化处理</strong>？</p>
+<p>在系统里为每个用户维护一个推贴流，一旦他们所关注的用户写了推贴，就把这个推贴加到自己的推贴流里。</p>
+<p><strong>之前的操作：</strong>读取他们的关注用户列表，然后把列表中每个人的最新推贴集合起来形成自己的推贴流；</p>
+<p><strong>后来的操作：</strong>有一个持续存在的来自于该用户推贴流的推贴列表。</p>
+<p>这本质上是对表进行的表规范化处理</p>
+</li>
+<li><p><strong>规范化和反规范化的区别是什么？</strong></p>
+<ul>
+<li><p><strong>规范化</strong></p>
+<ol>
+<li>每种重复信息都会放进自己的一张表</li>
+<li>好处：当发生更新或删除时，不用担心更新指定数据所有副本的的复杂性</li>
+<li>通过保存单一副本而不是多个副本，减少了占用的存储空间</li>
+<li>需要查询时，在SQL语句中使用JOIN子句重新联结这个数据</li>
+</ol>
+</li>
+<li><p><strong>反规范化</strong></p>
+<ol>
+<li>数据是重复的，存在多个地方</li>
+<li>不需要很大开销的JOIN操作，这使得查询数据变得更容易、更快</li>
+</ol>
+</li>
+<li><p><strong>从性能角度来看，规范化和反规范化的区别是什么？</strong></p>
+<p><img src="/images/hbase%20in%20action%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/image-20221107185356949.png" srcset="/img/loading.gif" lazyload alt="image-20221107185356949"></p>
+<ol>
+<li>规范化为 <strong>写</strong>优化</li>
+<li>反规范化为 <strong>读</strong>优化</li>
+<li>规范化为写操作时表进行优化，在读取时付出联结数据的开销</li>
+<li>反规范化为读操作对表进行优化，但是在写入时付出多个副本的开销</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p><strong>如何进行反规范化处理？</strong></p>
+<ul>
+<li>通过为推贴流给每个用户专门建立一张表的方式进行反规范化处理</li>
+<li><strong>当一个用户登录进来，建立推贴流的流程如下：</strong><ol>
+<li>获取这个用户的关注用户列表</li>
+<li>获取每个被关注用户的推贴</li>
+<li>集合这些推贴，按时间戳排序，最新的在最前面</li>
+</ol>
+</li>
+<li>可以给users表增加一个列族来为每个用户维护一个推贴流</li>
+<li><strong>推贴流的两种访问方式</strong><ol>
+<li>当给定用户登录时读取推贴流，按建立时间戳倒序显示给用户</li>
+<li>当用户关注的任何用户写了一条推贴流时，把这条推贴加到自己的推贴列表里</li>
+</ol>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="Chapter-4-5-IO考虑"><a href="#Chapter-4-5-IO考虑" class="headerlink" title="Chapter 4.5 IO考虑"></a>Chapter 4.5 IO考虑</h2><p>每个 RegionServer 包含多个 Region，而每个 Region 又对应多个 Store（多个列族）。每一个 Store 对应表中一个列族的存储，且每个 Store 由一个 MemStore 和多个 HFile 文件组成。</p>
+<p>:shallow_pan_of_food:<strong>行键：</strong></p>
+<ul>
+<li>行键决定了访问HBase表时可以得到的性能，因为：<ul>
+<li>region基于行键为区间内的行提供服务</li>
+<li>HFile在硬盘里存储<strong>有序的行</strong></li>
+<li>仔细的设计行键能够很好的改善性能，因为行按照行键排序</li>
+</ul>
+</li>
+</ul>
+<h2 id="Chapter-4-6-从关系型到非关系型"><a href="#Chapter-4-6-从关系型到非关系型" class="headerlink" title="Chapter 4.6 从关系型到非关系型"></a>Chapter 4.6 从关系型到非关系型</h2><p>:star:<strong>从关系型数据库映射到Hbase没有捷径，它们是不同的思考方式:star2:</strong></p>
+<ol>
+<li><p><strong>:deciduous_tree:实体：映射到表（table）</strong></p>
+<ul>
+<li>表映射到表，在关系型数据库和Hbase中，实体的容器（container）是表，表中每行代表实体的一个实例</li>
+</ul>
+</li>
+<li><p>:deciduous_tree:<strong>属性：映射到列（column）</strong></p>
+<ol>
+<li><strong>:heart_decoration:识别属性（identifying attribute）</strong><ul>
+<li>唯一精确识别出实体的一个实例（一行）</li>
+<li>在关系表中，构成primary key</li>
+<li>在Hbase中，称为rowkey的一部分</li>
+<li>复合键（compound keys）：一个实体是由多个属性识别出来的<ol>
+<li>关系型：复合键</li>
+<li>非关系型：使用多个属性，把它们作为行键的一部分</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>:heart_decoration:<strong>非识别属性（non-identifying attribute）</strong><ul>
+<li>在Hbase中非识别属性基本映射到 <strong>列限定符</strong></li>
+<li>这些属性不需要唯一性保证</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><p><strong>:deciduous_tree:联系：映射到外键（foreign key）</strong></p>
+<ul>
+<li><p>逻辑关系模型使用两种主要联系：</p>
+<ol>
+<li>一对多：在关系型数据库中，建模为 <strong>foreign</strong> <strong>key</strong></li>
+<li>多对多：在关系型数据库中，建模为 <strong>junction table</strong></li>
+</ol>
+</li>
+<li><p>在Hbase中，通常归结为 <strong>数据反规范化处理</strong>，没有内建的联结（join）或约束（constrain），几乎不使用显示联系</p>
+</li>
+<li><p>在Hbase中如何实现不同数据记录之间的联结？</p>
+<p>​	 Hbase通过 <strong>隐式联系</strong>实现不同数据记录之间的联结：**:star:需要在系统外部写代码，先遍历所有被关注用户，然后对每个用户分别执行Hbase查表操作来找到它们的最新推贴**:star:</p>
+</li>
+<li><p>在SQL中如何实现不同数据记录之间的联结？</p>
+<p><img src="/images/hbase%20in%20action%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/image-20221106204800786.png" srcset="/img/loading.gif" lazyload alt="image-20221106204800786"></p>
+</li>
+</ul>
+</li>
+<li><p><strong>:satisfied:嵌套实体</strong></p>
+<img src="/images/hbase%20in%20action%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/image-20221106205351197.png" srcset="/img/loading.gif" lazyload alt="image-20221106205351197" style="zoom:67%;" />
+
+<img src="/images/hbase%20in%20action%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/image-20221106210702782.png" srcset="/img/loading.gif" lazyload alt="image-20221106210702782" style="zoom:67%;" />
+
+<ul>
+<li><p><strong>什么是嵌套实体的能力？</strong></p>
+<p>follows表的早期版本中每个用户有一行，每个被关注对象有一列（先是用整数计数器作为列限定符，然后是被关注用户的名字作为列限定符）</p>
+<p>这代表了在一个父实体或主实体的行里嵌套另一个实体的能力</p>
+</li>
+<li><p><strong>嵌套的实体是从关系型映射到非关系型的又一个工具</strong></p>
+<p>如果表是以父子，主从或其他严格的一对多联系存在，在Hbase中可以用一个单行来建模</p>
+<ol>
+<li>行键相当于父实体</li>
+<li>嵌套的值将包含子实体，每个子实体得到一个包含识别属性的列限定符，以及包含其他非识别属性的值</li>
+<li>子实体的记录存储为单个列</li>
+</ol>
+</li>
+<li><p><strong>嵌套实体的局限性</strong></p>
+<ol>
+<li><strong>只能嵌套一层</strong>：但仍然可以在一个父实体下有多个不同的嵌套子实体，用识别属性作为列限定符</li>
+<li><strong>效率问题</strong>:与访问另一张表的一行相比，在一行里访问在嵌套列限定符下存储的单个值效率不高</li>
+</ol>
+</li>
+<li><p><strong>什么时候可以用嵌套子实体？</strong></p>
+<ol>
+<li>:upside_down_face: 如果得到子实体的唯一办法是通过父实体，并且希望在一个父实体的所有子实体上有事物级保护，这种技术是正确的选择</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p>:pensive: <strong>没有被映射到的一些东西</strong></p>
+<ul>
+<li><p><strong>列族</strong>:dart:</p>
+<p><strong>将列族理解为建模了一对一联系</strong></p>
+<ol>
+<li><p>在SQL中：</p>
+<p>建模两张不同的物理表（SQL语句几乎总是命中这张或那张表，很少同时访问两张表，分成两张表性能更好）</p>
+</li>
+<li><p>:shamrock: 在Hbase中：</p>
+<p>在一张表中使用两个列族正好合适</p>
+</li>
+</ol>
+</li>
+<li><p><strong>索引</strong>:dart:</p>
+<p><strong>该怎么处理索引？</strong></p>
+<ol>
+<li><p><strong>在SQL中：</strong></p>
+<p>很容易声明索引并且由数据库引擎自动维护</p>
+</li>
+<li><p><strong>在Hbase中：</strong></p>
+<p>:shamrock: 没有索引，通过反规范化处理数据和写入多张表来或者这个特性等近似方法</p>
+</li>
+</ol>
+</li>
+<li><p><strong>时间版本</strong>:dart:</p>
+<p><strong>关系数据库和非关系数据库之间在时间维度上有什么不同？</strong></p>
+<ol>
+<li><p><strong>在SQL中：</strong></p>
+<p>把时间戳显式存储在某个地方；</p>
+<p>时间戳的数据类型只有long；</p>
+<p>在一种叫做 <strong>历史表</strong>的关系型模式里，通常使用和主表相同的主键外加一个时间戳，来保存基于时间的行的副本</p>
+</li>
+<li><p>:shamrock:<strong>在Hbase中：</strong></p>
+<p>在Hbase单元中使用时间戳；</p>
+<p>时间戳的数据类型不仅仅是64位的long；</p>
+<p>用一个Hbase实体，只需在列族元数据里设定合理保存的时间版本数量即可；</p>
+<p>在Hbase中，时间是一个维度</p>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">非关系数据库</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93/">#非关系数据库</a>
+      
+        <a href="/tags/HBase/">#HBase</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Hbase in action读书笔记</div>
+      <div>http://example.com/2022/11/07/hbase in action读书笔记/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>ECNU_zhy</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>November 7, 2022</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>Licensed under</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/11/11/OOAD%E6%9C%88%E8%80%83%E5%A4%8D%E4%B9%A0/" title="OOAD月考复习">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">OOAD月考复习</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/09/28/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E9%A2%98%E7%9B%AE/" title="数据库系统概念查询处理题目">
+                        <span class="hidden-mobile">数据库系统概念查询处理题目</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.1/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

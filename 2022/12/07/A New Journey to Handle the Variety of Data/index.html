@@ -1,0 +1,852 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/xiaoxin.png">
+  <link rel="icon" href="/img/xiaoxin.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="ECNU_zhy">
+  <meta name="keywords" content="非关系数据库">
+  
+    <meta name="description" content="以下是我在阅读论文的过程中画的思维导图,放大可查看详情:    A New Journey to Handle the Variety of Data 10205101530-赵晗瑜-论文笔记和总结    [TOC] 以下是我读完后对论文的总结与体悟：首先，什么是muti-model呢？​		文章在开头处便给出了定义:  It is worthy to mention the difference">
+<meta property="og:type" content="article">
+<meta property="og:title" content="A new journey to handle the variety of data论文阅读笔记">
+<meta property="og:url" content="http://example.com/2022/12/07/A%20New%20Journey%20to%20Handle%20the%20Variety%20of%20Data/index.html">
+<meta property="og:site_name" content="zhy-blog">
+<meta property="og:description" content="以下是我在阅读论文的过程中画的思维导图,放大可查看详情:    A New Journey to Handle the Variety of Data 10205101530-赵晗瑜-论文笔记和总结    [TOC] 以下是我读完后对论文的总结与体悟：首先，什么是muti-model呢？​		文章在开头处便给出了定义:  It is worthy to mention the difference">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/images/A%20New%20Journey%20to%20Handle%20the%20Variety%20of%20Data/%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE.png">
+<meta property="og:image" content="http://example.com/images/A%20New%20Journey%20to%20Handle%20the%20Variety%20of%20Data/image-20221209154024003.png">
+<meta property="og:image" content="http://example.com/images/A%20New%20Journey%20to%20Handle%20the%20Variety%20of%20Data/image-20221209160440338.png">
+<meta property="og:image" content="http://example.com/images/A%20New%20Journey%20to%20Handle%20the%20Variety%20of%20Data/image-20221210124427562.png">
+<meta property="og:image" content="http://example.com/images/A%20New%20Journey%20to%20Handle%20the%20Variety%20of%20Data/image-20221210124526565.png">
+<meta property="og:image" content="http://example.com/images/A%20New%20Journey%20to%20Handle%20the%20Variety%20of%20Data/image-20221210125046755.png">
+<meta property="og:image" content="http://example.com/images/A%20New%20Journey%20to%20Handle%20the%20Variety%20of%20Data/image-20221210125922807.png">
+<meta property="og:image" content="http://example.com/images/A%20New%20Journey%20to%20Handle%20the%20Variety%20of%20Data/image-20221210131035218.png">
+<meta property="og:image" content="http://example.com/images/A%20New%20Journey%20to%20Handle%20the%20Variety%20of%20Data/image-20221210133430731.png">
+<meta property="og:image" content="http://example.com/images/A%20New%20Journey%20to%20Handle%20the%20Variety%20of%20Data/image-20221210140207101.png">
+<meta property="og:image" content="http://example.com/images/A%20New%20Journey%20to%20Handle%20the%20Variety%20of%20Data/image-20221210144454383.png">
+<meta property="article:published_time" content="2022-12-07T15:18:59.306Z">
+<meta property="article:modified_time" content="2022-12-10T07:24:08.915Z">
+<meta property="article:author" content="ECNU_zhy">
+<meta property="article:tag" content="非关系数据库">
+<meta property="article:tag" content="论文阅读">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/images/A%20New%20Journey%20to%20Handle%20the%20Variety%20of%20Data/%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE.png">
+  
+  
+  
+  <title>A new journey to handle the variety of data论文阅读笔记 - zhy-blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ECNU-zhy</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                Links
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="A new journey to handle the variety of data论文阅读笔记"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-12-07 23:18" pubdate>
+          December 7, 2022 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          6.8k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          57 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">A new journey to handle the variety of data论文阅读笔记</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>以下是我在阅读论文的过程中画的思维导图,放大可查看详情:</p>
+<img src="/images/A%20New%20Journey%20to%20Handle%20the%20Variety%20of%20Data/%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE.png" srcset="/img/loading.gif" lazyload alt="思维导图" style="zoom:50%;" />
+
+<h1 align="center"> A New Journey to Handle the Variety of Data</h1>
+<h2 align="center">10205101530-赵晗瑜-论文笔记和总结</h2>
+
+
+
+<p>[TOC]</p>
+<h2 id="以下是我读完后对论文的总结与体悟："><a href="#以下是我读完后对论文的总结与体悟：" class="headerlink" title="以下是我读完后对论文的总结与体悟："></a>以下是我读完后对论文的总结与体悟：</h2><h2 id="首先，什么是muti-model呢？"><a href="#首先，什么是muti-model呢？" class="headerlink" title="首先，什么是muti-model呢？"></a>首先，什么是muti-model呢？</h2><p>​		文章在开头处便给出了定义:</p>
+<blockquote>
+<p>It is worthy to mention the difference between multi-modal databases and multimodel databases. The former means the multi-media databases where the types of data may include speech, images, videos, handwritten text and fingerprints. But the latter stands for a system to manage data with different models such as relational, tree, graph and object models. The scope of this survey restricts to the latter one, i.e.<br>multi-model databases.</p>
+</blockquote>
+<p>​		multi-model即为管理有着不同模型的数据的系统，像是<strong>关系模型，树模型，图模型和对象模型</strong>等，而这篇论文即针对这一方面进行阐述。</p>
+<p>​		那么，现在常用的存储的逻辑模型有哪几种呢？</p>
+<p>​		文中给出了四种，分别是：<em>relation  model  ,semi-structured Model  for JSON and XML Documents, key&#x2F;value model ,Graph model</em>，文章先是简要地概述了这四种常见的模型（并且这些模型是被大多数multi-model database所支持的），然后就开始从很多不同的角度对<em>multi-model DBMSs</em>进行了分类和对比，分类的维度有很多种，比如文中的表格有按照对<em>multi-model</em>的扩展策略来分、按照<em>multi-model DBMSs</em>支持的数据模型来分、按照对<em>SQL</em>扩展的支持来划分等等，从多个角度对<em>multi-model DBMSs</em>的应用和可扩展性、语言特性、是否支持云端存储、索引、支持的数据格式、存储的策略等多个角度进行了对比分析，最后得出了这样的结论：</p>
+<blockquote>
+<p>The data models supported by multi-model databases include relational, column, key&#x2F;value, document, XML, graph, and object.<br>—Multi-model databases employ cross-model languages based on the extension of SQL, XML, and graph languages.<br>—The data indices in multi-model databases include inverted index, B-tree, materialized view, hashing, and bitmap index. Most of them are based on an extension for relational or XML databases.</p>
+<p>The existing multi-model databases have the features of data sharding, flexible schema, and a version for cloud. But they still lack of the support for multi-model transactions.</p>
+</blockquote>
+<p>​		可见，能够支持<em>multi-model</em>的数据模型覆盖广泛，<em>multi-model</em>所使用的语言也是针对<em>single model</em>语言的扩展，数据的索引也是基于关系型和<em>XML</em>数据库的扩展，可以看出，<em>multi-model</em>已经有很好的闪光点，像是<em>data sharding(数据碎片）,flexible schema, a version for cloud</em>，但是现有的<em>multi-model database</em>缺乏对于<em>multi-model</em>事物（<em>transaction</em>）的支持。</p>
+<p>​		随后文章用大量的篇幅对<em>multi-database</em>进行了多维度的分类:</p>
+<h2 id="第一种分类是根据原本的数据模型来分类："><a href="#第一种分类是根据原本的数据模型来分类：" class="headerlink" title="第一种分类是根据原本的数据模型来分类："></a>第一种分类是根据原本的数据模型来分类：</h2><img src="/images/A%20New%20Journey%20to%20Handle%20the%20Variety%20of%20Data/image-20221209154024003.png" srcset="/img/loading.gif" lazyload alt="image-20221209154024003" style="zoom: 80%;" />
+
+<p>​		从上图和文中的分析可以得出以下结论：</p>
+<ul>
+<li>multi-model database可以对关系数据库，所有四种非关系数据库和其他诸如对象数据库进行相应的拓展</li>
+</ul>
+<h2 id="第二种分类是按照多模型拓展的策略来分的，拓展的方法分别是"><a href="#第二种分类是按照多模型拓展的策略来分的，拓展的方法分别是" class="headerlink" title="第二种分类是按照多模型拓展的策略来分的，拓展的方法分别是:"></a>第二种分类是按照多模型拓展的策略来分的，拓展的方法分别是:</h2><ul>
+<li>适用于新模型的新的存储策略</li>
+<li>对原存储策略的拓展</li>
+<li>在不改变原策略的基础上提供一个针对新策略的接口</li>
+</ul>
+<p>针对这种分类，我们可以得出：第一种分类策略的代表支持XML并且利用XML进行高效存储和查询的数据库；第二种分类策略的代表是ArangoDB，这是一种document数据库；第三种分类策略的代表是Sinew，它在关系存储策略之上开辟了一个新的层</p>
+<h2 id="第三种分类是按照在multi-model数据库中支持的数据模型有哪些来分类的"><a href="#第三种分类是按照在multi-model数据库中支持的数据模型有哪些来分类的" class="headerlink" title="第三种分类是按照在multi-model数据库中支持的数据模型有哪些来分类的"></a>第三种分类是按照在multi-model数据库中支持的数据模型有哪些来分类的</h2><p>​		<img src="/images/A%20New%20Journey%20to%20Handle%20the%20Variety%20of%20Data/image-20221209160440338.png" srcset="/img/loading.gif" lazyload alt="image-20221209160440338" style="zoom:67%;" /></p>
+<p>​	从上图和文中的分析可以得出以下结论：</p>
+<p>​		从图中可以观察到所有的Document都支持JSON数据模型，同时，文中着重强调了RDF模型，指出RDF模型对于研究multi-model有很大作用，而支持RDF存储作为系统的一部分的DBMSs是真正的multi-model，文中还给出了针对RDF支持的系统的研究链接。</p>
+<h2 id="第四种分类是从支持的格式、存储策略、查询语言、索引等多方面对multi-model-single-database-DBMSs的对比"><a href="#第四种分类是从支持的格式、存储策略、查询语言、索引等多方面对multi-model-single-database-DBMSs的对比" class="headerlink" title="第四种分类是从支持的格式、存储策略、查询语言、索引等多方面对multi-model single database DBMSs的对比"></a>第四种分类是从支持的格式、存储策略、查询语言、索引等多方面对multi-model single database DBMSs的对比</h2><img src="/images/A%20New%20Journey%20to%20Handle%20the%20Variety%20of%20Data/image-20221210124427562.png" srcset="/img/loading.gif" lazyload alt="image-20221210124427562" style="zoom:80%;" />
+
+<img src="/images/A%20New%20Journey%20to%20Handle%20the%20Variety%20of%20Data/image-20221210124526565.png" srcset="/img/loading.gif" lazyload alt="image-20221210124526565" style="zoom:80%;" />
+
+<p>​		上图对系统的关键特性进行了总结，这两张表的侧重点在于：</p>
+<ul>
+<li>支持的数据格式</li>
+<li>处理多样的数据时采取的存储策略</li>
+<li>支持的查询语言是什么以及为了查询优化支持什么样的索引，而这个点在第七种分类中有更为详细的介绍</li>
+</ul>
+<h2 id="第五种分类是从数据分布、schema的灵活性、跨模型的查询、云版本、multi-model事务等多方面对multi-model-single-database-DBMSs的对比"><a href="#第五种分类是从数据分布、schema的灵活性、跨模型的查询、云版本、multi-model事务等多方面对multi-model-single-database-DBMSs的对比" class="headerlink" title="第五种分类是从数据分布、schema的灵活性、跨模型的查询、云版本、multi-model事务等多方面对multi-model single database DBMSs的对比"></a>第五种分类是从数据分布、schema的灵活性、跨模型的查询、云版本、multi-model事务等多方面对multi-model single database DBMSs的对比</h2><p>​		<img src="/images/A%20New%20Journey%20to%20Handle%20the%20Variety%20of%20Data/image-20221210125046755.png" srcset="/img/loading.gif" lazyload alt="image-20221210125046755" style="zoom:80%"/></p>
+<p>​		从上图和文中的分析可以得出以下结论：</p>
+<ul>
+<li>绝大多数系统都支持data distribution</li>
+<li>灵活的schema并不是所有系统都有，但是对于NoSQL来说是</li>
+<li>跨multi-model的查询是multi-model database 所必须的，以此所有系统都提供了对于此的支持</li>
+<li>但是，有一个很大的问题就是对于跨多模的事物管理的处理，这是一个非常棘手的问题</li>
+</ul>
+<h2 id="第六种分类是从multi-model-databases能够支持的SQL扩展的语言出发进行的分类"><a href="#第六种分类是从multi-model-databases能够支持的SQL扩展的语言出发进行的分类" class="headerlink" title="第六种分类是从multi-model databases能够支持的SQL扩展的语言出发进行的分类"></a>第六种分类是从multi-model databases能够支持的SQL扩展的语言出发进行的分类</h2><img src="/images/A%20New%20Journey%20to%20Handle%20the%20Variety%20of%20Data/image-20221210125922807.png" srcset="/img/loading.gif" lazyload alt="image-20221210125922807" style="zoom:80%;" />
+
+<p>从上图和文中的分析可以得出以下结论：</p>
+<ul>
+<li>在所有类型的multi-model database中都可以看到SQL语言的支持，可以看出SQL应用的普遍</li>
+</ul>
+<h2 id="第七种分类是从multi-model-databases中的查询优化策略出发进行的分类"><a href="#第七种分类是从multi-model-databases中的查询优化策略出发进行的分类" class="headerlink" title="第七种分类是从multi-model databases中的查询优化策略出发进行的分类"></a>第七种分类是从multi-model databases中的查询优化策略出发进行的分类</h2><img src="/images/A%20New%20Journey%20to%20Handle%20the%20Variety%20of%20Data/image-20221210131035218.png" srcset="/img/loading.gif" lazyload alt="image-20221210131035218" style="zoom:80%;" />
+
+<p>从上图和文中分析可以得到以下结论：</p>
+<ul>
+<li>最普遍的优化查询的策略是B+&#x2F;B-树索引</li>
+<li>与此同时，hashing也是在不同种类的DBMSs使用的普遍策略</li>
+<li>但是，总的来说没有一个通用的multi-model查询优化的合适的办法</li>
+</ul>
+<h2 id="综上所述，针对文章从多个维度对multi-model-databases进行的讨论，可以得出以下结论："><a href="#综上所述，针对文章从多个维度对multi-model-databases进行的讨论，可以得出以下结论：" class="headerlink" title="综上所述，针对文章从多个维度对multi-model databases进行的讨论，可以得出以下结论："></a>综上所述，针对文章从多个维度对multi-model databases进行的讨论，可以得出以下结论：</h2><ul>
+<li>支持multi-model databases的数据模型包括key&#x2F;value,column,relational,document,XML,graph和object</li>
+<li>multi-model databases应用了在SQL、XML、graph language基础上拓展的跨模型的语言</li>
+<li>在multi-model databases中使用的数据索引包括inverted index, B- tree,materialized view,hashing和bitmap index。而这些中的大多数都支持对于relational或XML数据库的扩展</li>
+</ul>
+<h2 id="然后，文章对不同的multi-model-databases进行了详细的介绍，重点介绍每一类代表的关键闪光点"><a href="#然后，文章对不同的multi-model-databases进行了详细的介绍，重点介绍每一类代表的关键闪光点" class="headerlink" title="然后，文章对不同的multi-model databases进行了详细的介绍，重点介绍每一类代表的关键闪光点"></a>然后，文章对不同的multi-model databases进行了详细的介绍，重点介绍每一类代表的关键闪光点</h2><h2 id="Relational-Stores"><a href="#Relational-Stores" class="headerlink" title="Relational Stores"></a>Relational Stores</h2><p>​		文章第一部分介绍的便是关系数据库存储——multi-model system的最大集合之一。</p>
+<p>​		文中提到了关系型数据的拓展性、通用性和易用性几个特点。</p>
+<p>​		文中首先介绍了PosgreSQL——一个非常经典和具有年代感的关系型DBMS，此处提到了json和jsonb这类multi-model数据组织类型，并简单对比了两者的优缺点：</p>
+<ul>
+<li>json插入快但取用慢</li>
+<li>jsonb作为json的解析二进制格式，插入慢但取用快</li>
+</ul>
+<p>​		此处还介绍了存储在PosgreSQL中的数据类型可以通过一种SQL扩展的语言进行查询得到，如-&gt; int,-&gt;string,#&gt;text,@&gt;,@&lt;,?,?&amp;,?|,||,-int,#-text[]等。</p>
+<p>​		下图便是一个查询的例子：</p>
+<img src="/images/A%20New%20Journey%20to%20Handle%20the%20Variety%20of%20Data/image-20221210133430731.png" srcset="/img/loading.gif" lazyload alt="image-20221210133430731" style="zoom:80%;" />
+
+<p>​		沿着jsonb，本小节还介绍了其索引相关的知识，简单提到了<strong>GIN</strong>以及B-tree，特别是<strong>GIN索引结构</strong>的两种情况：posting tree和posting list，而这与HashMap的存储策略非常类似。</p>
+<p>​		接着，文章又介绍了SQL Server、DB2、Oracle、MySQL对Relational Data和key&#x2F;value Data的multi-model操作支持，对XML、JSON数据类型的支持以及对应的数据操作、索引机制。</p>
+<p>​		最后文章简单介绍了基于以上传统Relational database所研发的没有固定数据模型的Sinew数据库，它可以支持上述提到的多种数据模型的灵活操作。</p>
+<h2 id="Column-Stores"><a href="#Column-Stores" class="headerlink" title="Column Stores"></a>Column Stores</h2><p>​		在介绍Column Store之前，文章先对“column store”进行了解读：</p>
+<ul>
+<li><strong>单列存储</strong>：一个列里面只存储单个属性</li>
+<li><strong>列簇存储</strong>：一个列里面存储多个属性，以列簇的形式呈现</li>
+</ul>
+<p>​		该部分主要对列簇式存储数据库进行了探讨</p>
+<p>​		文章首先介绍了Cassandra并提出了以下几个特性：</p>
+<ul>
+<li><p><strong>存储机制</strong></p>
+<p>内部的数据存储在SSTable中，SStable会进一步划分为block，SStable是immutable的，因此修改的数据会存储到一个新的SStable并且使用compaction策略进行合并。</p>
+<p>同时，其同样支持json格式，但需要提前指定schema，如下图是一个json schema从里向外层层嵌套预定义以及对应的数据插入例子：</p>
+<img src="/images/A%20New%20Journey%20to%20Handle%20the%20Variety%20of%20Data/image-20221210140207101.png" srcset="/img/loading.gif" lazyload alt="image-20221210140207101" style="zoom:80%;" />
+</li>
+<li><p><strong>查询语言</strong></p>
+<p>可以把它当作SQL的子集，支持SQL常见操作。</p>
+<p>但是在针对列簇数据进行where查询和索引时会受到一些限制</p>
+</li>
+<li><p><strong>索引机制</strong></p>
+<p>primary key:using an inverted index</p>
+<p>secondary indices:使用B+ tree以支持范围查询</p>
+<p>虽然合适的索引可以增加查询效率，但是并不推荐针对频繁修改、删除、大范围查询的数据表进行索引的建立</p>
+</li>
+</ul>
+<p>​		然后，文章简单介绍了Column-oriented数据库CrateDb查询层⾯的Lucence索引支持，这是一种动态的schema数据库，</p>
+<p>​		然后，文章介绍的DynamoDB可作为云部署的、具有动态Schema、分布式的高性能数据库，它支持json和key&#x2F;value的灵活的数据模型，同时还介绍了在Dynamo中一个item由哪些部分组成。</p>
+<p>​		然后，介绍了Dynamo中使用哪些API对item进行各种操作。</p>
+<p>​		然后，介绍了在Dynamo中使用的两种primary key：</p>
+<ul>
+<li><strong>partition key</strong></li>
+<li><strong>sort key</strong></li>
+</ul>
+<p>​		最后文章提到了HPE高性能分布式数据库中的virtual column和real column之间的转换，如virtual column可以转换成real column以获得更高的查询性能。</p>
+<p>​		Dynamo和HPE都提到了相应的SQL操作、索引、针对json和其他数据模型的支持。</p>
+<h2 id="Key-x2F-value-Stores"><a href="#Key-x2F-value-Stores" class="headerlink" title="Key&#x2F;value Stores"></a>Key&#x2F;value Stores</h2><p>​		键值数据库是最简单的非关系数据库，只需要通过id进行API的调用来实现数据的存储和获取。</p>
+<p>​		Riak作为经典的kv数据库，其基于Sorl的集成提供了高效的索引机制，另外其还具有分布式、高可用、高扩展等特性。</p>
+<p>​		c-treeACE同时支持SQL和NoSQL两种操作模式。</p>
+<p>​		最后介绍的Oracle NoSQL除了具备json、index外，还添加了RDF、Graph module、Child table等机制</p>
+<h2 id="Document-Stores"><a href="#Document-Stores" class="headerlink" title="Document Stores"></a>Document Stores</h2><p>​		文档数据库可以看作键值数据库的增强模式，其索引与kv数据库类似。综合来看，文档数据库更加贴近multi-model database。</p>
+<p>​		文章首先介绍了ArangDB这一原生多模型、开源的数据库，其强大的AQL查询支持在一个单个查询中混合使用kv、doc和graph三种数据模型。</p>
+<p>​		此外，其具有着和json类似的文档存储组织的存储方式；</p>
+<p>​		同时，文章还介绍了其文档之间的关系图模型和对应图算法的操作，如图遍历和求最短路径；</p>
+<p>​		同时，文章还介绍了Hashing和SkipList索引方式及其之间的差别：</p>
+<ul>
+<li>Hashing不支持范围查询而SkipList支持</li>
+</ul>
+<p>​		随后，文章介绍了Couchbase这一基于内存的高性能文档数据库，其特性总结如下：</p>
+<ul>
+<li>对于json存储格式的数据无需预先创建schema，这使得其数据操作更加flexible</li>
+<li>其针对频繁操作的document进行了缓存，可以提供更加高效的服务响应</li>
+<li>其基于SQL的查询语言$N_1QL$提供了对json、kv和geographical data的方便访问</li>
+<li>其提供了B+ tree和B+ trie两种索引，其中B+ trie在tree上构造更短的depth来获得更好的查询效率</li>
+</ul>
+<p>​		随后，文章介绍了MongoDB这一最流行的文档数据库，文章介绍了其flexible schema、json数据查询、Manual references和DBRefs references、BSON作为JSON的二进制高效表示等主要特性。</p>
+<p>​		随后文章介绍了Cosmos DB和MarkLogic这两款数据库，其除了最基本的文档数据库所具有的特性之外，还具有着其各自的特性：</p>
+<ul>
+<li>Cosmos DB的（constistent&#x2F;lazy&#x2F;none）索引更新策略</li>
+<li>MarkLogic的基于树状存储结构为XML和JSON提供的统一索引管理方式</li>
+<li>MarkLogic还提供了kv互换下的两种范围索引数据结构：kv和vk型</li>
+</ul>
+<h2 id="Gragh-Stores"><a href="#Gragh-Stores" class="headerlink" title="Gragh Stores"></a>Gragh Stores</h2><p>​		图数据库以图论为数学基础，各种复杂的算法都集中在图结构中</p>
+<p>​		文章针对OrientDB这一图数据库的代表从存储结构、数据操作、索引等关键点进行了分析。</p>
+<p>​		OrientDB支持针对云环境的支持，这意味着其能够提供DAAS平台层面的服务。即其支持类型继承以及类间关系的建立如引用。</p>
+<p>​		文章介绍了两种类间关系模式：</p>
+<ol>
+<li><p>引用（Refreneced）</p>
+<p>引用通过存储对应的物理连接来维持关系</p>
+</li>
+<li><p>嵌入（Embedded）</p>
+<p>嵌入通过直接将实际数据存储在对应的数据对象下形成共生依赖</p>
+</li>
+</ol>
+<p>​		下图是在OrientDB中存储multi-model data的一个例子：</p>
+<img src="/images/A%20New%20Journey%20to%20Handle%20the%20Variety%20of%20Data/image-20221210144454383.png" srcset="/img/loading.gif" lazyload alt="image-20221210144454383" style="zoom:80%;" />
+
+<h2 id="Other-Stores"><a href="#Other-Stores" class="headerlink" title="Other Stores"></a>Other Stores</h2><p>​		除了上述几种主流的数据存储模型之外，还存在一些潜在的多模数据存储模型，如object-model、multi-use-case stores</p>
+<ul>
+<li><p>object-model</p>
+<p>从面向对象的角度来看，其可以存储任何类型，因为“万物皆对象”。</p>
+<p>object-model data model的代表是InterSystems Cache，其所支持的	schemaless、schema-based的存储策略对于数据定义操作提供了更大的灵活性</p>
+</li>
+<li><p>Multi-use-case</p>
+<p>multi-use-case的核心思想是：“one size fits all”</p>
+</li>
+</ul>
+<h2 id="接着，文章说了一些挑战和问题"><a href="#接着，文章说了一些挑战和问题" class="headerlink" title="接着，文章说了一些挑战和问题"></a>接着，文章说了一些挑战和问题</h2><p>​		文章将遇到的挑战和问题划分成了四类：</p>
+<ul>
+<li>multi-model查询处理和优化</li>
+<li>multi-model schema的设计和优化</li>
+<li>multi-model的演变问题</li>
+<li>multi-model的扩展性问题</li>
+</ul>
+<h2 id="最后："><a href="#最后：" class="headerlink" title="最后："></a>最后：</h2><p>​		文章对比了各种数据模型的典型的数据库产品，并重点针对数据存储模型、查询操作语言、索引、可扩展性等特性进行阐述，但存在一个问题是：</p>
+<p><strong><u>我们还没有一个较为成熟的、可针对多种数据模型提供一个统一操作接口的数据库技术</u></strong></p>
+<p>​		而在大数据的背景下，针对volume、velocity、variety、veracity、value  5v问题急需一个统一的数据库技术来操作多种数据库模型，打破各个数据模型之间的壁垒，进而才能提高数据处理的效率、降低数据处理的难度、节约企业数据处理的成本。</p>
+<p>​		我非常相信多年以后一定能有这些问题的解决办法，或许某一天就会出现一个这样统一的数据库技术针对各种数据模型进行统一的处理。</p>
+<p>​		希望早日到达“one size fits a bunch”的境地。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">非关系数据库</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93/">#非关系数据库</a>
+      
+        <a href="/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/">#论文阅读</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>A new journey to handle the variety of data论文阅读笔记</div>
+      <div>http://example.com/2022/12/07/A New Journey to Handle the Variety of Data/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>ECNU_zhy</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>December 7, 2022</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>Licensed under</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/01/15/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA24-%E5%8D%95%E6%BA%90%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98-%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/" title="算法导论24-单源最短路径问题">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">算法导论24-单源最短路径问题</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/12/03/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA22.4-%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F-%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/" title="算法导论22.4-拓扑排序-期末复习">
+                        <span class="hidden-mobile">算法导论22.4-拓扑排序-期末复习</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.1/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

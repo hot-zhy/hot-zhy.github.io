@@ -1,0 +1,922 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/xiaoxin.png">
+  <link rel="icon" href="/img/xiaoxin.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="ECNU_zhy">
+  <meta name="keywords" content="OOAD">
+  
+    <meta name="description" content="单实例模式SingleTon单实例模式的key points 步骤 定义一个公有的成员函数，创建并供客户获取该单实例 定义一个私有的构造函数 定义私有的静态成员变量    单实例模式的类图  锁住某类的实例化功能，客户类只能使用某类自身实例化的唯一实例 summary要点 只能有一个实例 这个实例能够方便地被所有客户访问  解决方法 定义私有的静态成员变量，保存单实例的引用 定义公有的getter">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OOAD期末复习——Gof设计模式">
+<meta property="og:url" content="http://example.com/2023/02/09/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/index.html">
+<meta property="og:site_name" content="zhy-blog">
+<meta property="og:description" content="单实例模式SingleTon单实例模式的key points 步骤 定义一个公有的成员函数，创建并供客户获取该单实例 定义一个私有的构造函数 定义私有的静态成员变量    单实例模式的类图  锁住某类的实例化功能，客户类只能使用某类自身实例化的唯一实例 summary要点 只能有一个实例 这个实例能够方便地被所有客户访问  解决方法 定义私有的静态成员变量，保存单实例的引用 定义公有的getter">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209223325963.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209223517809.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209223625585.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209171225139.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209171348426.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209171809670.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209173344870.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209175854333.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209180124556.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209180747003.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209181230957.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209181809260.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209181955719.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209211808695.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209212212339.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209213217893.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209213345719.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209213505555.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209214002252.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209221252869.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209221444008.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209221649013.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209221931938.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209222157356.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209222324560.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209222447953.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209222914351.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209223010577.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209153017972.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209153545341.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209153758889.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209154137818.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209154413935.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209154619313.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209154813383.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209155019660.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209155609497.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209160351168.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209161236604.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209161525710.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209161828981.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209163449262.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209163936694.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209165107154.png">
+<meta property="og:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209165400344.png">
+<meta property="article:published_time" content="2023-02-09T06:45:01.693Z">
+<meta property="article:modified_time" content="2023-02-09T14:42:12.335Z">
+<meta property="article:author" content="ECNU_zhy">
+<meta property="article:tag" content="OOAD">
+<meta property="article:tag" content="期末复习">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209223325963.png">
+  
+  
+  
+  <title>OOAD期末复习——Gof设计模式 - zhy-blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ECNU-zhy</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                Links
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="OOAD期末复习——Gof设计模式"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-02-09 14:45" pubdate>
+          February 9, 2023 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.1k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          35 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">OOAD期末复习——Gof设计模式</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="单实例模式SingleTon"><a href="#单实例模式SingleTon" class="headerlink" title="单实例模式SingleTon"></a>单实例模式SingleTon</h1><h2 id="单实例模式的key-points"><a href="#单实例模式的key-points" class="headerlink" title="单实例模式的key points"></a>单实例模式的key points</h2><p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209223325963.png" srcset="/img/loading.gif" lazyload alt="image-20230209223325963"></p>
+<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><ol>
+<li>定义一个公有的成员函数，创建并供客户获取该单实例</li>
+<li>定义一个私有的构造函数</li>
+<li>定义私有的静态成员变量</li>
+</ol>
+<img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209223517809.png" srcset="/img/loading.gif" lazyload alt="image-20230209223517809" style="zoom:67%;" />
+
+<h2 id="单实例模式的类图"><a href="#单实例模式的类图" class="headerlink" title="单实例模式的类图"></a>单实例模式的类图</h2><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209223625585.png" srcset="/img/loading.gif" lazyload alt="image-20230209223625585" style="zoom:67%;" />
+
+<p>锁住某类的实例化功能，客户类只能使用某类自身实例化的唯一实例</p>
+<h2 id="summary"><a href="#summary" class="headerlink" title="summary"></a>summary</h2><h3 id="要点"><a href="#要点" class="headerlink" title="要点"></a>要点</h3><ul>
+<li>只能有一个实例</li>
+<li>这个实例能够方便地被所有客户访问</li>
+</ul>
+<h3 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h3><ul>
+<li>定义私有的静态成员变量，保存单实例的引用</li>
+<li>定义公有的getter函数</li>
+<li>该类自己负责第一次使用时实例化对象</li>
+<li>定义私有的构造函数</li>
+<li>客户对象只能通过getter函数获得该单例</li>
+</ul>
+<h1 id="适配器模式"><a href="#适配器模式" class="headerlink" title="适配器模式"></a>适配器模式</h1><h2 id="Scenario"><a href="#Scenario" class="headerlink" title="Scenario"></a>Scenario</h2><p>You have an existing software system that you need to work a new vendor library , but the new vendor designed their interfaces differently than the lasted vendor</p>
+<p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209171225139.png" srcset="/img/loading.gif" lazyload alt="image-20230209171225139"></p>
+<h2 id="What-to-do"><a href="#What-to-do" class="headerlink" title="What to do?"></a>What to do?</h2><p>Write  a class that adapts the new vendor interface into the one you’re expecting.</p>
+<p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209171348426.png" srcset="/img/loading.gif" lazyload alt="image-20230209171348426"></p>
+<h2 id="一个例子，我需要鸭子，但是只有火鸡"><a href="#一个例子，我需要鸭子，但是只有火鸡" class="headerlink" title="一个例子，我需要鸭子，但是只有火鸡"></a>一个例子，我需要鸭子，但是只有火鸡</h2><p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209171809670.png" srcset="/img/loading.gif" lazyload alt="image-20230209171809670"></p>
+<p>方法就是用火鸡去实现鸭子，在方法中替代地实现鸭子的方法</p>
+<h3 id="适配器模式的定义和类图"><a href="#适配器模式的定义和类图" class="headerlink" title="适配器模式的定义和类图"></a>适配器模式的定义和类图</h3><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>将一个类的接口转化成客户希望的另外一个接口，Adapter模式使得原本由于接口不兼容而不能一起工作的那些类可以一起工作</p>
+<h3 id="类图"><a href="#类图" class="headerlink" title="类图"></a>类图</h3><p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209173344870.png" srcset="/img/loading.gif" lazyload alt="image-20230209173344870"></p>
+<p>Client需要的是Adaptee这个类，但是不能匹配，而且Adaptee可能会变化，如果直接相联系，违反OCP原则。</p>
+<p>于是我们在中间加了一个Adapter，其中的request()是Client所需要的，这个方法只做一个事情，就是让Adaptee去调用specificRequest()</p>
+<p>注意Adapter和Adaptee之间是聚合关系，Adapter是整体，拥有Adaptee对象，图中的箭头只是表示可见性。</p>
+<p>同时注意到Target，我们面向的是抽象而不是具体，当Adapter发生变化的时候，我们的Client是不需要修改的</p>
+<h3 id="在这张类图中体现的oo设计原则："><a href="#在这张类图中体现的oo设计原则：" class="headerlink" title="在这张类图中体现的oo设计原则："></a>在这张类图中体现的oo设计原则：</h3><ul>
+<li>对象组合：use of object combination，能用组合的地方不用继承</li>
+<li>面向接口而不是面向实现</li>
+</ul>
+<h3 id="具体例子"><a href="#具体例子" class="headerlink" title="具体例子"></a>具体例子</h3><p> <img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209175854333.png" srcset="/img/loading.gif" lazyload alt="image-20230209175854333"></p>
+<h3 id="适配器模式的关键点"><a href="#适配器模式的关键点" class="headerlink" title="适配器模式的关键点"></a>适配器模式的关键点</h3><p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209180124556.png" srcset="/img/loading.gif" lazyload alt="image-20230209180124556"></p>
+<h3 id="实现细节：check-list"><a href="#实现细节：check-list" class="headerlink" title="实现细节：check list"></a>实现细节：check list</h3><ul>
+<li>两个角色Identify the players<ul>
+<li>Adaptee:The adapter adapts the interface of an Adaptee to match that of the Adapter’s target (the class it derives from)</li>
+<li>Client:use the Adaptee as if it were a type of target</li>
+</ul>
+</li>
+<li>表示客户需要用到的接口</li>
+<li>设计一个包装器使得Adaptee满足客户的需要</li>
+<li>adapter&#x2F;wrapper类里必须有一个adaptee class的对象负责工作</li>
+<li>adapter&#x2F;wrapper负责 <strong>映射</strong>客户接口与adaptee的接口</li>
+</ul>
+<h3 id="summary-1"><a href="#summary-1" class="headerlink" title="summary"></a>summary</h3><p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209180747003.png" srcset="/img/loading.gif" lazyload alt="image-20230209180747003"></p>
+<h1 id="外观Facade模式"><a href="#外观Facade模式" class="headerlink" title="外观Facade模式"></a>外观Facade模式</h1><p>现有系统功能强大复杂，开发新系统需要用到其中的一部分，但又要增加新的一部分</p>
+<h2 id="外观模式的关键点-key-features"><a href="#外观模式的关键点-key-features" class="headerlink" title="外观模式的关键点(key features)"></a>外观模式的关键点(key features)</h2><p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209181230957.png" srcset="/img/loading.gif" lazyload alt="image-20230209181230957"></p>
+<h2 id="外观模式的动机"><a href="#外观模式的动机" class="headerlink" title="外观模式的动机"></a>外观模式的动机</h2><ul>
+<li>最小化通信minimize communication</li>
+<li>最小化依赖minimize dependencies</li>
+</ul>
+<p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209181809260.png" srcset="/img/loading.gif" lazyload alt="image-20230209181809260"></p>
+<img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209181955719.png" srcset="/img/loading.gif" lazyload alt="image-20230209181955719" style="zoom:67%;" />
+
+<p>这里有一个前台</p>
+<h2 id="外观模式和适配器模式的比较"><a href="#外观模式和适配器模式的比较" class="headerlink" title="外观模式和适配器模式的比较"></a>外观模式和适配器模式的比较</h2><ul>
+<li>外观定义了新的接口，适配器使用旧的接口</li>
+<li>适配器使得两个不一致的接口协同工作，而不是定义一个新的</li>
+<li>外观模式的本意是产生一个轻便的接口，适配器的本意是把现有接口转换一下</li>
+<li>一个外观接口可能包装了多个现有系统的对象，也可能增加了一些新的功能，而适配器只是包装一个对象</li>
+<li>多数情况下，外观是单实例的</li>
+<li>GRASP原则的外观控制器，就是外观模式</li>
+</ul>
+<h2 id="外观模式的适用性"><a href="#外观模式的适用性" class="headerlink" title="外观模式的适用性"></a>外观模式的适用性</h2><ul>
+<li>简化复杂系统的使用</li>
+<li>在使用复杂系统的某个功能时，可以加入新功能</li>
+<li>为客户软件提供一个接口，隐藏了现有系统的细节</li>
+<li>使客户与现有系统之间减少耦合，增加独立性，可移植性</li>
+<li>节约成本<ul>
+<li>开发新的外观类的成本，要比每个人都去熟悉现有系统，了解如何使用现有系统的功能要节省许多</li>
+</ul>
+</li>
+</ul>
+<h1 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h1><p>当有许多不同的客户都对同一数据源感兴趣，对相同的数据有不同的处理方式，该如何解决？</p>
+<h2 id="什么是观察者模式？"><a href="#什么是观察者模式？" class="headerlink" title="什么是观察者模式？"></a>什么是观察者模式？</h2><p>定义对象之间的一对多依赖关系，当一个对象改变状态时，所有依赖于它的对象都会自动获得感知</p>
+<h2 id="观察者模式案例"><a href="#观察者模式案例" class="headerlink" title="观察者模式案例"></a>观察者模式案例</h2><p>观察者模式又称发布-订阅模式(publish &#x2F;Subscribe)，源-监听器(Source&#x2F;Listener)模式，模型-视图模式(Model&#x2F;View)</p>
+<ul>
+<li><p>Publisher&#x3D;&#x3D;Subject 主题</p>
+</li>
+<li><p>Subscribers&#x3D;&#x3D;Observers 观察者</p>
+<p>观察者已经订阅了主题数据，当数据发生变化之后将会收到更新数据或更新通知</p>
+<p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209211808695.png" srcset="/img/loading.gif" lazyload alt="image-20230209211808695"></p>
+</li>
+</ul>
+<h2 id="观察者模式的定义"><a href="#观察者模式的定义" class="headerlink" title="观察者模式的定义"></a>观察者模式的定义</h2><p>定义对象之间的一对多依赖关系，当一个对象改变状态时，所有依赖于它的对象都会获得感知</p>
+<h2 id="观察者模式的类图"><a href="#观察者模式的类图" class="headerlink" title="观察者模式的类图"></a>观察者模式的类图</h2><p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209212212339.png" srcset="/img/loading.gif" lazyload alt="image-20230209212212339"></p>
+<p>OCP原则：open：功能扩展；close：修改源代码</p>
+<p> <img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209213217893.png" srcset="/img/loading.gif" lazyload alt="image-20230209213217893"></p>
+<h3 id="具体代码"><a href="#具体代码" class="headerlink" title="具体代码"></a>具体代码</h3><p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209213345719.png" srcset="/img/loading.gif" lazyload alt="image-20230209213345719"></p>
+<p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209213505555.png" srcset="/img/loading.gif" lazyload alt="image-20230209213505555"></p>
+<ul>
+<li>registerObservers函数是Observer调用的，将自己加进Subject中的list</li>
+</ul>
+<p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209214002252.png" srcset="/img/loading.gif" lazyload alt="image-20230209214002252"></p>
+<h2 id="观察者模式信息的推拉模式"><a href="#观察者模式信息的推拉模式" class="headerlink" title="观察者模式信息的推拉模式"></a>观察者模式信息的推拉模式</h2><h3 id="推模式"><a href="#推模式" class="headerlink" title="推模式"></a>推模式</h3><p>当通知消息来的时候，把所有相关消息都通过参数的形式“推给”观察者</p>
+<ol>
+<li>优点<ul>
+<li>所有信息通过参数传递，直接，简单，观察者可以马上处理</li>
+<li>观察者和被观察者没有一点联系，两者之间几乎没有耦合</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>所有信息强迫推给观察者，不管有用与否</li>
+<li>如果想添加一个参数，那就需要修改所有观察者的接口函数</li>
+</ul>
+</li>
+</ol>
+<h3 id="拉模式"><a href="#拉模式" class="headerlink" title="拉模式"></a>拉模式</h3><p>当通知消息来的时候，通知的函数不带任何相关的信息，而是要观察者主动去被主题对象那里去“拉”信息</p>
+<ol>
+<li>优点<ul>
+<li>可以主动去取自己感兴趣的信息</li>
+<li>如要添加一个参数，无需修改观察者</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>观察者与被观察者有一定的联系</li>
+</ul>
+</li>
+</ol>
+<h2 id="如何应用观察者模式-check-list"><a href="#如何应用观察者模式-check-list" class="headerlink" title="如何应用观察者模式 check list"></a>如何应用观察者模式 check list</h2><ul>
+<li>主题对象只与观察者基类有耦合</li>
+<li>客户配置观察者的数量和类型</li>
+<li>observers首先要知道Subject，然后把自己注册到Subject中</li>
+<li>Subject保存所有注册过的Observer，当状态发生变化时，广播给所有的注册观察者</li>
+<li>Subject可以采用push或pull的模式，与Observer交流信息</li>
+</ul>
+<h1 id="策略模式"><a href="#策略模式" class="headerlink" title="策略模式"></a>策略模式</h1><p>OO原则：Open-Closed Principle（OCP）原则</p>
+<ul>
+<li>open for extension-the behavior can be extended to meet new requirements</li>
+<li>closed for Modification-the source code of the module is not allowed to change</li>
+</ul>
+<h2 id="设计原则"><a href="#设计原则" class="headerlink" title="设计原则"></a>设计原则</h2><h4 id="软件行业公理"><a href="#软件行业公理" class="headerlink" title="软件行业公理"></a>软件行业公理</h4><p>在软件项目中，唯一不变的事情就是变化</p>
+<h4 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h4><p>拥抱（embrace）变化，让变化成为设计的一部分</p>
+<p>标识变化点，把它们和系统其余部分隔离开</p>
+<h2 id="利用接口的强大功能"><a href="#利用接口的强大功能" class="headerlink" title="利用接口的强大功能"></a>利用接口的强大功能</h2><p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209221252869.png" srcset="/img/loading.gif" lazyload alt="image-20230209221252869"></p>
+<p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209221444008.png" srcset="/img/loading.gif" lazyload alt="image-20230209221444008"></p>
+<p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209221649013.png" srcset="/img/loading.gif" lazyload alt="image-20230209221649013"></p>
+<p>能用组合的地方不要用继承</p>
+<p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209221931938.png" srcset="/img/loading.gif" lazyload alt="image-20230209221931938"></p>
+<p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209222157356.png" srcset="/img/loading.gif" lazyload alt="image-20230209222157356"></p>
+<p>总的设计方案</p>
+<p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209222324560.png" srcset="/img/loading.gif" lazyload alt="image-20230209222324560"></p>
+<p>行为重用：</p>
+<p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209222447953.png" srcset="/img/loading.gif" lazyload alt="image-20230209222447953"></p>
+<h2 id="策略模式的定义"><a href="#策略模式的定义" class="headerlink" title="策略模式的定义"></a>策略模式的定义</h2><p>策略模式定义了算法族，分别封装起来，让他们之间可以互相替换，此模式让算法的变化独立于使用算法的客户</p>
+<p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209222914351.png" srcset="/img/loading.gif" lazyload alt="image-20230209222914351"></p>
+<p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209223010577.png" srcset="/img/loading.gif" lazyload alt="image-20230209223010577"></p>
+<p>使得算法的变化和客户的选择之间没有耦合</p>
+<h1 id="工厂模式"><a href="#工厂模式" class="headerlink" title="工厂模式"></a>工厂模式</h1><h2 id="简单工厂模式"><a href="#简单工厂模式" class="headerlink" title="简单工厂模式"></a>简单工厂模式</h2><h3 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h3><p>设计原则：Don’t program to an implementation,program to an interface(abstraction)</p>
+<p>然而，当我们需要处理一个具体类的时候，例如需要new一个新的对象的时候，我们面向的就不是abstraction了</p>
+<p>那么，我们能不能先定义一个不变的框架，当需要new一个新的对象的时候，新的类定义好之后，不修改这个框架就能直接用</p>
+<p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209153017972.png" srcset="/img/loading.gif" lazyload alt="image-20230209153017972"></p>
+<p>上述一段代码违反了OCP原则。</p>
+<h3 id="工厂模式准备"><a href="#工厂模式准备" class="headerlink" title="工厂模式准备"></a>工厂模式准备</h3><ul>
+<li><p>principle：标识程序中那些多变的部分，并且把它们和稳定的部分隔离开来（GRASP：protected variation隔离变化）</p>
+</li>
+<li><p>那么，如何把软件系统中实例化具体类的所有场合与系统的其余部分隔离或封装起来呢？</p>
+</li>
+<li><p>一些矛盾：</p>
+</li>
+</ul>
+<p>  <img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209153545341.png" srcset="/img/loading.gif" lazyload alt="image-20230209153545341"></p>
+<ul>
+<li><p>那么如何解决这种矛盾呢？首先是可以采用面向对象的继承机制：</p>
+<img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209153758889.png" srcset="/img/loading.gif" lazyload alt="image-20230209153758889" style="zoom:67%;" />
+</li>
+<li><p>那么哪些是可能的变化点呢？</p>
+<p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209154137818.png" srcset="/img/loading.gif" lazyload alt="image-20230209154137818"></p>
+<p>那么我们可以将变化的这部分拎出来放到一个新的类中，当我们发现有一部分功能放在原来的位置不合适的时候，我们可以虚构一个类</p>
+<p>同时考虑，当我们需要增加或减少新的披萨种类时，我们可能会这么做：</p>
+<p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209154413935.png" srcset="/img/loading.gif" lazyload alt="image-20230209154413935"></p>
+<p>但这违反了OCP原则</p>
+</li>
+<li><p>那么我们可以隔离出哪一部分呢？</p>
+<p>我们定义一个新的类SimplPizzaFactory，专门负责创建Pizza对象</p>
+<p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209154619313.png" srcset="/img/loading.gif" lazyload alt="image-20230209154619313"></p>
+<p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209154813383.png" srcset="/img/loading.gif" lazyload alt="image-20230209154813383"></p>
+<p>那么工厂做的事情就是根据类型去创建和删除Pizza，这是从OrderPizza方法中抽取出来的功能</p>
+<p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209155019660.png" srcset="/img/loading.gif" lazyload alt="image-20230209155019660"></p>
+</li>
+<li><p>这种改进的设计方案有以下的优点：</p>
+<ol>
+<li>新方案，orderPizza（）变成了对象SimplePizzaFactory的客户端，当orderPizza()需要一份披萨时，它就要求SimplePizzaFactory生产一个披萨对象，这个对象已经实现了Pizza接口，因此它可以调用prepare(),bake()等方法。</li>
+<li>SimplePizzaFactory可以服务多个客户，灵活性增加了</li>
+<li>客户的代码再也不用关注具体的Pizza类型和制作细节</li>
+<li><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209155609497.png" srcset="/img/loading.gif" lazyload alt="image-20230209155609497"></li>
+<li>简单工厂模式模式不是真正意义上的工厂模式，但是工厂模式建立在它基础之上</li>
+</ol>
+<h2 id="工厂模式-1"><a href="#工厂模式-1" class="headerlink" title="工厂模式"></a>工厂模式</h2><p>如何设计一个方法，去实例化不同的对象，也可以实例化今后新开发的类，这样做不需要修改该方法的代码</p>
+<h4 id="案例背景"><a href="#案例背景" class="headerlink" title="案例背景"></a>案例背景</h4><p>需求新变化：</p>
+<p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209160351168.png" srcset="/img/loading.gif" lazyload alt="image-20230209160351168"></p>
+<p>我们需要的是一套机制、框架 a framework，把PizzaStore和Pizza的制作联系在一起，又允许一定的灵活性</p>
+<h4 id="框架设计-a-framework"><a href="#框架设计-a-framework" class="headerlink" title="框架设计 a framework"></a>框架设计 a framework</h4><ul>
+<li><p>我们需要一种机制，为PizzaStore本地化制作披萨的所有活动，同时又使分店自由加入本地风味</p>
+</li>
+<li><p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209161236604.png" srcset="/img/loading.gif" lazyload alt="image-20230209161236604"></p>
+</li>
+<li><p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209161525710.png" srcset="/img/loading.gif" lazyload alt="image-20230209161525710"></p>
+</li>
+<li><p>不同地方的客户有一个不同的concreteStore，然后用它去createPizza</p>
+<p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209161828981.png" srcset="/img/loading.gif" lazyload alt="image-20230209161828981"></p>
+</li>
+<li><p>把总店的createPizza下放到分店</p>
+</li>
+</ul>
+<h4 id="工厂方法"><a href="#工厂方法" class="headerlink" title="工厂方法"></a>工厂方法</h4><p>A factory method handles object creation and encapsulates it in a subclass.This decouples the client code in  the superclass from the object creation code in the subclass</p>
+<p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209163449262.png" srcset="/img/loading.gif" lazyload alt="image-20230209163449262"></p>
+<p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209163936694.png" srcset="/img/loading.gif" lazyload alt="image-20230209163936694"></p>
+<h4 id="工厂模式的定义"><a href="#工厂模式的定义" class="headerlink" title="工厂模式的定义"></a>工厂模式的定义</h4><p>工厂模式定义了一个创建产品对象的工厂接口，将实际创建工作推迟到子类中</p>
+<p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209165107154.png" srcset="/img/loading.gif" lazyload alt="image-20230209165107154"></p>
+<h4 id="工厂模式的要点"><a href="#工厂模式的要点" class="headerlink" title="工厂模式的要点"></a>工厂模式的要点</h4><p><img src="/images/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230209165400344.png" srcset="/img/loading.gif" lazyload alt="image-20230209165400344"></p>
+</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/OOAD/" class="category-chain-item">OOAD</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/OOAD/">#OOAD</a>
+      
+        <a href="/tags/%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/">#期末复习</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>OOAD期末复习——Gof设计模式</div>
+      <div>http://example.com/2023/02/09/ooad期末复习/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>ECNU_zhy</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>February 9, 2023</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>Licensed under</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/02/12/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0-grasp/" title="OOAD期末复习——GRASP">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">OOAD期末复习——GRASP</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/01/31/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA26-%E6%9C%80%E5%A4%A7%E6%B5%81/" title="算法导论26-最大流">
+                        <span class="hidden-mobile">算法导论26-最大流</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.1/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

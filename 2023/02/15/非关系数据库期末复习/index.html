@@ -1,0 +1,1467 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/xiaoxin.png">
+  <link rel="icon" href="/img/xiaoxin.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="ECNU_zhy">
+  <meta name="keywords" content="非关系数据库">
+  
+    <meta name="description" content="I&#x2F;O OptimizationHbase读取性能优化读请求延迟较大通常存在三种场景，分别为：  仅有某业务延迟较大，集群其他业务都正常 整个集群所有业务都反映延迟较大 某个业务起来之后集群其他部分业务延迟较大  这三种场景是表象，通常某业务反应延迟异常，首先需要明确具体是哪种场景，然后针对性解决问题。 主要分为四个方面: 客户端优化、服务器端优化、列族设计优化以及 HDFS 相关优化">
+<meta property="og:type" content="article">
+<meta property="og:title" content="非关系数据库期末复习">
+<meta property="og:url" content="http://example.com/2023/02/15/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/index.html">
+<meta property="og:site_name" content="zhy-blog">
+<meta property="og:description" content="I&#x2F;O OptimizationHbase读取性能优化读请求延迟较大通常存在三种场景，分别为：  仅有某业务延迟较大，集群其他业务都正常 整个集群所有业务都反映延迟较大 某个业务起来之后集群其他部分业务延迟较大  这三种场景是表象，通常某业务反应延迟异常，首先需要明确具体是哪种场景，然后针对性解决问题。 主要分为四个方面: 客户端优化、服务器端优化、列族设计优化以及 HDFS 相关优化">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/2020-03-05-3.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/2020-03-11-1.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230216000156616.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230216000356549.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230216000600765.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230216000618106.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230216000724570.png">
+<meta property="og:image" content="https://gukaifeng.cn/posts/gfs-lun-wen-yue-du-bi-ji/GFS_Figure_1.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/GFS_Table_1.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/GFS_Figure_2.png">
+<meta property="og:image" content="https://gukaifeng.cn/posts/gfs-lun-wen-yue-du-bi-ji/GFS_Figure_3.png">
+<meta property="og:image" content="https://gukaifeng.cn/posts/gfs-lun-wen-yue-du-bi-ji/GFS_Table_2.png">
+<meta property="og:image" content="https://gukaifeng.cn/posts/gfs-lun-wen-yue-du-bi-ji/GFS_Table_3.png">
+<meta property="og:image" content="https://gukaifeng.cn/posts/gfs-lun-wen-yue-du-bi-ji/GFS_Table_4.png">
+<meta property="og:image" content="https://gukaifeng.cn/posts/gfs-lun-wen-yue-du-bi-ji/GFS_Table_5.png">
+<meta property="og:image" content="https://gukaifeng.cn/posts/gfs-lun-wen-yue-du-bi-ji/GFS_Table_6.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215145627420.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215150028313.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215150301066.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215150347585.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215150417801.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215150915139.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215151356977.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215151501283.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215151829664.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215151900976.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215151949321.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215152938014.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215163139828.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215163736046.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215163936056.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215164911431.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215211723041.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215213143276.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215214159334.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215214609630.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215215114906.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215215155301.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215215459602.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215215945866.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215220058395.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215220542890.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215220727253.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215221035207.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215221123828.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/bgp.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/3_loyal.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/1_traitors.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/loyal_commander.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/traitor_commander.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/signed_1.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/signed_2.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/overview-167647877108237.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/BlockChain.png">
+<meta property="og:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/CA.png">
+<meta property="article:published_time" content="2023-02-15T06:22:53.377Z">
+<meta property="article:modified_time" content="2023-02-15T16:38:25.927Z">
+<meta property="article:author" content="ECNU_zhy">
+<meta property="article:tag" content="非关系数据库">
+<meta property="article:tag" content="期末复习">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/2020-03-05-3.png">
+  
+  
+  
+  <title>非关系数据库期末复习 - zhy-blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ECNU-zhy</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                Links
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="非关系数据库期末复习"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-02-15 14:22" pubdate>
+          February 15, 2023 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          56k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          467 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">非关系数据库期末复习</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="I-x2F-O-Optimization"><a href="#I-x2F-O-Optimization" class="headerlink" title="I&#x2F;O Optimization"></a>I&#x2F;O Optimization</h1><h2 id="Hbase读取性能优化"><a href="#Hbase读取性能优化" class="headerlink" title="Hbase读取性能优化"></a>Hbase读取性能优化</h2><p>读请求延迟较大通常存在三种场景，分别为：</p>
+<ul>
+<li>仅有某业务延迟较大，集群其他业务都正常</li>
+<li>整个集群所有业务都反映延迟较大</li>
+<li>某个业务起来之后集群其他部分业务延迟较大</li>
+</ul>
+<p>这三种场景是表象，通常某业务反应延迟异常，首先需要明确具体是哪种场景，然后针对性解决问题。</p>
+<p>主要分为四个方面: 客户端优化、服务器端优化、列族设计优化以及 HDFS 相关优化</p>
+<h3 id="客户端优化"><a href="#客户端优化" class="headerlink" title="客户端优化"></a>客户端优化</h3><p>客户端作为业务读写的入口，姿势使用不正确通常会导致本业务读延迟较高实际上存在一些使用姿势的推荐用法</p>
+<h5 id="scan-缓存是否设置合理？"><a href="#scan-缓存是否设置合理？" class="headerlink" title="scan 缓存是否设置合理？"></a>scan 缓存是否设置合理？</h5><p><strong>优化原理:</strong> HBase业务通常一次 scan 就会返回大量数据，因此客户端发起一次 scan 请求，实际并不会一次就将所有数据加载到本地，而是分成多次 RPC 请求进行加载，这样设计一方面因为大量数据请求可能会导致网络带宽严重消耗进而影响其他业务，另一方面因为数据量太大可能导致本地客户端发生OOM。在这样的设计体系下，用户会首先加载一部分数据到本地，然后遍历处理，再加载下一部分数据到本地处理，如此往复，直至所有数据都加载完成。数据加载到本地就存放在scan缓存中，默认为100条数据。</p>
+<p>通常情况下，默认的scan缓存设置是可以正常工作的。但是对于一些大scan（一次scan可能需要查询几万甚至几十万行数据），每次请求100条数据意味着一次scan需要几百甚至几千次RPC请求，这种交互的代价无疑是很大的。因此可以考虑将scan缓存设置增大，比如设为500或者1000条可能更加合适。《HBase原理与实践》作者之前做过一次试验，在一次scan 10w+条数据量的条件下，将scan缓存从100增加到1000条，可以有效降低scan请求的总体延迟，延迟降低了25%左右。</p>
+<p><strong>优化建议:</strong> 大scan场景下将scan缓存从100增大到500或者1000，用以减少RPC次数。</p>
+<h5 id="get-是否使用批量请求？"><a href="#get-是否使用批量请求？" class="headerlink" title="get 是否使用批量请求？"></a>get 是否使用批量请求？</h5><p><strong>优化原理:</strong> HBase分别提供了单条get以及批量get的API接口，使用批量get接口可以减少客户端到RegionServer之间的RPC连接数，提高读取吞吐量。另外需要注意的是，批量get请求要么成功返回所有请求数据，要么抛出异常。</p>
+<p><strong>优化建议:</strong> 使用批量get进行读取请求。需要注意的是，对读取延迟非常敏感的业务，批量请求时每次批量数不能太大，最好进行测试。</p>
+<h5 id="请求是否可以显式指定列簇或者列？"><a href="#请求是否可以显式指定列簇或者列？" class="headerlink" title="请求是否可以显式指定列簇或者列？"></a>请求是否可以显式指定列簇或者列？</h5><p><strong>优化原理:</strong> HBase是典型的列簇数据库，意味着同一列簇的数据存储在一起，不同列簇的数据分开存储在不同的目录下。一个表有多个列簇，如果只是根据rowkey而不指定列簇进行检索，不同列簇的数据需要独立进行检索，性能必然会比指定列簇的查询差很多，很多情况下甚至会有2～3倍的性能损失。</p>
+<p><strong>优化建议：</strong>尽量指定列簇或者列进行精确查找。</p>
+<h5 id="离线批量读取请求是否设置禁止缓存？"><a href="#离线批量读取请求是否设置禁止缓存？" class="headerlink" title="离线批量读取请求是否设置禁止缓存？"></a>离线批量读取请求是否设置禁止缓存？</h5><p><strong>优化原理:</strong> 通常在离线批量读取数据时会进行一次性全表扫描，一方面数据量很大，另一方面请求只会执行一次。这种场景下如果使用scan默认设置，就会将数据从HDFS加载出来放到缓存。可想而知，大量数据进入缓存必将其他实时业务热点数据挤出，其他业务不得不从HDFS加载，进而造成明显的读延迟毛刺。</p>
+<p><strong>优化建议:</strong> 离线批量读取请求设置禁用缓存，scan.setCacheBlocks (false)。</p>
+<h3 id="服务器端优化"><a href="#服务器端优化" class="headerlink" title="服务器端优化"></a>服务器端优化</h3><p>一般服务端端问题一旦导致业务读请求延迟较大的话，通常是集群级别的，即整个集群的业务都会反映读延迟较大。</p>
+<h5 id="读请求是否均衡？"><a href="#读请求是否均衡？" class="headerlink" title="读请求是否均衡？"></a>读请求是否均衡？</h5><p><strong>优化原理:</strong> 假如业务所有读请求都落在集群某一台RegionServer上的某几个Region上，很显然，这一方面不能发挥整个集群的并发处理能力，另一方面势必造成此台 RegionServer 资源严重消耗（比如IO耗尽、handler耗尽等），导致落在该台 RegionServer 上的其他业务受到波及。也就是说读请求不均衡不仅会造成本身业务性能很差，还会严重影响其他业务。</p>
+<p><strong>观察确认:</strong> 观察所有RegionServer的读请求QPS曲线，确认是否存在读请求不均衡现象。</p>
+<p><strong>优化建议:</strong> Rowkey必须进行散列化处理（比如MD5散列），同时建表必须进行预分区处理。</p>
+<h5 id="BlockCache设置是否合理？"><a href="#BlockCache设置是否合理？" class="headerlink" title="BlockCache设置是否合理？"></a>BlockCache设置是否合理？</h5><p><strong>优化原理:</strong> BlockCache作为读缓存，对于读性能至关重要。默认情况下BlockCache和MemStore的配置相对比较均衡（各占40%），可以根据集群业务进行修正，比如读多写少业务可以将BlockCache占比调大。另一方面，BlockCache的策略选择也很重要，不同策略对读性能来说影响并不是很大，但是对GC的影响却相当显著，尤其在BucketCache的offheap模式下GC表现非常优秀。</p>
+<p><strong>观察确认:</strong> 观察所有 RegionServer 的缓存未命中率、配置文件相关配置项以及GC日志，确认 BlockCache 是否可以优化。</p>
+<p><strong>优化建议:</strong> 如果JVM内存配置量小于20G，BlockCache策略选择LRUBlockCache；否则选择BucketCache策略的 offheap 模式。</p>
+<h5 id="HFile文件是否太多？"><a href="#HFile文件是否太多？" class="headerlink" title="HFile文件是否太多？"></a>HFile文件是否太多？</h5><p><strong>优化原理:</strong> HBase在读取数据时通常先到MemStore和BlockCache中检索（读取最近写入数据和热点数据），如果查找不到则到文件中检索。HBase的类LSM树结构导致每个store包含多个HFile文件，文件越多，检索所需的IO次数越多，读取延迟也就越高。文件数量通常取决于Compaction的执行策略，一般和两个配置参数有关：hbase.hstore. compactionThreshold和hbase.hstore.compaction.max.size，前者表示一个store中的文件数超过阈值就应该进行合并，后者表示参与合并的文件大小最大是多少，超过此大小的文件不能参与合并。这两个参数需要谨慎设置，如果前者设置太大，后者设置太小，就会导致Compaction合并文件的实际效果不明显，很多文件得不到合并，进而导致HFile文件数变多。</p>
+<p><strong>观察确认:</strong> 观察RegionServer级别以及Region级别的HFile数，确认HFile文件是否过多。</p>
+<p><strong>优化建议:</strong> hbase.hstore.compactionThreshold设置不能太大，默认为3个。</p>
+<h5 id="Compaction是否消耗系统资源过多？"><a href="#Compaction是否消耗系统资源过多？" class="headerlink" title="Compaction是否消耗系统资源过多？"></a>Compaction是否消耗系统资源过多？</h5><p><strong>优化原理:</strong> Compaction是将小文件合并为大文件，提高后续业务随机读性能，但是也会带来IO放大以及带宽消耗问题（数据远程读取以及三副本写入都会消耗系统带宽）。正常配置情况下，Minor Compaction并不会带来很大的系统资源消耗，除非因为配置不合理导致MinorCompaction太过频繁，或者Region设置太大发生Major Compaction。</p>
+<p><strong>观察确认:</strong> 观察系统IO资源以及带宽资源使用情况，再观察Compaction队列长度，确认是否由于Compaction导致系统资源消耗过多。</p>
+<p><strong>优化建议:</strong> 对于大Region读延迟敏感的业务（100G以上）通常不建议开启自动MajorCompaction，手动低峰期触发。小Region或者延迟不敏感的业务可以开启MajorCompaction，但建议限制流量。</p>
+<h3 id="列族设计优化"><a href="#列族设计优化" class="headerlink" title="列族设计优化"></a>列族设计优化</h3><h5 id="布隆过滤器是否设置？"><a href="#布隆过滤器是否设置？" class="headerlink" title="布隆过滤器是否设置？"></a>布隆过滤器是否设置？</h5><p><strong>优化原理:</strong> 布隆过滤器主要用来过滤不存在待检索rowkey的HFile文件，避免无用的IO操作。</p>
+<p>布隆过滤器取值有两个——row以及rowcol，需要根据业务来确定具体使用哪种。如果业务中大多数随机查询仅仅使用row作为查询条件，布隆过滤器一定要设置为row；如果大多数随机查询使用row+column作为查询条件，布隆过滤器需要设置为rowcol。如果不确定业务查询类型，则设置为row。</p>
+<p><strong>优化建议:</strong> 任何业务都应该设置布隆过滤器，通常设置为row，除非确认业务随机查询类型为row+column，则设置为rowcol。<strong>默认为 row</strong></p>
+<h5 id="TTL-是否设置合理？"><a href="#TTL-是否设置合理？" class="headerlink" title="TTL 是否设置合理？"></a>TTL 是否设置合理？</h5><p><strong>优化原理:</strong> TTL(Time to Live) 用于限定数据的超时时间，HBase cell 超过时间后会被自动删除，对某些数据不是永久保存，并大量写入的场景下非常适用，减少数据规模</p>
+<p><strong>优化建议:</strong> CF 默认的 TTL 值是 FOREVER，也就是永不过期，可以根据具体的业务场景设置超时时间</p>
+<h3 id="HDFS相关优化"><a href="#HDFS相关优化" class="headerlink" title="HDFS相关优化"></a>HDFS相关优化</h3><h5 id="数据本地率是不是很低？"><a href="#数据本地率是不是很低？" class="headerlink" title="数据本地率是不是很低？"></a>数据本地率是不是很低？</h5><p><strong>优化原理:</strong> 如果数据本地率很低，数据读取时会产生大量网络IO请求，导致读延迟较高。</p>
+<p><strong>观察确认:</strong> 观察所有RegionServer的数据本地率（见jmx中指标PercentFileLocal，在TableWeb UI可以看到各个Region的Locality）。</p>
+<p><strong>优化建议:</strong> 尽量避免Region无故迁移。对于本地率较低的节点，可以在业务低峰期执行major_compact。</p>
+<blockquote>
+<p>执行major_compact提升数据本地率的理论依据是，major_compact本质上是将Region中的所有文件读取出来然后写到一个大文件，写大文件必然会在本地DataNode生成一个副本，这样Region的数据本地率就会提升到100%。</p>
+</blockquote>
+<h5 id="Short-Circuit-Local-Read功能是否开启？"><a href="#Short-Circuit-Local-Read功能是否开启？" class="headerlink" title="Short-Circuit Local Read功能是否开启？"></a>Short-Circuit Local Read功能是否开启？</h5><p><strong>优化原理:</strong> 当前HDFS读取数据都需要经过 DataNode，客户端会向DataNode发送读取数据的请求，DataNode接受到请求之后从硬盘中将文件读出来，再通过TCP发送给客户端。Short Circuit策略允许客户端绕过DataNode直接读取本地数据。</p>
+<p><strong>优化建议:</strong> 开启Short Circuit Local Read 功能，需要在<code>hbase-site.xml</code>或者<code>hdfs-site.xml</code>配置文件中增加如下配置项</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">configuration</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">property</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">name</span>&gt;</span>dfs.client.read.shortcircuit<span class="hljs-tag">&lt;/<span class="hljs-name">name</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">value</span>&gt;</span>true<span class="hljs-tag">&lt;/<span class="hljs-name">value</span>&gt;</span><br>  <span class="hljs-tag">&lt;/<span class="hljs-name">property</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">property</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">name</span>&gt;</span>dfs.domain.socket.path<span class="hljs-tag">&lt;/<span class="hljs-name">name</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">value</span>&gt;</span>/var/lib/hadoop-hdfs/dn_socket<span class="hljs-tag">&lt;/<span class="hljs-name">value</span>&gt;</span><br>  <span class="hljs-tag">&lt;/<span class="hljs-name">property</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">property</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">name</span>&gt;</span>dfs.client.read.shortcircuit.buffer.size<span class="hljs-tag">&lt;/<span class="hljs-name">name</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">value</span>&gt;</span>131072<span class="hljs-tag">&lt;/<span class="hljs-name">value</span>&gt;</span><br>  <span class="hljs-tag">&lt;/<span class="hljs-name">property</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">configuration</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>需要注意的是，dfs.client.read.shortcircuit.buffer.size参数默认是1M，对于HBase系统来说有可能会造成OOM，详见HBASE-8143 HBase on Hadoop 2 with local short circuit reads(ssr) causes OOM</p>
+</blockquote>
+<h5 id="Hedged-Read功能是否开启？"><a href="#Hedged-Read功能是否开启？" class="headerlink" title="Hedged Read功能是否开启？"></a>Hedged Read功能是否开启？</h5><p><strong>优化原理:</strong> HBase数据在HDFS中默认存储三个副本，通常情况下HBase会根据一定算法优先选择一个DataNode进行数据读取。然而在某些情况下，有可能因为磁盘问题或者网络问题等引起读取超时，根据Hedged Read策略，如果在指定时间内读取请求没有返回，HDFS客户端将会向第二个副本发送第二次数据请求，并且谁先返回就使用谁，之后返回的将会被丢弃。</p>
+<p><strong>优化建议:</strong> 开启Hedged Read功能，需要在<code>hbase-site.xml</code>配置文件中增加如下配置项</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">configuration</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">property</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">name</span>&gt;</span>dfs.client.hedged.read.threadpool.size<span class="hljs-tag">&lt;/<span class="hljs-name">name</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">value</span>&gt;</span>20<span class="hljs-tag">&lt;/<span class="hljs-name">value</span>&gt;</span><span class="hljs-comment">&lt;!-- 20 threads --&gt;</span><br>  <span class="hljs-tag">&lt;/<span class="hljs-name">property</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">property</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">name</span>&gt;</span>dfs.client.hedged.read.threshold.millis<span class="hljs-tag">&lt;/<span class="hljs-name">name</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">value</span>&gt;</span>10<span class="hljs-tag">&lt;/<span class="hljs-name">value</span>&gt;</span><span class="hljs-comment">&lt;!-- 10 milliseconds --&gt;</span><br>  <span class="hljs-tag">&lt;/<span class="hljs-name">property</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">configuration</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>参数dfs.client.hedged.read.threadpool.size表示用于hedged read的线程池线程数量，默认为0，表示关闭hedged read功能；参数dfs.client.hedged.read.threshold.millis表示HDFS数据读取超时时间，超过这个阈值，HDFS客户端将会再发起一次读取请求。</p>
+</blockquote>
+<h3 id="读性能优化归纳"><a href="#读性能优化归纳" class="headerlink" title="读性能优化归纳"></a>读性能优化归纳</h3><p>提到读延迟较大无非三种常见的表象，<strong>单个业务慢、集群随机读慢以及某个业务随机读之后其他业务受到影响导致随机读延迟很大。</strong></p>
+<p>了解完常见的可能导致读延迟较大的一些问题之后，我们将这些问题进行如下归类，读者可以在看到现象之后在对应的问题列表中进行具体定位</p>
+<p><a target="_blank" rel="noopener" href="https://lihuimintu.github.io/images/blog/2020-03-05-3.png"><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/2020-03-05-3.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<h2 id="Hbase写入性能优化"><a href="#Hbase写入性能优化" class="headerlink" title="Hbase写入性能优化"></a>Hbase写入性能优化</h2><h3 id="客户端优化-1"><a href="#客户端优化-1" class="headerlink" title="客户端优化"></a>客户端优化</h3><h5 id="是否可以使用-Bulkload-方案写入？"><a href="#是否可以使用-Bulkload-方案写入？" class="headerlink" title="是否可以使用 Bulkload 方案写入？"></a>是否可以使用 Bulkload 方案写入？</h5><p>Bulkload 是一个 MapReduce 程序（当然，也可以自行改成 Spark 程序）运行在Hadoop集群。程序的输入是指定数据源，输出是 HFile 文件。HFile 文件生成之后再通过 LoadIncrementalHFiles 工具将 HFile 中相关元数据加载到 HBase 中。</p>
+<p>Bulkload 方案适合将已经存在于 HDFS 上的数据批量导入 HBase 集群。相比调用API的写入方案，Bulkload 方案可以更加高效、快速地导入数据，而且对 HBase 集群几乎不产生任何影响。</p>
+<p>关于 Bulkload 可以阅读《HBase原理与实践》6.2 章</p>
+<h5 id="是否需要写-WAL-WAL-是否需要同步写入？"><a href="#是否需要写-WAL-WAL-是否需要同步写入？" class="headerlink" title="是否需要写 WAL? WAL 是否需要同步写入？"></a>是否需要写 WAL? WAL 是否需要同步写入？</h5><p><strong>优化原理:</strong> 数据写入流程可以理解为一次顺序写WAL+一次写缓存，通常情况下写缓存延迟很低，因此提升写性能只能从WAL入手。HBase中可以通过设置WAL的持久化等级决定是否开启WAL机制以及HLog的落盘方式。WAL的持久化分为四个等级：SKIP_WAL，ASYNC_WAL，SYNC_WAL以及FSYNC_WAL。如果用户没有指定持久化等级，HBase默认使用SYNC_WAL等级持久化数据。</p>
+<p>在实际生产线环境中，部分业务可能并不特别关心异常情况下少量数据的丢失，而更关心数据写入吞吐量。比如某些推荐业务，这类业务即使丢失一部分用户行为数据可能对推荐结果也不会构成很大影响，但是对于写入吞吐量要求很高，不能造成队列阻塞。这种场景下可以考虑关闭WAL写入。退而求其次，有些业务必须写WAL，但可以接受WAL异步写入，这是可以考虑优化的，通常也会带来一定的性能提升。</p>
+<p><strong>优化推荐:</strong> 根据业务关注点在WAL机制与写入吞吐量之间做出选择，用户可以通过客户端设置WAL持久化等级。</p>
+<h5 id="Put-是否可以同步批量提交？"><a href="#Put-是否可以同步批量提交？" class="headerlink" title="Put 是否可以同步批量提交？"></a>Put 是否可以同步批量提交？</h5><p><strong>优化原理:</strong> HBase分别提供了单条put以及批量put的API接口，使用批量put接口可以减少客户端到RegionServer之间的RPC连接数，提高写入吞吐量。另外需要注意的是，批量put请求要么全部成功返回，要么抛出异常。</p>
+<p><strong>优化建议:</strong> 使用批量put写入请求。</p>
+<h5 id="Put-是否可以异步批量提交？"><a href="#Put-是否可以异步批量提交？" class="headerlink" title="Put 是否可以异步批量提交？"></a>Put 是否可以异步批量提交？</h5><p><strong>优化原理:</strong> 如果业务可以接受异常情况下少量数据丢失，可以使用异步批量提交的方式提交请求。提交分两阶段执行：用户提交写请求，数据写入客户端缓存，并返回用户写入成功；当客户端缓存达到阈值（默认2M）后批量提交给RegionServer。需要注意的是，在某些客户端异常的情况下，缓存数据有可能丢失。</p>
+<p><strong>优化建议:</strong> 在业务可以接受的情况下开启异步批量提交，用户可以设置setAutoFlush (false)</p>
+<h6 id="写入-KeyValue-数据是否太大？"><a href="#写入-KeyValue-数据是否太大？" class="headerlink" title="写入 KeyValue 数据是否太大？"></a>写入 KeyValue 数据是否太大？</h6><p>KeyValue大小对写入性能的影响巨大。一旦遇到写入性能比较差的情况，需要分析写入性能下降是否因为写入KeyValue的数据太大。</p>
+<p>KeyValue大小对写入性能影响曲线如下</p>
+<p><a target="_blank" rel="noopener" href="https://lihuimintu.github.io/images/blog/2020-03-11-1.png"><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/2020-03-11-1.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<p>横坐标是写入的一行数据（每行数据10列）大小，左纵坐标是写入吞吐量，右纵坐标是写入平均延迟（ms）。可以看出，随着单行数据不断变大，写入吞吐量急剧下降，写入延迟在100K之后急剧增大。</p>
+<h3 id="服务端优化"><a href="#服务端优化" class="headerlink" title="服务端优化"></a>服务端优化</h3><h5 id="Region-是否太少？"><a href="#Region-是否太少？" class="headerlink" title="Region 是否太少？"></a>Region 是否太少？</h5><p><strong>优化原理:</strong> 当前集群中表的Region个数如果小于RegionServer个数，即Num (Region of Table)&lt; Num (RegionServer)，可以考虑切分Region并尽可能分布到不同的RegionServer上以提高系统请求并发度。</p>
+<h5 id="写入请求是否均衡？"><a href="#写入请求是否均衡？" class="headerlink" title="写入请求是否均衡？"></a>写入请求是否均衡？</h5><p><strong>优化原理:</strong> 写入请求如果不均衡，会导致系统并发度较低，还有可能造成部分节点负载很高，进而影响其他业务。分布式系统中特别需要注意单个节点负载很高的情况，单个节点负载很高可能会拖慢整个集群，这是因为很多业务会使用Mutli批量提交读写请求，一旦其中一部分请求落到慢节点无法得到及时响应，会导致整个批量请求超时。</p>
+<p><strong>优化建议:</strong> 检查Rowkey设计以及预分区策略，保证写入请求均衡。</p>
+<h5 id="Utilize-Flash-storage-for-WAL"><a href="#Utilize-Flash-storage-for-WAL" class="headerlink" title="Utilize Flash storage for WAL"></a>Utilize Flash storage for WAL</h5><p>该特性会将WAL文件写到SSD上，对于写性能会有非常大的提升。需要注意的是，该特性建立在HDFS 2.6.0+以及HBase 1.1.0+版本基础上，以前的版本并不支持该特性。</p>
+<p>使用该特性需要两个配置步骤:</p>
+<ol>
+<li>使用HDFS Archival Storage机制，在确保物理机有SSD硬盘的前提下配置HDFS的部分文件目录为SSD介质</li>
+<li>在hbase-site.xml中添加如下配置</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">configuration</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">property</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">name</span>&gt;</span>hbase.wal.storage.policy<span class="hljs-tag">&lt;/<span class="hljs-name">name</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">value</span>&gt;</span>ONE_SSD<span class="hljs-tag">&lt;/<span class="hljs-name">value</span>&gt;</span><br>  <span class="hljs-tag">&lt;/<span class="hljs-name">property</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">configuration</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+
+<p>hbase.wal.storage.policy默认为none，用户可以指定ONE_SSD或者ALL_SSD</p>
+<ul>
+<li>ONE_SSD: WAL在HDFS上的一个副本文件写入SSD介质，另两个副本写入默认存储介质</li>
+<li>ALL_SSD: WAL的三个副本文件全部写入SSD介质</li>
+</ul>
+<h3 id="写入问题"><a href="#写入问题" class="headerlink" title="写入问题"></a>写入问题</h3><ul>
+<li>写阻塞<ul>
+<li>MemStore 占用内存超过 RegionServer 级别高水位阈值导致阻塞 (hbase.regionserver.global.memstore.size)</li>
+<li>RegionServer Active Handler 资源被耗尽 (可能跟KeyValue太大有关)</li>
+<li>Store 中 HFile 文件数量达到阈值就会阻塞写入 (hbase.hstore.blockingStoreFiles)</li>
+</ul>
+</li>
+<li>写延迟<ul>
+<li>WAL 写入延迟，IO 资源是否争抢 (Utilize Flash storage for WAL)</li>
+<li>JVM young gc (CCSMap)</li>
+</ul>
+</li>
+</ul>
+<h2 id="LSM树"><a href="#LSM树" class="headerlink" title="LSM树"></a>LSM树</h2><blockquote>
+<p>存储引擎和B树存储引擎一样，同样支持增、删、读、改、顺序扫描操作。而且通过批量存储技术规避磁盘随机写入问题</p>
+</blockquote>
+<h3 id="原理："><a href="#原理：" class="headerlink" title="原理："></a>原理：</h3><blockquote>
+<p>把一棵大树拆分成N棵小树，它首先写入内存中，随着小树越来越大，内存中的小树会flush到磁盘中，磁盘中的树定期可以做merge操作，合并成一棵大树，以优化读性能。</p>
+</blockquote>
+<h3 id="读写性能"><a href="#读写性能" class="headerlink" title="读写性能"></a>读写性能</h3><blockquote>
+<p>LSM树与B树相比，牺牲了部分的读性能，大幅提高写性能。<br> LSM Tree，对于最简单的二层LSM Tree而言，内存中的数据和磁盘你中的数据merge操作，如下图：</p>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230216000156616.png" srcset="/img/loading.gif" lazyload alt="image-20230216000156616" style="zoom:80%;" />
+</blockquote>
+<h2 id="hbase与LSM树"><a href="#hbase与LSM树" class="headerlink" title="hbase与LSM树"></a>hbase与LSM树</h2><p><strong>原理：</strong></p>
+<blockquote>
+<p>数据会先写到内存中，为了防止内存数据丢失，写内存的同时需要持久化到磁盘，对应了HBase的MemStore和HLog；</p>
+<p>MemStore中的数据达到一定的阈值之后，需要将数据刷写到磁盘，即生成HFile（也是一颗小的B+树）文件；</p>
+<p>hbase中的minor（少量HFile小文件合并）major（一个region的所有HFile文件合并）执行compact操作，同时删除无效数据（过期及删除的数据），多棵小树在这个时机合并成大树，来增强读性能。</p>
+</blockquote>
+<p><strong>针对LSM树读性能hbase的优化：</strong></p>
+<blockquote>
+<p>Bloom-filter:就是个带随机概率的bitmap,可以快速的告诉你，某一个小的有序结构里有没有指定数据的。于是就可以不用二分查找，而只需简单的计算几次就能知道数据是否在某个小集合里啦。效率得到了提升，但付出的是空间代价。</p>
+<p>compact:小树合并为大树:因为小树性能有问题，所以要有个进程不断地将小树合并到大树上，这样大部分的老数据查询也可以直接使用log2N的方式找到，不需要再进行(N&#x2F;m)*log2n的查询了。</p>
+</blockquote>
+<p><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230216000356549.png" srcset="/img/loading.gif" lazyload alt="image-20230216000356549"></p>
+<p><strong>LSM-Tree的初衷是想通过空间放大和读放大来换取写放大的降低，从而达到极致的写性能</strong>，但也需要做好三方面因素的权衡。EDBT 2016的一篇论文首先提出RUM猜想（R为read，U为update，M为memory usage，RUM为三者缩写）。该论文认为，三者之间存在权衡关系，无法使得三个方面的性能都达到最优，因此必须在三者之间进行有效权衡。</p>
+<p>以compaction操作为例，其目的是保证数据的局部有序和清理数据旧值，即一个sorted run内部的多个SST文件中的数据是有序的，从而降低读放大。对一个查询而言，在一个sorted run中至多只需要读取一个SST中的一个数据块。</p>
+<p><strong>如果完全不做compaction操作</strong>，即一直顺序写，LSM-Tree就会退化为log文件，这时<strong>写性能达到最佳</strong>。因为只需要顺序写log即可，不需要做任何操作。但读性能将会处于最差状态，因为在没有任何索引、无法保证有序性的情况下，每次想读到固定的数据项，就需要扫描所有的SST件。</p>
+<p><strong>如果compaction操作做到极致</strong>，实现所有数据全局有序，此时<strong>读性能最优</strong>。查询时只需要通过索引和二分法即可迅速找到要读的键值的位置，一次IO操作即可完成，但代价是需要频繁进行compaction操作来维持全局有序状态，从而造成严重的写放大，即写性能变差。</p>
+<p><strong>这就延伸出两种compaction策略：</strong></p>
+<ul>
+<li>Tiering compaction：较少做compaction操作，有序性较弱，每一层允许有多个sorted run。</li>
+<li>Leveling compaction：更频繁的compaction操作，尽可能增强有序性，限制每一层最多只有1个sorted run（L0层除外）。</li>
+</ul>
+<h3 id="优化策略与分析"><a href="#优化策略与分析" class="headerlink" title="优化策略与分析"></a><strong>优化策略与分析</strong></h3><p><strong>Leveling compaction策略</strong>中，每层只有一个sorted run，sorted run内部的数据保持物理有序。具体实现上我们以RocksDB为例。一个sorted run可以由多个key不重叠且有序的SSTable files组成。当第L层满时，L层会选取部分数据即部分SSTable，与L+1层有重叠的SSTable进行合并，该合并操作即compaction操作。</p>
+<p><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230216000600765.png" srcset="/img/loading.gif" lazyload alt="image-20230216000600765"></p>
+<p><strong>Tiering compaction策略</strong>中，每层可以有至多T个sorted run，sorted run内部有序但每层不完全有序。当第L层满时，L层的T个sorted run会合并为L+1层的1个sorted run。因为每层允许有多个sorted run，因此SST文件间可能会存在数据范围的重叠，compaction操作的频率会更低，<strong>写性能也会更强</strong>。</p>
+<p><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230216000618106.png" srcset="/img/loading.gif" lazyload alt="image-20230216000618106"></p>
+<p>两种compaction策略各有优劣。Tiering compaction因为compation操作频率低，过期版本的数据未能得到及时清除，因此空间利用率低，由此带来的查询操作的代价比较高。在极端情况log file即完全不做compaction操作时，<strong>写入性能</strong>最优。Leveling compaction则会更频繁地做compaction操作，因此数据趋向更有序。<strong>极端情况sorted array即数据达到全局有序时，此时查询性能和空间利用率最优。</strong></p>
+<p><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230216000724570.png" srcset="/img/loading.gif" lazyload alt="image-20230216000724570"></p>
+<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><ul>
+<li>Tiering compaction的写放大低，compaction频率低，其缺陷为空间放大高、查询效率低，更利于update频繁的workload；Leveling compaction的写放大高，compaction操作更频繁，但空间放大低，查询效率高。</li>
+<li>尽管Tiering  compaction和Leveling  compaction的空间放大不同，但导致空间放大的主要原因相同，即受最下层的过期版本数据影响。</li>
+<li>越往下的层，做一次compaction的I&#x2F;O代价越高，但发生的频率也更低，不同层之间做compaction的期望代价大致相同。</li>
+<li>点查、空间放大、长范围查询的性能瓶颈在LST-tree的最下层，而更新操作则更加均匀地分布在每一层。因此，减少非最后一层的compaction频率可以有效降低更新操作的代价，且对点查、空间放大、长范围查询的性能影响较小。</li>
+</ul>
+<h3 id="降低写放大"><a href="#降低写放大" class="headerlink" title="降低写放大"></a><strong>降低写放大</strong></h3><p><strong>基于上述理论分析，该论文提出混合compaction策略即Lazy Leveling。</strong>它将Leveling与Tiering进行结合，在最后一层使用Leveling策略，其他层使用Tiering策略，即最后一层只能存在唯一的sorted run，其他层允许存在多个sorted run，从而有效降低非最后一层做compaction的频率。</p>
+<p>下表是采取Lazy Leveling策略后的性能汇总表，其中，绿色部分表示效果较好，红色部分表示较差，黄色部分代表适中。从下表可以看出，Lazy Leveling的更新操作（update）性能优于Leveling，接近于Tiering。这是由于在前L-1层维持Tiering策略，做compaction的频率更低，写放大低。但Lazy Leveling的空间放大接近于Leveling，远好于Tiering。这相当于结合了两种策略的优势。</p>
+<p>对于点查（point lookup），论文中分别分析了查找不存在kv和kv在最后一层两种情况，并基于论文Monkey的思路对每层的bloom filter bit进行了优化，可以达到与Leveling+Monkey策略相匹配的点查性能。对于长范围查询，Lazy Leveling可以做到与Leveling一致的性能，而短范围查询则退化至接近Tiering的水平。</p>
+<p><strong>论文对此进行总结：</strong>使用一种单一compaction策略，不可能在上述所有操作中做到性能最优。<strong>Lazy Leveling本质上是Tiering与Leveling策略的折衷加调优，在侧重于更新操作、点查和长范围查询的workload上性能较好</strong>；Leveling适用于查询为主的workload；Tiering则适用于更新操作为主的workload</p>
+<h1 id="GFS"><a href="#GFS" class="headerlink" title="GFS"></a>GFS</h1><h2 id="1-什么是-GFS"><a href="#1-什么是-GFS" class="headerlink" title="1. 什么是 GFS"></a>1. 什么是 GFS</h2><p>GFS，全称 Google File System，谷歌文件系统。</p>
+<p>这篇论文是 2003 年发表的，在这之前，GFS 已经大规模应用在了 Google 内部。</p>
+<p>GFS 是 Google 提出的一个文件系统，其是分布式的，主要用于处理越来越庞大的数据。因为当数据量大到一定程度时，传统的数据存储与处理方式就显得很笨重了，不适用了（比如你很难很快地读取数百 TB 的数据）。</p>
+<h2 id="2-设计概述"><a href="#2-设计概述" class="headerlink" title="2. 设计概述"></a>2. 设计概述</h2><h3 id="2-1-假想（目标）"><a href="#2-1-假想（目标）" class="headerlink" title="2.1. 假想（目标）"></a>2.1. 假想（目标）</h3><p>GFS 在设计的时候有一些假想，即预期要实现的目标。</p>
+<ol>
+<li>这个系统由很多廉价的、经常会故障的商用组件构建，所以在日常使用中，这个系统必须持续地监控自身，以检测、容忍组件故障，并迅速从组件故障中恢复。</li>
+<li>这个系统存储数量适中的大文件。Google 期望是几百万个文件，每个一般是 100MB 或者更大。数 GB 大小的文件在这个系统中也是很常见的，需要高效管理。而小文件肯定也要支持，但是不需要为了这些小文件专门优化。</li>
+<li>工作负载主要包括两类读：大文件流的读（流只能顺序读）和小文件的随机读。<ul>
+<li>大文件流的读：单个读操作一般读几百 KB，更常见的是读 1MB 或者更多。来自同一个客户端连续的读操作经常是从一个文件连续的位置读。</li>
+<li>小文件的随机读：一般是在文件的任意位置读几 KB 大小。注重性能的应用程序通常对它们的小读取进行批处理和排序，以逐渐地浏览文件，而不是来回的读（文件指针来回移动）。</li>
+</ul>
+</li>
+<li>这个系统也会有很多大的、连续的写操作，将数据追加到文件末尾。一般这种操作的大小和读差不多。一旦写入操作完成，这个文件很少会再次修改。小的随机写也支持，但是不太高效。</li>
+<li>这个系统必须高效地实现定义明确的语义，以支持多客户端并发写入（追加写入）同一个文件。GFS 中的文件通常用作生产者消费者队列或多路合并。系统中有数百个生产者，每个机器上运行一个，这些生产者并发地追加修改一个文件，因此以最小的同步开销来实现原子性是必不可少的。这些文件可能随后被读取，也可能有一个消费者在写的同时读。</li>
+<li>高的持续的带宽比低的延迟更重要。GFS 的大多数目标应用程序都重视以高速率批量处理数据，而很少有应用程序对单个读或写有严格的响应时间要求。</li>
+</ol>
+<h3 id="2-2-接口"><a href="#2-2-接口" class="headerlink" title="2.2. 接口"></a>2.2. 接口</h3><p>GFS 提供了一个常见的文件系统接口，尽管 GFS 没有实现像 POSIX 这样的标准 API。</p>
+<p>GFS 中文件在目录中以层次结构组织，通过路径名区分。</p>
+<p>GFS 支持常用操作以创建(create)、删除(delete)、打开(open)、关闭(close)、读(read)和写(write)文件。</p>
+<p>此外，GFS 中还有 <em>snapshot</em> 和 <em>record append</em> 操作。Snapshot 以一个很低的开销创建一个文件的或者一个目录树的拷贝。Record append 允许多个客户端并发地追加写入同一个文件，且确保每个客户端的写入操作都是原子的。Record append 对实现多路合并结果、生产者消费者队列很有用，因为很多客户端可以同时追加写入，而不需要额外的锁。Google 发现在构建大型分布式应用时，这些类型的文件是非常有用的。</p>
+<p>Snapshot 和 record append 会在后面进一步讨论。</p>
+<h3 id="2-3-架构"><a href="#2-3-架构" class="headerlink" title="2.3. 架构"></a>2.3. 架构</h3><p>一个 GFS 集群包含单个 <em>master</em> 和多个 <em>chunkservers</em>，允许多个 <em>client</em> 访问。如图 1 所示。</p>
+<p><img src="https://gukaifeng.cn/posts/gfs-lun-wen-yue-du-bi-ji/GFS_Figure_1.png" srcset="/img/loading.gif" lazyload alt="图 1: GFS 架构"></p>
+<p>图 1: GFS 架构</p>
+<p>每个 master 或 chunkserver 一般都是一个商品 Linux 机器中运行着的一个用户级服务进程。在同一个机器上同时运行一个 chunkserver 和一个 client 是很容易，但前提是机器资源允许，并且你可以接受运行不稳定的应用程序代码导致的更低的可靠性。</p>
+<p>GFS 系统中的文件会被划分为固定大小的 chunks。每个 chunk 使用一个不可变的、全局唯一的 64 位 chunk 句柄来标识，这个 chunk 句柄是在 chunk 创建时由 master 指定的。Chunkservers 在本地磁盘中以 Linux 文件的形式存储 chunks，并读取或写入由 chunk 句柄和字节范围指定的块数据。为了可靠性，每个 chunk 都在多个 chunkservers 上有复制。默认是 3 个复制，但用户可以为文件命名空间的不同部分指定不同的复制级别。</p>
+<p>master 维护所有文件系统元数据，包括命名空间、访问控制信息、从文件到 chunk 的映射以及 chunks 当前的位置。master 也会控制系统范围内的活动，比如 chunk 租用管理，孤儿 chunks 的垃圾回收，以及在 chunkservers 之间迁移 chunks。master 会定期在 HeartBeat 消息中与每个 chunkservers 通信，以给 chunkservers 指令并收集其状态信息。</p>
+<p>链接到每个应用程序的 GFS 客户端代码中实现了文件系统 API，这个 GFS 客户端代表应用程序与 master 和 chunkservers 通信以读写数据。客户端与 master 交互以进行元数据操作，但所有数据承载通信直接进入 chunkservers。GFS 没有提供 POSIX API，因此不需要连接到 Linux 的 vnode 层。</p>
+<p>客户端和 chunkserver 都不缓存文件数据。客户端缓存文件数据几乎没什么好处，因为大多数应用程序通过巨大的文件进行流式传输，或者工作集太大而无法缓存。不缓存文件数据使得客户端代码和总体系统的代码得以简化，因为无需编写代码解决缓存一致性的问题（不过客户端是缓存元数据的）。Chunkservers 不需要缓存文件数据是因为 chunks 是作为本地文件存储的，所以 Linux buffer 缓存已经把频繁访问的数据放在内存中了。</p>
+<h3 id="2-4-单个-Master"><a href="#2-4-单个-Master" class="headerlink" title="2.4. 单个 Master"></a>2.4. 单个 Master</h3><p>GFS 中只有一个 master，这大大简化了其设计，并且使得 master 能够根据全局知识做出复杂的 chunk 放置和复制决策。不过必须最小化在读写中 master 的调用次数，防止 master 成为 GFS 系统的性能瓶颈。客户端永远都不会通过 master 读写文件数据，而是向 master 询问该联系哪些 chunkservers，当客户端会在有限的时间内缓存此信息，且直接和 chunkservers 互动，以进行一系列的操作。</p>
+<hr>
+<p>现在我们通过一个简单的读操作来解释 GFS 的工作流程（就如图 1 中的那样）。</p>
+<p>首先，要使用固定的 chunk 大小，客户端把应用程序指定的文件名和字节偏移翻译成这个文件中的一个 chunk 索引。然后客户端向 master 发送一个包含文件名和 chunk 索引的请求，master 给客户端回复相应的 chunk 句柄和 chunk 副本的位置。客户端以文件名和 chunk 索引作为 key 缓存这些信息。</p>
+<p>客户端随后给副本之一发送一个请求（大部分情况是最近的一个副本），这个请求中指定了 chunk 句柄和一个 chunk 中的字节范围。同一个 chunk 的读就不再需要 client-master 互动了，直到客户端缓存的信息到期（前文说过在有限的时间内缓存这些信息，也就是说这些信息是有时效性的）或这个文件被重新打开。事实上，客户端往往在一个请求中询问多个 chunks，master 也可以在回复的信息中心包含这些请求的 chunks 信息，这些额外的信息几乎不需要什么额外的开销，就可以避免未来几次的 client-master 交互。</p>
+<h3 id="2-5-Chunk-大小"><a href="#2-5-Chunk-大小" class="headerlink" title="2.5. Chunk 大小"></a>2.5. Chunk 大小</h3><p>Chunk 的大小是关键的设计参数之一。GFS 中将 chunk 的大小设定为 64MB，远远大于一般文件系统的块大小。每个 chunk 副本都以一个普通的 Linux 文件存储在一个 chunkserver 上，只要需要的时候才会扩展 chunk 的数量。延迟空间分配避免了由于内部碎片造成的空间浪费，这可能是对如此大 chunk 大小的最大反对。</p>
+<p>将 chunk 设置为 64MB 这么大，可以提供一个重要的优势。<strong>首先</strong>，减少了客户端与 master 的交互次数，因为在同一个 chunk 上的读和写只需要在最初的请求中向 master 询问一次 chunk 的位置信息。减少客户端与 master 交互次数对于我们的工作负载而言格外重要，因为应用程序往往是连续读写大文件的。即便是对于小的随机读，客户端也可以轻松缓存一个数 TB 工作集的所有 chunk 的位置信息。<strong>第二</strong>，由于一个 chunk 比较大，使得一个客户端更可能在一个给定的 chunk 上执行很多操作，这样就可以在很长的一段时间内，通过保持一个持续的客户端与 chunkserver 之间的 TCP 连接来减少网络开销。<strong>第三</strong>，减少了 master 上存储的元数据大小。这允许我们把元数据放在内存中，把元数据放在内存中又反过来带给我们一些其他的优势，这些优势我们在 2.6.1 中讨论。</p>
+<p>另一方面，一个很大的 chunk 大小，即便有延迟空间分配策略，也还是有缺点的。一个小文件可能包含很少数量的 chunks，甚至可能只有一个。这样如果有很多客户端都要访问这同一个文件，那么存储这些 chunks 的 chunkservers 就会成为热点。不过在实践中，热点问题不是主要问题，因为我们的应用程序大多是顺序读多 chunk 的大文件。</p>
+<p>然而，当 GFS 首次被批处理队列系统使用时，热点确实出现了：一个可执行文件作为单个 chunk 文件写入 GFS，然后同时在数百台机器上启动。存储此可执行文件的少数 chunkservers 被数百个同时请求过载。Google 通过以更高的复制因子存储此类可执行文件以及使批处理队列系统错开应用程序启动时间来解决此问题。一个潜在的长期解决方案是允许客户端在这种情况下从其他客户端读取数据。</p>
+<h3 id="2-6-元数据"><a href="#2-6-元数据" class="headerlink" title="2.6. 元数据"></a>2.6. 元数据</h3><p>master 中主要存储三种类型的元数据：</p>
+<ol>
+<li>文件和 chunk 的命名空间；</li>
+<li>从文件到 chunks 的映射；</li>
+<li>每个 chunk 的副本的位置。</li>
+</ol>
+<p>所有的元数据都存储在 master 的内存里。前两种类型也会通过在操作日志(operation log)上记录修改来持久化，操作日志存储在 master 的本地磁盘上，并且会在远程机器上复制。使用日志使得我们可以容易地、可靠地更新 master 状态信息，而不用承受 master 崩溃导致的不一致性的风险。master 不会持久的存储 chunk 位置信息，而是会在 master 启动时或一个 chunkserver 加入集群时向 chunkserver 询问其 chunks 信息。</p>
+<h4 id="2-6-1-内存中的数据结构"><a href="#2-6-1-内存中的数据结构" class="headerlink" title="2.6.1. 内存中的数据结构"></a>2.6.1. 内存中的数据结构</h4><p>因为元数据存储在内存中，所以 master 的操作是非常快速的。进一步地说，master 定期在后台扫描其整个状态信息是非常简单且高效的。定期扫描是用来实现 chunk 垃圾回收、chunkserver 故障时的重新复制，以及为了负载均衡和跨 chunkserver 使用磁盘空间进行的 chunk 迁移的。4.3 和 4.4 小节会进一步讨论这些内容。</p>
+<p>仅在内存访问这些，有一个潜在的问题是，chunks 的数量和整个 GFS 系统的容量受 master 拥有多少内存限制。在实践中这不是一个很严重的限制。对于每个 64MB 的 chunk，master 维护小于 64 字节的元数据。大部分 chunks 是满的，因为大部分文件包含很多个 chunks，只有最后一个可能是不满的。类似地，对于每个文件，master 存储的文件命名空间数据通常少于 64 个字节，因为它使用前缀压缩紧凑地存储文件名。</p>
+<p>如果确有必要支持更大的文件系统，只需要给 master 增加额外的内存，这个开销相对于我们在内存中存储元数据获得的简单性、可靠性、性能与灵活性而言，是很小的。</p>
+<h4 id="2-6-2-Chunk-的位置"><a href="#2-6-2-Chunk-的位置" class="headerlink" title="2.6.2. Chunk 的位置"></a>2.6.2. Chunk 的位置</h4><p>master 不会持有一个持久的关于哪些 chunkservers 有一个给定 chunk 的副本的记录，而是在 master 启动时简单地轮询 chunkservers 来获取这些信息。启动后 master 可以保持最新，因为 master 控制着所有 chunk 的放置，以及通过常规心跳(HearBeat)消息监控着 chunkserver 的状态。</p>
+<p>Google 起初尝试在 master 中持久存储 chunk 的位置信息，但是后来决定在 master 启动时（以及启动后定期）从 chunkmasters 请求数据，这简单的多。并且这样做也排除了在有 chunkservsers 加入或离开集群、修改名字，故障、重启时等等保持 master 和 chunkservers 同步的问题。在一个有着数百个服务器的集群上，这些情况常常发生。</p>
+<p>另一个理解这样设计决策的思路是这样想，一个 chunkserver 有决定存储哪些 chunks 在其本地磁盘上的最终话语权。在 master 上尝试维护一个这种信息的一致性视图是没有意义的，因为一个 chunkserver 上的错误可能导致 chunk 自发消失（比如磁盘损坏或不可用），或操作员可能修改 chunkserver 的名字。</p>
+<h4 id="2-6-3-操作日志-Operation-Log"><a href="#2-6-3-操作日志-Operation-Log" class="headerlink" title="2.6.3. 操作日志(Operation Log)"></a>2.6.3. 操作日志(Operation Log)</h4><p>操作日志包含至关重要的元数据修改历史记录。</p>
+<p>操作日志是 GFS 的核心。操作日志不仅仅是元数据唯一的持久化记录，也是一个逻辑时间线（充当定义并发操作的次序）。文件和 chunks 还有它们的版本(versions，详见 4.5. 小节)，全部由他们被创建时的逻辑时间唯一且永久标识。</p>
+<p>由于操作日志是非常重要的，我们必须将其可靠存储，并在在元数据修改持久化之前不让修改对客户端可见。否则，我们会在事实上丢失整个文件系统或最近的客户端操作（即便 chunks 本身还在）（这里原文翻译过来就是这样的。我的理解是客户端对 chunks 的操作依赖其缓存的元数据，如果元数据的改动在持久化前就对客户端可见的话，客户端就会依赖改动后的元数据对 chunks 操作，而此时这些元数据的改动还没有持久化，客户端的操作可能无法执行，导致操作丢失）。因此 GFS 将操作日志在多个远程机器上复制，并且仅在相应的日志记录已经被 flush 到本地和远程磁盘上后才会响应一个客户端的操作。Master 在 flush 前一起批处理几个 log 记录，从而减少 flush 和复制对整个系统吞吐量的影响。</p>
+<p>Master 通过重放操作日志来恢复其文件系统状态信息。为了使 master 启动时间最短，就要保持日志小。每当日志超过一个特定的大小时，master 就会生成一个包含其此时状态的检查点(check point)，这样 master 恢复的时候，只需要从本地磁盘加载最近的检查点，然后重放在这个检查点之后的有限数量的日志记录。检查点采用类似 B 树的紧凑形式，可以直接映射到内存中，用于命名空间查找，无需额外解析。 这进一步加快了恢复速度并提高了可用性</p>
+<p>因为构建一个检查点需要一些时间，所以 master 的内部状态通过这样的一种方式构造：创建一个新的检查点时不推迟即将到来的修改，master 会切换到一个新的日志文件，并且在一个单独的线程中创建新的检查点。换句话说，新的检查点中包含了切换前的所有修改，切换后的修改会被记录到 master 切换过去的新的日志文件中。对于一个有几百万文件的集群来说，可以在一分钟左右创建完一个新的检查点。当检查点创建完成时，检查点会被写入本地和远程的磁盘。</p>
+<p>恢复操作只需要最近的检查点和日志文件序列。更旧的检查点和日志文件就可以随便删了，尽管一般来说会保留一些以抵御灾难。在创建检查点时发生的故障不会影响正确性，因为恢复代码会检查并跳过不完整的检查点。</p>
+<h3 id="2-7-一致性模式"><a href="#2-7-一致性模式" class="headerlink" title="2.7. 一致性模式"></a>2.7. 一致性模式</h3><p>GFS 有一个宽松的一致性模型，很好地支持我们的高度分布式应用程序，但是实现起来依然简单且高效。</p>
+<p>我们现在讨论 GFS 如何保证一致性，以及这对应用程序来说有何意义。我们也会强调 GFS 如何维护这些保证，但是更详细的内容将在本文的其他部分来说。</p>
+<h4 id="2-7-1-GFS-如何保证一致性"><a href="#2-7-1-GFS-如何保证一致性" class="headerlink" title="2.7.1. GFS 如何保证一致性"></a>2.7.1. GFS 如何保证一致性</h4><p>文件命名空间的修改（例如，文件创建）是原子的，且只能由 master 来操作：命名空间锁确保原子性和正确性（详见 4.1）；master 的操作日志定义了一个这些操作的全局的总的次序（详见 2.6.3）。</p>
+<p>在数据修改后，文件区域的状态依赖于修改的类型，修改成功还是失败，以及这些是否是并发的修改。表 1 总结了在数据修改后的文件区域的状态。</p>
+<p><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/GFS_Table_1.png" srcset="/img/loading.gif" lazyload alt="表 1 : 发生修改后文件区域的状态"></p>
+<p>表 1 : 发生修改后文件区域的状态</p>
+<ul>
+<li>对于一个文件区域，如果所有的客户端总是看到相同的数据（不论看的是哪个副本），那这个文件区域是一致的 <em>consistent</em>。</li>
+<li>对于一个文件区域，在文件数据修改后，如果这个修改是一致的，并且客户端将看到这个修改写入的全部内容，那么这个文件区域就是 <em>defined</em>。</li>
+</ul>
+<p>（个人理解：对于一个文件区域，只要所有客户端看到的数据都是一样的，那这个区域就是 consistent 的。在 consistent 的前提下，如果所有修改都已经被写入，就是 defined 的。consistent 是 defined 的子集。即 defined 的一定是 consistent 的，但 consistent 的不一定是 defined 的（上表中的 Recored Append 在后面单独说）。）</p>
+<p>当一个修改成功，且没有受到并发写者的干预（即串行的修改），那么受影响的区域是 <em>defined</em> 的（且含义一致）：即所有的客户端将总是能看到这个修改写入了什么。</p>
+<p>并发的成功的修改使得受影响的区域是 <em>undefined</em> 但 <em>consistent</em>：即所有的客户端看到的数据是一样的，但这并不意味着每个修改都已经被写入。一般来说，写入的内容由多个修改的混合片段组成。</p>
+<p>一个失败的修改会使得文件区域 inconsistent（因此也是 undefined）：不同的客户端在不同的时间可能看到不同的数据。我们在下面描述我们的应用程序如何辨别 defined 的区域和 undefined 的区域。另外，应用程序不需要进一步区分不同种类的 undefined 的区域。</p>
+<p>数据修改可能是 <em>write</em> 或 <em>record appends</em>。</p>
+<ul>
+<li><em>write</em> 使数据被写入在一个由应用程序指定的文件偏移处。</li>
+<li><em>record append</em> 使数据（即 <em>record</em>）被<strong>原子地</strong>的追加至少一次（即便是并发修改），但数据写入的文件偏移由 GFS 选择（详见 3.3）。</li>
+</ul>
+<p>作为对比，一个普通的 append 仅仅是一个在客户端认为是当前文件末尾的偏移处的 write。</p>
+<p>标志着包含写入 record 的 <em>defined</em> 的区域的开始的偏移会被返回给客户端。此外，GFS 可能会在写入的内容之间插入填充或 record 的复制。我们认为 GFS 插入内容占据的区域是 <em>inconsistent</em> 的（即表 1 中的 <em>defined</em> interspersed with <em>inconsistent</em>，即 <em>defined</em> 区域中穿插了 <em>inconsistent</em> 区域，但这些区域不会影响读取数据的结果，因为读者会过滤掉这些），且占用的空间比起用户数据的总量而言微不足道。</p>
+<p>在连续的成功的修改后，GFS 会保证被修改的文件区域是 <em>defined</em> 的，并且包含最后一次修改写入的数据。GFS 实现这一点，通过 (a) 以相同的顺序应用修改到 chunk 以及其所有的拷贝上（详见 3.1），(b) 使用 chunk 版本号检测某个拷贝是否过期（即在其对应的 chunkserver 挂掉时，错过了修改。详见 4.5）。过期的 chunk 拷贝永远都不会被再应用修改，其位置也不会再由 master 提供给客户端，这些过期的 chunk 将尽快被垃圾回收。</p>
+<p>由于客户端缓存了 chunk 的位置信息，所以在其缓存的位置信息更新之前，客户端可能会从一个旧的副本中读取数据。只有当缓存条目超时，或文件被重新打开时，这个问题才能解决，因为条目超时或重新打开文件会清除客户端缓存中的所有跟这个文件有关的 chunk 信息。此外，由于我们的文件大多数都是仅 append 的，一个旧的副本通常返回一个最新的 chunk 结束位置之前的位置，而不是过期的数据（也就是说，数据还是有效的数据，只是返回的偏移位置不对）。当一个读者重试并联系 master 时，读者会立即获得现在的 chunk 的位置。</p>
+<p>即便在修改成功后的较长时间后，组件故障仍然可以导致数据被损坏、催毁。GFS 通过 master 与所有 chunkservers 定期握手的方式来找到故障的 chunkservers，通过校验和（详见 5.2）来检测数据是否损坏。一旦发现问题，GFS 会尽快通过相应数据的其他有效副本来恢复数据（详见 4.3）。仅当一个 chunk 的所有副本都丢失了，这个 chunk 的丢失才是不可逆地，即便在这种情况下，chunk 也是无法访问，而不是损坏：应用程序会收到一个明确的错误，而不是损坏的数据。</p>
+<h4 id="2-7-2-对应用程序的影响"><a href="#2-7-2-对应用程序的影响" class="headerlink" title="2.7.2. 对应用程序的影响"></a>2.7.2. 对应用程序的影响</h4><p>GFS 应用程序可以用一些其他目的已经需要的简单技术来适应宽松的一致性模型：依赖 append 而不是覆写、检查点，和写入自验证、自识别的记录。</p>
+<p>实际上，我们应用程序所有的文件修改，都是通过 append 而不是覆写。</p>
+<p>一个典型的用法是，一个写者从头到尾生产一个文件，在数据全部写入完成后，在原子地将文件重命名一个持久化的名字。或者是定期生成检查点，即每成功写入多少数据，就生成一个检查点。检查点也可能包含应用程序级检查和。读者只验证和处理直到最新的检查点的文件区域，即已知的 <em>defined</em> 状态的文件区域。无论一致性和并发问题怎样，这种方法都很好地为我们服务。append 比随机写要高效的多，而且在面对应用程序故障时更有弹性。检查点允许写者递增的重新开始（即可以从更新的检查点处接着写），阻止读者处理已经成功写入，但还未对应用程序可见（即在应用程序认为还不完整）的数据。</p>
+<p>另一个典型的用法，很多写者并发 append 一个文件，以获取合并结果或作为一个生产者-消费者队列。<em>Record append</em> 的 <strong>append 至少一次</strong>语义保留了每个写者的输出。</p>
+<p>读者通过下面的方法来处理偶然的填充或者 record 的复制。每个 record 由写者准备好，包含了诸如校验和这种额外信息，这样 record 的有效性就可以验证。读者使用校验和，可以区分填充和 recored 片段。如果应用程序不能容忍偶尔的重复（例如，如果重复的记录会触发非幂等操作），它可以使用记录中的唯一标识符将它们过滤掉，这通常是命名相应应用程序实体（例如 Web 文档）所必需的。这些 record I&#x2F;O 的功能（除了重复记录的移除）在我们应用程序共享的库代码中，并且也适用其他 Google 的文件接口实现。这样，相同的 record 序列加上极少的重复，总是会被传送给 record 读者。</p>
+<h2 id="3-系统交互"><a href="#3-系统交互" class="headerlink" title="3. 系统交互"></a>3. 系统交互</h2><p>Google 设计 GFS 系统交互要最小化在所有的操作中对 master 的涉及（因为 master 只有一个，必须减轻 master 的压力）。在这个背景下，我们现在来说客户端、master 和 chunkserver 如何互动以实现数据修改、原子记录追加(append)，以及快照(snapshot)。</p>
+<h3 id="3-1-租约和修改顺序"><a href="#3-1-租约和修改顺序" class="headerlink" title="3.1. 租约和修改顺序"></a>3.1. 租约和修改顺序</h3><p>像 write 或 append 的修改操作是会改变 chunk 的内容或者元数据的。每次修改都会应用在 chunk 的所有副本上。我们使用租约来维护一个在副本之间一致的修改顺序。master 授予一个 chunk 租约给副本之一，我们称这个副本为 <em>primary</em>。Primary 为所有修改挑选一个顺序给 chunk。当应用修改时，所有的副本都遵循这个顺序。因此，全局修改顺序先由 master 选择的租约授予顺序定义，在租约内由 priamry 指定的序列号定义。</p>
+<p>租约机制是设计用来最小化 master 的管理开销的。一个租约有一个初始的 60s 的超时时间。然而，只要 chunk 被修改，primary 就可以向 master 请求延时，并且通常会收到延时的许可，并且这不限制次数。这些扩展请求与授权是附带在 master 和所有 chunkservers 之间交换的常规的心跳(<em>HeartBeat</em>)信息中的。master 有时可能会尝试在一个租约到期前将其撤销（例如，master 想要禁用一个正在重命名的文件上的修改）。即便 master 与一个 primary 失去了联系，master 也可以在旧的租约到期后安全地向另一个副本授予租约。</p>
+<p>在图 2 中，我们通过列出 write 控制流描述了这个过程，并且用数字标记了步骤顺序。</p>
+<p><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/GFS_Figure_2.png" srcset="/img/loading.gif" lazyload alt="图 2: 写控制和数据流"></p>
+<p>图 2: 写控制和数据流</p>
+<ol>
+<li>客户端向 master 询问，哪个 chunkserver 持有要访问的 chunk 当前的租约，以及其他副本的位置。如果目前没有任何一个 chunkserver 持有要访问的 chunk 的租约，master 就会选择一个副本，授予一个租约（没有在图上显示出）。</li>
+<li>master 向客户端回复 primary 的标识和其他副本（图中 <em>secondary</em> 标记，所有除了 primary 的副本都是 secondary）的位置。客户端缓存这个数据，用于将来的修改操作。只有当 primary 变得不可达，或副本不再持有租约时，客户端才需要再次联系 master。</li>
+<li>客户端把数据 push 给所有的副本，客户端可以以任意的顺序 push。每个 chunkserver 将会在一个内部的 LRU buffer 缓存这些数据，直到这些数据被使用或老化。通过将数据流与控制流解耦，我们可以通过基于网络拓扑调度昂贵的数据流来提高性能，而不管哪个 chunkserver 是 primary 的。我们会在 3.2 进一步讨论这一点。</li>
+<li>一旦所有的副本都确认收到了数据，客户端就向 primary 发送一个 write 请求。这个请求标识了早前 push 给所有副本的数据。primary 给其收到的所有修改指定连续的序列号，由于这些修改可能来自多个客户端，所有进行编号是有必要的。primary 按着序号的顺序将修改应用到自己的本地状态。</li>
+<li>primary 把 write 请求传递给所有的 secondary 副本，每个 secondary 副本以由 primary 指定的同样的序列号顺序应用修改。</li>
+<li>所有完成了操作的 secondary 向 primary 回复，表明他们已经完成了操作。</li>
+<li>primary 回复客户端，在任何副本上遇到的任何错误都会报告给客户端。在有错误的情况中，write 可能已经在 primary 和部分 secondary 中成功完成了，（如果操作是在 primary 这里失败了，那么其就不会被指定序列号并向 secondary 传递命令。个人理解：因为是 primary 先成功完成修改后，才会让 secondary 开始应用修改，如果 primary 失败了，secondary 就不会收到序列号以及应用更改的命令。）此时客户端会认为请求已经失败，已经修改完的区域就会处于 <em>inconsistent</em> 的状态。我们的客户端代码通过重试失败的修改来处理这种错误，即将在步骤 3 到 7 进行几次尝试，如果仍然没有成功，就会退回到 write 开始时（从步骤 1 开始）进行重试，直到操作完全成功（有一种最坏的情况是重试的时候客户端挂了，这种情况的数据可能最后就是不一致的了，GFS 毕竟是弱一致性的 ）。（Q：这里有个疑问是，已经完成操作或部分完成操作的副本，接收到重试的数据后，如何处理？A：直接在文件末尾（最后一个 chunk 末尾）继续写入，之前成功的 secondary 会重复写入，去重任务由读取数据的客户端来完成。）</li>
+</ol>
+<p>如果应用程序的 write 很大或者跨过了一个 chunk 的边界，GFS 客户端代码就会把其拆成多个 write 操作。这些新的 write 操作也都遵循上述控制流（图 2），但可能会与来自其他客户端的并发操作交错并被覆盖。因此，共享文件区域最终可能包含来自不同客户端的片段，尽管副本将是相同的，因为单个操作在所有的副本上以相同的顺序成功完成。这就会出现我们在 2.7 中提到过的 <em>consistent</em> 但 <em>undefined</em> 的状态。</p>
+<h3 id="3-2-数据流"><a href="#3-2-数据流" class="headerlink" title="3.2. 数据流"></a>3.2. 数据流</h3><p>我们解耦了控制流和数据流以高效的使用网络。当控制流从客户端到 primary 再到所有的 secondary 时，数据是以流水线的方式沿着精心挑选的 chunkservers 链路线性 push 的。我们的目标是充分利用每个机器的网络带宽，避免网络瓶颈和高延迟链路，同时最小化 push 全部数据的延迟。</p>
+<p>为了充分利用每台机器的带宽，数据是线性地沿着一个 chunkserver 链路 push 的，而不是分布式地 push （例如，树）。因此，每台机器全部的向外的带宽都被用来尽可能快的传输数据，而不是像分布式那样把数据在多个接受者之间分配。</p>
+<p>为了尽可能的避免网络瓶颈和高延迟链路（例如，交换机见链路通常两者都有），每个机器向网络拓扑中“最近的”还没有收到数据的机器传递数据。假设客户端正在 push 数据，要将数据 push 至 chunkserver S1 到 S4。客户端先把数据发送到最近的 chunkserver，这里记为 S1。S1 将数据传递给 S2 到 S4 中离它最近的，这里记为 S2。类似的，S2 再把数据传递给 S3 或 S4，选择离它更近的，等等以此类推。我们的网络拓扑足够简单，因为“距离”可以通过 IP 地址来准确的估算（GFS 没有考虑异地备份这种，GFS 一般是部署在单个机架或者数据中心的。结合现实，同一个数据中心的 IP 地址分配一般是有规律的，所以通过 IP 就能知道大概位置，也就知道了距离）。</p>
+<p>最终，我们通过 TCP 连接流水线式的传输数据最小化了延迟。一旦一个 chunkserver 收到了一些数据，它就会立即向其他 chunkserver 传递传递这些数据。对我们来说，流水线式传输数据是非常有用的，因为我们使用的是全双工链路的交换网络。立即发送数据不会减小接收速率。不考虑网络拥堵的话，把 � 字节数据发送到 � 个副本的理想的时间消耗是 �&#x2F;�+��，� 是网络吞吐量，� 是在两个机器上传输字节的延迟。我们的网络链路通常是 100 Mbps (�)，� 远远小于 1ms。因此，理想情况下，把 1 MB 散布出去需要大约 80ms。</p>
+<h3 id="3-3-原子记录追加-append"><a href="#3-3-原子记录追加-append" class="headerlink" title="3.3. 原子记录追加(append)"></a>3.3. 原子记录追加(append)</h3><p>GFS 提供了一个原子的 append 操作，称为 <em>record append</em>。在传统的 write 操作中，客户端指定写入数据的偏移位置。对同一个区域的并发写不可以串行化，因为这个区域最终可能包含来自多个客户端的数据片段。而在 record apppend 中，客户端仅给出数据，由 GFS 选择偏移并把偏移返回给客户端，GFS 将在这个偏移处原子地 append 数据至少一次（即一个连续的字节序列）。这与在 Unix 中写入一个以 <code>O_APPEND</code> 模式打开的文件类似，多个写者并发写入的时候不会有冲突条件。</p>
+<p>Record append 在我们的一些分布式应用程序（会有在不同的机器上的客户端并发 append 同一个文件的场景的分布式应用程序）中被重度使用。在这种情况下，如果客户端采用传统的 write，那么就额外需要复杂且昂贵的同步，例如通过一个分布式锁管理器。在我们的工作负载中，像这样的文件通常用作多生产者&#x2F;单消费者队列，或包含来自很多不同的客户端的合并后的结果。</p>
+<p>Record append 是修改操作的一种，也适合我们 3.1 中说到的控制流，只是在 primary 中有一点额外的逻辑。客户端将数据 push 给文件的最后一个 chunk 的所有副本，然后给 primary 发送请求。primary 检查如果将这个 record 记录 append 到当前的 chunk 是否会导致 chunk 的大小超过最大值（64 MB）。如果会超过，primary 就会将当前 chunk 填充至最大大小，并告诉所有 secondary 也这么做，然后回复客户端，说明这个操作将在下一个 chunk 上重试。（Record append 单次 append 的数据大小被限制为至多为 chunk 最大大小的 1&#x2F;4，以将最坏情况下的碎片保持在可接受的水平。）如果在当前 chunk 上 append 这个 record 不会使得这个 chunk 的大小超过最大值（这是通常的情况），那么 primary 就会把这个记录 append 到其本地自己的副本，然后告诉 secondary 在精确的偏移处写入这些数据，最后将成功的通知回复给客户端。</p>
+<p>如果一个 record append 在某个副本上失败了，客户端会重试操作。结果就是，同一个 chunk 的副本可能包含不同的数据，同一个 record，有的 chunk 中有完整的，有的只有一部分。GFS 不保证所有副本都完全一样（每个字节都一样），只会保证数据作为一个原子单位被写入至少一次。这个属性很容易从简单的观察中得出，即操作报告成功必须是数据在一些 chunk 的所有副本的同样的偏移处写入完成。进一步说，在操作报告成功后，所有的副本至少与 record 末尾一样长，因此未来的 record 将会被指定一个更高的偏移或一个不同的 chunk，即便后面会有一个不同的副本成为 primary。就我们的一致性保证而言，成功的 record append 操作写入数据的区域是 <em>defined</em>（因此也是 <em>consistent</em>），而没有完全成功写入的区域是 <em>inconsistent</em> 的（因此也是 <em>undefined</em> 的）。 我们在第 2.7.2 中讨论过，我们的应用程序可以处理 <em>inconsistent</em> 的区域。</p>
+<h3 id="3-4-快照-snapshot"><a href="#3-4-快照-snapshot" class="headerlink" title="3.4. 快照(snapshot)"></a>3.4. 快照(snapshot)</h3><p>快照操作几乎瞬间就可以制作一个文件或一个目录树（即，源）的拷贝，同时最大可能的减少中断正在进行中的修改。我们的用户使用快照来快速创建一个大数据集（经常是副本的副本（这段没读懂），递归）的分支副本，或者在试验修改前创建一个当前状态的检查点，稍后的提交或者回滚可以轻松些。</p>
+<p>我们使用标准的**写时复制(copy-on-write) **技术来实现快照。当 master 收到一个快照请求时，先撤销要做快照的文件中的 chunks 的所有未到期的租约。这保证了任何后来的对于这些 chunks 的 write 操作需要和 master 互动以寻找一个租约持有者（找不到就没法写），这会让 master 有机会先去创建这个 chunk 的一个新的副本。</p>
+<p>在租约被撤回或者到期以后，master 将操作记录在磁盘上。master 随后通过复制源文件或目录树的元数据将此日志记录应用于其内存状态。最新创建的快照文件指向与源文件相同的 chunk。（这段没读懂）</p>
+<p>在快照操作后，一个客户端第一次想要 write 一个 chunk <code>C</code>，要给 master 发送一个请求，为了得到当前的租约持有者。master 注意到 chunk <code>C</code> 的引用数大于 1（写时复制方法创建快照时是给这个 chunk 加一个引用计数，没有立刻真的拷贝。一个 chunk 的引用计数大于 1 的话就代表这个 chunk 是某个快照的一部分，要保留原样数据的。当这个 chunk 上有新的写入的时候，这个 chunk 才会真的被复制，客户端在新复制的 chunk 上写入，而原来的旧 chunk 被快照继续引用），于是推迟回复客户端请求并选择一个新的 chunk 句柄 <code>C&#39;</code>。然后 master 让每个有 <code>C</code> 当前副本的 chunkserver 创建一个名为 <code>C&#39;</code> 的新 chunk。通过在和原来相同的 chunkserver 上创建这个新的 chunk，我们可以确保数据可以在本地复制，而不经过网络（我们的磁盘速度大约是我们 100 Mb 以太网链路的三倍快）。从这一点看，对于任何 chunk 来说，请求操作一模一样：master 授予一个新的租约给新的 chunk <code>C&#39;</code>，回复客户端，客户端可以正常 write 这个 chunk，而不知道这个 chunk 其实是刚刚从已存在的 chunk 新创建的。</p>
+<h2 id="4-master-操作"><a href="#4-master-操作" class="headerlink" title="4. master 操作"></a>4. master 操作</h2><p>所有的命名空间操作都由 master 执行。</p>
+<p>此外，master 对 chunk 副本的管理贯穿整个 GFS 系统：</p>
+<ol>
+<li>master 决定在哪放置 chunks 副本；</li>
+<li>创建新的 chunks 和之后的副本；</li>
+<li>协调各种各样的系统范围内的活动以保持 chunks 完全拷贝；</li>
+<li>在所有的 chunkservers 上做复杂均衡；</li>
+<li>回收未使用的存储空间。</li>
+</ol>
+<p>下面我们深入讨论下上述的几点。</p>
+<h3 id="4-1-命名空间管理和锁"><a href="#4-1-命名空间管理和锁" class="headerlink" title="4.1. 命名空间管理和锁"></a>4.1. 命名空间管理和锁</h3><p>很多 master 的操作会花很长的时间。例如，一个快照操作必须撤回快照覆盖的所有 chunks 在 chunkserver 上的租约。在执行快照操作期间，我们不想推迟其他 master 的操作。因此，我们允许同时进行多个操作，并在命名空间的区域上使用锁来确保正确的操作执行顺序。</p>
+<p>与很多传统的文件系统不同，GFS 没有按目录列出该目录中所有文件的数据结构，也不支持等价一个相同文件或目录的别名（即 Unix 术语中的硬链接或符号链接）。GFS 在逻辑上将其命名空间表示为将完整路径名映射到元数据的查找表。通过前缀压缩，这个表可以在内存中高效地表示。命名空间树中的每个结点（即绝对文件名或绝对路径名）都有一个与之相关联的读写锁。</p>
+<p>每个 master 操作在执行前都要获取多个锁。一般来说，如果操作涉及 <code>/d1/d2/.../dn/leaf</code>，则该操作要请求目录名 <code>/d1</code>, <code>/d1/d2</code>, …, <code>/d1/d2/.../dn</code> 上的读锁，以及完整路径名 <code>/d1/d2/.../dn/leaf</code> 的读锁或者写锁。注意 <code>leaf</code> 可能是一个文件，也可能是一个目录，具体取决于操作。</p>
+<p>现在我们通过一个例子来讲解锁机制是如何工作的。在这个例子中，我们要给目录 <code>/home/user</code> 创建快照，快照将存到 <code>/save/user</code>，我们来说在这个过程中，锁机制是如何阻止 <code>/home/user/foo</code> 被创建的。快照操作要获取 <code>/home</code> 和 <code>/save</code> 上的读锁，以及 <code>/home/user</code> 和 <code>/save/user</code> 上的写锁（Q：这里为什么需要 <code>/home/user</code> 上的写锁？A：我的理解是为了和后面创建文件操作需要的读锁互斥。）。文件创建操作要获取 <code>/home</code> 和 <code>/home/user</code> 上的读锁，以及一个 <code>/home/user/foo</code> 上的写锁。这两个操作将会被按正确的顺序执行，因为他们尝试获取 <code>/home/user</code> 上冲突的锁（快照操作要的写锁与文件创建操作要的读锁）。文件创建操作不需要父目录（这里即 <code>/home</code> 和 <code>/home/user</code>）上的写锁，因为没有“目录”或类似 <em>inode</em> 那样的数据结构需要在修改操作中受保护，而命名空间上的读锁可以有效地确保父目录不会被删除（这里即为 <code>/home</code> 和 <code>/home/user</code> 上的读锁可以保护他们不被删除）。</p>
+<p>上述锁策略的一个好处是，允许在同一个目录内的并发修改。举个例子，在同一个目录中可以并发的创建多个文件：每个创建文件操作获取一个目录名字上的读锁和一个文件名字上的写锁。目录名字上的读锁足以阻止目录被删除、重命名或被创建快照（前面说过创建快照需要获取写锁）。文件名字上的写锁会连续两次尝试创建同名的文件（这句话黑人问号脸！）。</p>
+<p>由于命名空间可能会包含很多结点，所以读写锁对象是延迟分配的，并且一旦不用了就会被删除。另外，多个锁要以一个一致的总体顺序被获取，以防死锁：这些锁会先被按照命名空间树的级别排序，同级别之间则按照字典序。</p>
+<h3 id="4-2-副本放置"><a href="#4-2-副本放置" class="headerlink" title="4.2. 副本放置"></a>4.2. 副本放置</h3><p>一个 GFS 集群高度分布在多个级别上。GFS 集群往往在很多个机器机架上含有数百个 chunkservers 。这些 chunkservers 可能轮流被来自相同或不同机架上的数百个客户端连接。在不同机架上的两个机器间通信可能经过一个或多个网络交换机。此外，出入一个机架的带宽可能小于这个机架中所有机器的总带宽。多级分布提出了一个特别的挑战，即在保证可伸缩性、可靠性和可用性的前提下，分发数据。</p>
+<p>chunk 副本的放置策略服务于两个目的：(1) 最大化数据的可靠性和可用性，(2) 最大化网络带宽利用率。为了实现这两个目的，仅仅跨机器传播副本是不够的，因为这只是能抵御磁盘或机器故障，以及能充分利用每个机器的网络带宽。我们必须也跨机架传播 chunk 副本，这可以确保即便整个机架都损坏了或者离线了（例如，由于共享资源故障，如网络开关或电源电路）。这也意味着，关于一个 chunk 的流量，尤其是读，可以充分利用多个机架的总带宽。但另一方面，写流量必须流经多个机架，这是一个我们乐意看到的权衡。</p>
+<h3 id="4-3-创建-Creation-、重新复制-Re-replication-、重新平衡-Rebalancing"><a href="#4-3-创建-Creation-、重新复制-Re-replication-、重新平衡-Rebalancing" class="headerlink" title="4.3. 创建(Creation)、重新复制(Re-replication)、重新平衡(Rebalancing)"></a>4.3. 创建(Creation)、重新复制(Re-replication)、重新平衡(Rebalancing)</h3><p>chunk 副本将在下面三种情况下创建：chunk 创建、重新赋值、重新平衡。</p>
+<p>master 在<strong>创建(*create*)*<em>一个 chunk 时会选择一个位置来放置初始的空的副本。这考虑到了几个因素，*</em>(1)** 我们想把新的副本放在磁盘空间利用率低于平均值的 chunkservers 上。随着时间推移，这个方法会使得各个 chunkservers 上的磁盘利用率相等。</strong>(2)** 我们想限制在每个 chunkserver 上“最近”创建的数量。尽管创建操作本身开销很低，但创建操作会可靠的预测即将到来的大量的写流量，因为 chunk 是在写操作有要求时创建（这里就是说，在一个 chunkserver 上创建一个新的 chunk，创建操作本身开销不大，但是接下来往往会有写操作，如果“最近”创建的 chunk 太多，那么意味着后面会有太多的写流量，这会加重这个 chunkserer 的压力）。在我们的 append 一次读多次(append-once-read-many) 的工作负载中，当 chunk 被完全写入完成以后，通常会变成实际上的只读。**(3)** 像上面讨论的那样，我们想在跨机架传播一个 chunk 的副本。</p>
+<p>当副本的有效数量低于用户指定的值时，master <strong>重新复制(*re-replicates*)*<em>一个 chunk。可能导致重新复制操作发生的原因多种多样：*</em>(1)** 一个 chunkserver 变得不可用，则会给 master 报告它上面的副本可能损坏；</strong>(2)** chunkserver 上的磁盘之一由于错误变得不可用；**(3)** 或者用户指定的副本数量增加了。</p>
+<p>基于下面几个因素需要被重新复制的 chunk 会被优先处理：**(1)** 当前副本数量与目标副本数量相差太多。例如，相比丢失了一个副本的 chunk，我们会更优先处理丢失了两个副本的 chunk 的重新复制操作。**(2)** 我们倾向先处理存在的文件的 chunk 的重新复制操作，而不是最近删除的文件（详见 4.4）。**(3)** 最后，为了最小化故障对正在运行的应用程序带来的影响，我们提高任何使得客户端进程阻塞的 chunk 的优先级。</p>
+<p>master 选择优先级最高的 chunk，通过指示一些 chunkservers 直接从一个现存的有效副本拷贝 chunk 数据来“克隆”这个 chunk。新副本的放置策略的目标和新建 chunk 的放置类似：均衡磁盘空间利用率，限制任一单个 chunkserver 上的活跃的克隆操作数，以及跨机架传播副本。为了防止克隆流量大于客户端流量太多，master 同时在整个集群上和每个 chunkserver 上限制活跃克隆操作的数量。此外，每个 chunkserver 通过减少其向源 chunkserver 的读请求来限制其花在每个克隆操作上的带宽总量。</p>
+<p>最后，master 定期<strong>重新平衡(*rebalances*)</strong> 副本：master 检查当前副本的分布，然后移动一些副本，为了更好的利用磁盘空间，以及更好的负载均衡。通过这个过程，master 也可以逐渐填满一个新的 chunkserver，而不是立即用新的 chunks 和随之而来的大量写流量将其淹没。新副本的放置标准也和上面讨论过的类似。此外，master 也必须选择要移除哪个现存的副本。一般来说，master 倾向于移除那些空闲空间低于平均值的 chunkservers 上的 chunk，以平衡各个 chunkserver 磁盘空间的使用。</p>
+<h3 id="4-4-垃圾回收"><a href="#4-4-垃圾回收" class="headerlink" title="4.4. 垃圾回收"></a>4.4. 垃圾回收</h3><p>在一个文件被删除后，GFS 不会立即回收其有效的物理存储空间。master 只会在文件级别和 chunk 级别的垃圾回收期间，延迟回收物理存储。我们发现这个方法使得 GFS 系统更简单，更可靠。</p>
+<h4 id="4-4-1-机制"><a href="#4-4-1-机制" class="headerlink" title="4.4.1. 机制"></a>4.4.1. 机制</h4><p>当一个文件被应用程序删除，master 和对其他的修改一样，立即记录删除日志。然而，这个文件只是被重命名为一个包含了删除时间戳的隐藏的名字，而不是立即回收了其资源。在 master 对文件系统命名空间的的定期扫描过程中，master 移除任何这样的，已经存在超过 3 天（内部可配置的）的隐藏文件。在这之前，被删除的文件仍然可以通过新的、特殊的名字（即被重命名后的带有删除时间戳的名字）被读取，也可以通过把名字改回正常名字取消删除。当隐藏文件被从命名空间中删除时，其内存中的元数据也会被删除。这有效地切断了它与所有 chunk 的链接。</p>
+<p>类似的，在 master 对 chunk 命名空间的定期扫描中，master 识别孤儿 chunks（即不能从任何文件到达这个 chunk），并删除这些孤儿 chunks 的元数据。在与 master 的定期交换的心跳(<em>HeartBeat</em>)消息中，每个 chunkserver 报告其持有的 chunks 的一个子集，master 向 chunkserver 回复已经不在 master 存储的元数据中的所有 chunks 的身份信息，然后 chunkserver 就可以自由删除这些 chunks 的副本了。</p>
+<h4 id="4-4-2-讨论"><a href="#4-4-2-讨论" class="headerlink" title="4.4.2. 讨论"></a>4.4.2. 讨论</h4><p>尽管分布式垃圾回收是一个难题，需要在编程语言的上下文中解决复杂的问题，但对于我们的 GFS 来说相当简单。我们可以轻松识别 chunks 的所有引用：master 维护着专门的文件到 chunk 的映射。我们也可以轻松识别所有的 chunk 副本：所有的副本都在每个 chunkserver 下一个指定的目录中。另外，任何 master 不知道的副本都被视为“垃圾(garbage)”。</p>
+<p>这种存储回收利用的垃圾回收方法，相比即时删除有几个优势。<strong>首先</strong>，在组件故障很常见的大规模的分布式系统中更简单更可靠。chunk 的创建可能在一些 chunkservers 上成功了，而在另一些 chunkserves 上失败了，留下了一些 master 不知道存在的副本（这里我的理解是，若有部分 chunkserver 上的 chunk 创建失败了，就会重做所有的操作，那么成功创建了 chunk 的 chunkserver，其上的 chunk 就不被 master 认可，即 master 不知道的存在的副本）。副本删除信息可能丢失，master 必须记得在失败时重新发送这些信息，不论这个失败是由 master 自己还是由 chunkservers 导致的。垃圾回收提供了一个统一的、可靠的方法来清理任何未知有用的副本。<strong>第二</strong>，这种垃圾回收方法会将存储回收操作合并到 master 常规的后台活动中，就像定期扫描命名空间和与 chunkservers 定期握手一样。因此，存储回收操作是分批完成的，其开销分摊到了各个 master 常规的后台活动中。此外，存储回收操作只在 master 相对空闲的时候执行，这样 master 可以更迅速地响应需要及时关注的客户请求。<strong>第三</strong>，存储空间的延迟回收提供了一个防止意外的、不可逆的删除的安全网（这里我的理解是，意外删除的文件，在其被真正回收之前，是可以撤销删除的）。</p>
+<p>根据我们的经验，这种垃圾回收方法最主要的缺点是，当存储空间紧张时，延迟垃圾回收有时会阻碍用户努力微调空间的使用。重复创建和删除临时文件的应用程序可能无法立即重用存储空间。如果已删除的文件再次被明确删除，我们会通过加快存储回收来解决这些问题。我们也允许用户在命名空间的不同部分应用不同的复制和回收策略。例如，用户可以指定一些目录树中的文件中的所有 chunks 存储时不复制，任何删除的文件都会立刻且不可撤销地被从文件系统状态中移除。</p>
+<h3 id="4-5-过期副本检测"><a href="#4-5-过期副本检测" class="headerlink" title="4.5. 过期副本检测"></a>4.5. 过期副本检测</h3><p>如果 chunkserver 对一个 chunk 的修改失败，或在其挂掉的时候错过了一些修改，就可能导致 chunk 副本过期。对于每个 chunk，master 维护一个 chunk 版本号( <em>chunk version number</em>)，以区别最新的和过期的副本（这个版本号也会记录在日志中，是非易失的）。我们永远不会在过期的副本上应用更改，过期的副本只能等待回收。</p>
+<p>每当 master 给一个 chunk 授予一个新的租约<strong>（注意，是每授予租约时增加版本号，不是每次修改时！）</strong>，master 都会增加这个 chunk 的版本号并且通知这个 chunk 的最新的那些副本。master 和这些副本都会在他们的持久化的状态中记录这个新的版本号。这个过程发生在任何客户端被通知之前，因此也发生在开始向 chunk 写入之前。如果某个副本当前不可用，那它的版本号就不会增加。当 chunkserver 重启并向 master 报告其包含的 chunks 集合，以及这些 chunks 相关联的版本号时，master 就会检测到这个 chunkserver 有一个过期的副本。如果 master 看到一个版本号大于它自己的记录中的版本号，那么 master 就认为自己在授予租赁权时故障了，因此将更高的版本作为最新的版本。</p>
+<p>master 在其定期的垃圾回收中移除过期的副本。在这之前，当 master 回复客户端对 chunk 信息的请求时，master 实际上会认为根本不存在一个过期的副本（也就是说，给客户端返回的 chunk 列表中可能包含过期的 chunk，客户端有可能去读过期的 chunk。GFS 是弱一致性的）。作为另一个保障措施，当 master 告知客户端哪个 chunkserver 持有一个 chunk 上的租约，或当 master 在一个克隆操作中指示一个 chunkserver 去从另一个 chunkserver 中读一个 chunk 时，master 包含这个 chunk 的最新版本号，客户端或 chunkserver 执行操作时会验证 chunk 的版本号，以便始终访问最新的数据。</p>
+<h2 id="5-容错和诊断"><a href="#5-容错和诊断" class="headerlink" title="5. 容错和诊断"></a>5. 容错和诊断</h2><p>在设计 GFS 系统时，我们最大的挑战之一是，如何解决频繁的组件故障。组件的质量和数量一起使得这些问题成为常态而不是意外。我们不能完全相信机器，也不能完全相信这些磁盘。组件故障可能会导致系统不可用，更糟糕的是导致数据损坏。这一节我们讨论我们如何面对这些挑战，还有我们在 GFS 系统中构建的一些工具，这些工具用来在故障不可避免的发生时诊断问题。</p>
+<h3 id="5-1-高可用性"><a href="#5-1-高可用性" class="headerlink" title="5.1. 高可用性"></a>5.1. 高可用性</h3><p>在 GFS 集群中的数百个服务器中，某些服务器在任何给定的时间都必然不可用。</p>
+<p>我们通过两个简单的但有效的策略来保持系统的高可用性：快速恢复和复制。</p>
+<h4 id="5-1-1-快速恢复"><a href="#5-1-1-快速恢复" class="headerlink" title="5.1.1. 快速恢复"></a>5.1.1. 快速恢复</h4><p>master 和 chunkserver 都被设计为，无论他们是如何终止的，都会在几秒恢复他们的状态并启动。事实上，我们不去区分正常或不正常的终止；服务器只会通过杀死其进程来例行关机。当客户端和其他服务器在他们未完成请求中超时，重新连接重启的服务器并重试操作时会遇到一个小问题。6.2.2 节中会讲到观察到的启动时间。</p>
+<h4 id="5-1-2-chunk-复制"><a href="#5-1-2-chunk-复制" class="headerlink" title="5.1.2. chunk 复制"></a>5.1.2. chunk 复制</h4><p>像之前讨论过的那样，每个 chunk 在不同的机架上的多个 chunkservers 上复制。用户可以为文件命名空间的不同部分指定不同的复制级别，默认为 3 个复制。master 会根据需要克隆现存的副本，以在 chunkservers 离线或通过校验和验证（详见 5.2）检测到损坏的副本时，保持 chunk 有足够数量的副本。尽管对我们来说，复制机制工作的很好，我们依然正在探索其他形式的跨服务器冗余，例如奇偶校验码或纠删码，以满足我们不断增长的只读存储需求。我们预计在我们耦合很宽松的系统中实现这些更复杂的冗余策略是有挑战的但容易管理的，因为我们的流量主要是追加(append)和读取(read)，而不是小的随机写入。</p>
+<h4 id="5-1-3-Master-复制"><a href="#5-1-3-Master-复制" class="headerlink" title="5.1.3. Master 复制"></a>5.1.3. Master 复制</h4><p>为了可靠性，master 状态将会被复制。master 的操作日志和检查点被复制到多个机器上。只有在其日志记录被 flush 到本地磁盘和所有 master 副本上之后，状态的修改才被视为已提交。为简单起见，一个 master 进程仍然负责所有修改以及后台活动，例如在内部更改系统的垃圾回收。master 进程在挂掉后可以几乎瞬间重启。如果是 master 进程所在的机器或者磁盘坏了，在 GFS 外部的监控设施会利用 master 操作日志的副本在别处启动一个新的 master 进程。客户端只通过 master 的规范名（如 gfs-test）与其通信，规范名是一个 DNS 别名，如果 master 被重新放到其他机器上，这个别名可以修改。</p>
+<p>此外，“影子” masters （论文原文即为 masters，复数，所以这里应该是说“影子”可能有多个）提供了对文件系统的只读连接，即便主 master 挂掉了，“影子” masters 依然可以正常工作。注意这里说的是“影子”而不是“镜像”，也就是说“影子” masters 可能落后主 master 一点，通常是几分之一秒。“影子” master 增强了没有正在被活跃修改的文件和不在意获取有一点旧的结果的应用程序的读可用性。事实上，由于文件内容是从 chunkservers 读的，所以应用程序不会注意到文件内容是旧的。在短窗口内可能旧的是像目录内容或连接控制信息这样的文件元数据。</p>
+<p>“影子” masters 为了保持其能知道情况，一个“影子” master 读取逐渐增长的操作日志的副本，并在其自己的数据结构中严格应用和主 master 一样的修改序列。“影子” master 和主 master 一样，在启动时（此后就很少了）轮询 chunkservers 来定位 chunk 副本，并且频繁和 chunkservers 交换握手信息以监控他们的状态。“影子” masters 依赖主 master 的只有副本位置更新结果，根据主 master 的决策来创建和删除副本。</p>
+<p>（关于这节的“影子” master，有几个问题。(1) 影子 masters 和主 master 同时存在，都轮询 chunkservers，也就是说 chunkservers 同时要和多个 master 握手、保持联系吗？(2) 最后一段仅说了从主 master 获取创建或删除副本的信息，那修改的文件信息如何更新？）</p>
+<h3 id="5-2-数据完整性"><a href="#5-2-数据完整性" class="headerlink" title="5.2. 数据完整性"></a>5.2. 数据完整性</h3><p>每个 chunkserver 都用校验和来检测其存储的数据的损坏。考虑到一个 GFS 集群经常在数百机器上有数千磁盘，其经常会经历磁盘故障，导致读和写路径上的数据损坏或丢失。（原因之一见第 7 节）我们可以用其他的 chunk 副本恢复损坏的数据，但通过跨 chunkservers 比较副本来检测损坏是不切实际的。此外，不同的副本（同一个 chunk 的）可能是合法的：GFS 修改的语义，特别是之前讨论过的原子 record append，不能保证副本都一样。因此，每个 chunkserver 必须通过维护校验和来独立验证其自己的拷贝的完整性。（这里，副本之间可以不同是什么鬼，回头再看看。）</p>
+<p>一个 chunk 被分成 64 KB 的块，每个块有一个相应的 32 比特的校验和。像其他元数据一样，校验和也会保存在内存中，并且通过日志持久化的存储，与用户数据分开。</p>
+<p>对于读，在返回任何数据给请求者（无论是客户端还是另一个 chunkserver）之前，chunkserver 会验证与读取范围重叠的数据块的检验和。因此 chunkservers 不会把损坏的数据传播到其他机器上。如果一个块没有匹配记录的检验和，chunkserver 就会返回一个错误给请求者，并且将不匹配的情况报告给 master。作为回应，请求者将会从其他副本读取数据，而 master 将从另一个副本克隆 chunk。在一个有效的新的副本放置好后，master 指示报告了不匹配的 chunkserver 删除其副本。</p>
+<p>由于以下几个原因，校验和对读性能几乎没有影响。由于我们大部分的读至少会跨越几个块，因此我们只需要读取和校验相对少量的额外数据以进行验证。GFS 客户端代码通过尝试在校验和块边界对齐读取来进一步减少这种开销。此外，chunkserver 上的校验和查找和比较不需要任何 I&#x2F;O 就可以完成，并且检验和计算通常会与 I&#x2F;Os 重叠。（这一段都没读懂。(1) 为什么读取的数据跨越几个快就可以只读、验证少量的额外数据？(2) 什么是对齐读？(3) 校验和查找和比较为什么不需要 I&#x2F;O，是校验和记录存在内存中吗？校验和计算和 I&#x2F;Os 重叠是什么意思？）</p>
+<p>检验和计算为 append 到 chunk 末尾的写（而不是覆盖已存在数据的写）做了大量优化，因为在我们的工作负载中主要都是 append。我们只是逐渐更新最后部分的校验和块，并为由 append 填充的任何全新的校验和块计算新的校验和。即使最后部分的校验和块已经损坏，而且我们当前又无法检测出，也没什么关系，因为新的检验和将无法匹配已存储的数据，所以损坏通常会在这个块下次被读取时被检测出来。（检验和块存在哪？）</p>
+<p>作为对比，如果一个 write 覆盖现有 chunk 的一个范围，我们必须读并验证被覆盖范围的第一个和最后一个块，然后执行这个 write，最终计算并记录新的校验和。如果我们在部分覆盖之前不验证第一个和最后一个块，新的校验和可能会隐藏存在于没有被覆盖区域中的损坏。（这里我的理解是，被覆盖的范围，中间部分的块校验和就没必要验证了，因为数据被全部覆盖了。而对于第一个和最后一个块，只有一半会被覆盖，所以先要验证一下，以保证没有呗覆盖的那部分数据是正确的。）</p>
+<p>在空闲时期，chunkservers 可以扫描并验证不活跃 chunk 的内容，这使得我们可以检测出很少读的 chunk 中的损坏。一旦检测到损坏，master 就可以创建一个新的未损坏的副本并删除损坏的副本。这样可以防止一个不活跃但损坏的 chunk 副本骗过 master，使得 master 认为对应 chunk 还有用足够的有效副本。</p>
+<h3 id="5-3-诊断工具"><a href="#5-3-诊断工具" class="headerlink" title="5.3. 诊断工具"></a>5.3. 诊断工具</h3><p>广泛而详细的诊断日志记录在问题隔离、调试和性能分析方面提供了不可估量的帮助，同时只产生了最小的成本。如果没有日志，我们很难理解机器之间短暂、不可复现的交互。GFS 服务生成诊断日志来记录很多重大事件（例如 chunkservers 的加入或 down 机）以及全部的 RPC 请求和回复。这些诊断日志可以随意删除而不会影响整个系统的正确性，不过在空间允许的情况下，我们会尽可能保留这些日志。</p>
+<p>RPC 日志包括在线上发送的确切请求和响应，不包括被读取或写入的文件数据。 通过将请求与应答进行匹配，并整理不同机器上的RPC记录，我们可以重构整个交互历史来诊断问题。日志还可以作为负载测试和性能分析的跟踪。</p>
+<p>日志记录对性能的影响很小（而且其优点远远超过这个影响），因为这些日志是顺序和异步写入的。 大部分最近的事件也会保持在内存中，并且可用于持续的在线监控。</p>
+<h2 id="6-性能测试"><a href="#6-性能测试" class="headerlink" title="6. 性能测试"></a>6. 性能测试</h2><p>在这一部分，我们展示了几个微型基准测试来说明 GFS 架构和实现中的固有瓶颈，以及在 Google 中应用的真实集群的一些数字。</p>
+<h3 id="6-1-Micro-benchmarks"><a href="#6-1-Micro-benchmarks" class="headerlink" title="6.1. Micro-benchmarks"></a>6.1. Micro-benchmarks</h3><p>我们此微型基准测试的组成如下：</p>
+<ul>
+<li>1 个 master；</li>
+<li>2 个 master 副本；</li>
+<li>16 个 chunkservers；</li>
+<li>16 个客户端。</li>
+</ul>
+<p>注意这个配置主要是为了方便测试，真实的集群往往包含数百 chunkservers 和 数百客户端。</p>
+<p>所有的机器都配备 dual 1.4 Ghz PIII 处理器，2 GB 内存，两个 80 GB 5400 rpm 的磁盘，以及 100 Mbps 的全双工以太网连接到一个 HP 2542 交换机。全部的 19 个服务器机器都连接到一个交换机上，全部的 16 个客户端机器都连接到另一个交换机上，两个交换机之间通过 1 Gbps 链路连接。</p>
+<p><img src="https://gukaifeng.cn/posts/gfs-lun-wen-yue-du-bi-ji/GFS_Figure_3.png" srcset="/img/loading.gif" lazyload alt="图 3: 总吞吐量。上面的曲线（即 Network limit）表示由我们网络拓扑决定的理论极限。下面的曲线（即 Aggregate read rate）表示我们测量得到的吞吐量，这个曲线具有显示 95% 置信区间的误差线，由于测量值的方差较低，在某些情况下，这些区间难以辨认。"></p>
+<p>图 3: 总吞吐量。上面的曲线（即 Network limit）表示由我们网络拓扑决定的理论极限。下面的曲线（即 Aggregate read rate）表示我们测量得到的吞吐量，这个曲线具有显示 95% 置信区间的误差线，由于测量值的方差较低，在某些情况下，这些区间难以辨认。</p>
+<h4 id="6-1-1-读"><a href="#6-1-1-读" class="headerlink" title="6.1.1. 读"></a>6.1.1. 读</h4><p>N 个客户端同时从文件系统中读。每个客户端从一个 320 GB 的文件集中读取一个随机选择的 4 MB 区域，重复 256 次，所以每个客户端最终读取了 1 GB 的数据。这些 chunkservers 加起来只有 32 GB 的内存，所以我们预计 Linux 缓冲区缓存中的命中率最多为 10%。 我们的结果应该接近冷缓存结果。</p>
+<p>图 3(a) 展示了 N 个客户端总的读速率以及该速率的理论上限。当两个交换机之间的 1Gbps 链路饱和时，总的读速率的极限峰值在 125 MB&#x2F;s，或者说当客户端的 100 Mbps 网络接口饱和时，每个客户端的读速率极限峰值是 12.5 MB&#x2F;s，以适用者为准。当只有一个客户端在读时，我们观察到的读速率是 10 MB&#x2F;s，即每个客户端 12.5 MB&#x2F;s 理论峰值的 80%。当 16 个客户端都在读时，总的读速率达到了 94 MB&#x2F;s，大约是理论峰值 125 MB&#x2F;s 的 75%。这个效率从 80% 降到 75% 是因为，随着读者的增加，多个读者同时从同一个 chunkserver 读取数据的可能性也增加了。</p>
+<h4 id="6-1-2-写"><a href="#6-1-2-写" class="headerlink" title="6.1.2. 写"></a>6.1.2. 写</h4><p>N 个客户端同时写 N 个不同的文件。每个客户端通过一组 1 MB 的 write 往一个新文件中写入 1 GB 数据。图 3(b) 展示了总的写速率以及理论极限。总的写速度的峰值稳定在 67 MB&#x2F;s，因为我们需要把每个字节都写到 16 个 chunkservers 中的 3 个上，每个 chunkserver 有一个 12.5 MB&#x2F;s 的输入连接。</p>
+<p>只有一个客户端写时，观察到的写速率是 6.3 MB&#x2F;s，大约是理论极限值的一半。导致这一问题的罪魁祸首是我们的网络堆栈，网络堆栈和我们用来给 chunk 副本推送数据的流水线方案交互得不是很好。从一个副本向另一个副本传播数据的延迟会降低总的写速率。</p>
+<p>当 N &#x3D; 16 时，总的写速率到了 35 MB&#x2F;s（即每个客户端 2.2 MB&#x2F;s），大约是理论极值的一半。和读一样，导致这个结果最可能的原因是随着客户端数量的增加，会有多个客户端并发写入同一个 chunkserver。此外，16 个写者比 16 个读者更可能发生冲突，因为每个写者要涉及 3 个不同的副本（读者只读副本之一）。</p>
+<p>写比我们想要的更慢，不过在实践中这不是主要问题，因为虽然这增加了单个客户端所看到的延迟，但对系统分给大量客户端的总的写带宽没什么大的影响。</p>
+<h4 id="6-1-3-记录追加-Record-Appends"><a href="#6-1-3-记录追加-Record-Appends" class="headerlink" title="6.1.3. 记录追加(Record Appends)"></a>6.1.3. 记录追加(Record Appends)</h4><p>图 3(c) 展示了 record append 的性能。N 个客户端同时追加同一个文件。性能受限于存储该文件最后一个 chunk 的 chunkserver 的网络带宽，独立于客户端的数量。从一开始的一个客户端时 6.0 MB&#x2F;s 到 16 个客户端时的 4.8 MB&#x2F;s，这个下降主要是由于网络拥塞，以及不同客户端看到的网络传输速率差异。</p>
+<p>我们的应用程序倾向于并发生成多个这样的文件。换句话说，N 个客户端同时 append 到 M 个共享文件，N 和 M 都是几十或者数百。因此，在实践中，我们实验中的 chunkserver 的网络拥塞不是大问题，因为客户端可以在写入一个文件时取得进展，而另一个文件的 chunkserver 则处于繁忙状态。</p>
+<h3 id="6-2-现实世界集群"><a href="#6-2-现实世界集群" class="headerlink" title="6.2. 现实世界集群"></a>6.2. 现实世界集群</h3><p>现在，我们研究了 Google 内部使用的两个集群，它们代表了其他几个类似的集群。</p>
+<p>集群 A 经常被一百多名工程师用于研发。典型的任务由人类用户启动，运行长达数小时。其读取从几 MBs 到几 TBs 的数据，传输或分析数据，以及将结果写回集群。</p>
+<p>集群 B 主要用于生产数据处理。集群 B 中任务的持续时间要长得多，其持续地生成并处理数 TB 的数据集，期间仅有偶尔的人类干预。</p>
+<p>在集群 A 和 B 中，一个单个的任务包含了在很多机器上的很多进程同时读和写很多的文件。</p>
+<p><img src="https://gukaifeng.cn/posts/gfs-lun-wen-yue-du-bi-ji/GFS_Table_2.png" srcset="/img/loading.gif" lazyload alt="表 2 : 两个 GFS 集群的特征"></p>
+<p>表 2 : 两个 GFS 集群的特征</p>
+<h4 id="6-2-1-存储"><a href="#6-2-1-存储" class="headerlink" title="6.2.1. 存储"></a>6.2.1. 存储</h4><p>从表 2 中的前 5 行中可以看到，两个集群都有上百个 chunkservers，都支持很多 TB 的磁盘空间，且这些磁盘空间中有相当多的，但没有全部写满磁盘的数据。”Used disk” 包含所有 chunk 副本。实际上所有文件都会被复制 3 次（3 个副本），因此，A 和 B 两个集群分别存储了 18 TB（55 &#x2F; 3 ≈ 18） 和 52 TB （155 &#x2F; 3 ≈ 52）的文件数据。</p>
+<p>两个集群有相似的文件数量（A: 735 k, B: 737 k），尽管 B 中有很大比例的 dead files（即被删除、或被新版本替换的，但是其存储空间还没有被回收的文件）。集群 B 还具有更多 chunk，因为集群 B 的文件往往更大。这里没太理解是由于 dead files 多导致的 chunk 多，还是集群 B 的普通文件就更大。</p>
+<h4 id="6-2-2-元数据"><a href="#6-2-2-元数据" class="headerlink" title="6.2.2. 元数据"></a>6.2.2. 元数据</h4><p>chunkservers 一共存储了数十 GB 的元数据，其中大部分是 64 KB 用户数据块的校验和。chunkservers 持有的其他元数据只有我们在 4.5 讨论过的 chunk 版本号。</p>
+<p>保存在 master 上的元数据要小得多，只有几十 MB，或者每个文件平均大约 100 个字节。这与我们的假设一致，即 master 内存的大小在实践中不会限制我们 GFS 系统的容量，每个文件的大多数元数据是以前缀压缩形式存储的文件名。其他元数据包括文件所有权和权限、从文件到 chunks 的映射以及每个块的当前版本。此外，对于每个 chunk，我们存储其当前的副本位置和用于实现写时复制(copy-on-write)的引用计数。</p>
+<p>每个单独的服务器，不论是 chunkserver 还是 master，都只有 50 ~ 100 MD 的元数据。因此恢复是很快的：服务器在能够回答询问时前只需要花几秒钟来读其存储的元数据。但是，master 在一段时间内（通常为 30 到 60 秒）会有些受阻，直到它从所有 chunkservers 获取完 chunk 定位信息（这里我的理解是 master 启动时要轮询 chunkserver）。</p>
+<h4 id="6-2-3-读写速率"><a href="#6-2-3-读写速率" class="headerlink" title="6.2.3. 读写速率"></a>6.2.3. 读写速率</h4><p>表 3 展示了不同时期的读写速率。当我们进行这些测量时，A 和 B 两个集群都已经启动了大约一周。（集群最近已经重新启动(restart)以升级到新的 GFS 版本）</p>
+<p>从重新启动开始，平均写速率小于 30 MB&#x2F;s。当我们进行这些测量时，集群 B 处于写入活动的突发过程中，生成了大约 100 MB&#x2F;s的数据，这产生了 300 MB&#x2F;s的网络负载，因为写入被传播到三个副本。</p>
+<p>正如我们所假设的那样，读取速率远高于写入速率，总工作负载包含的读取次数多于写入次数。这两个集群都处于繁重的阅读活动中。特别是，A 在前一周一直保持 580 MB&#x2F;s 的读取率。A 的网络配置可以支持750 MB &#x2F; s，因此它有效地利用了资源。集群 B 可以支持 1300 MB&#x2F;s 的峰值读取速率，但其应用程序仅使用 380 MB&#x2F;s。</p>
+<p><img src="https://gukaifeng.cn/posts/gfs-lun-wen-yue-du-bi-ji/GFS_Table_3.png" srcset="/img/loading.gif" lazyload alt="表 3 : 两个 GFS 集群的性能指标"></p>
+<p>表 3 : 两个 GFS 集群的性能指标</p>
+<h4 id="6-2-4-master-负载"><a href="#6-2-4-master-负载" class="headerlink" title="6.2.4. master 负载"></a>6.2.4. master 负载</h4><p>表 3 还显示，发送到 master 的操作速率约为每秒 200 到 500 次操作。master 可以轻松跟上这个速度，因此这不是这些工作负载的瓶颈。</p>
+<p>在早期版本的 GFS 中，master 偶尔会成为某些工作负载的瓶颈，它花费大部分时间按顺序扫描大型目录（包含数十万个文件）以查找特定文件。此后，我们更改了 master 数据结构，以允许通过命名空间进行高效的二进制搜索。master 现在可以轻松支持每秒数千次文件访问。如有必要，我们可以通过在命名空间数据结构前面放置名称查找缓存来进一步加快速度。</p>
+<h4 id="6-2-5-恢复时间"><a href="#6-2-5-恢复时间" class="headerlink" title="6.2.5. 恢复时间"></a>6.2.5. 恢复时间</h4><p>当一个 chunkserver 故障后，一些 chunks 的副本数量会不足，必须再克隆这些副本以保持这些副本的复制级别。恢复所有这些受影响的 chunk 副本需要的时间依赖于资源的总量。</p>
+<p>在一个实验中，我们杀死了集群 B 中的一个单个的 chunkserver，这个 chunkserver 有大约 15000 个 chunks，这些 chunks 共包含 600 GB 的数据。为了限制恢复操作对正在运行的应用程序的影响，并为调度决策提供余地（这里没搞清楚“余地”的主语和宾语），我们的默认参数限制这个集群最多同时进行 91 个克隆操作（chunkservers 数量的 40%，227 x 0.4 ≈ 91），并且每个克隆操作最多可以消耗 6.25 MB&#x2F;s（即 50 Mbps）的带宽。以有效拷贝速率 440 MB&#x2F;s 进行 23.2 分钟后，所有的 chunks 都恢复完成，</p>
+<p>在另一个实验中，我们杀死了两个 chunkservers，每个有大概 16000 个 chunks 和 660 GB 的数据。这两个故障使得有 266 个 chunks 变得只剩一个副本。这 266 个 chunks 被以更高的优先级克隆，在 2 分钟内全部恢复到至少有 2 个副本，从而使集群处于可以容忍另一个 chunkserver 故障而不会丢失数据的状态。</p>
+<h3 id="6-3-工作负载分解"><a href="#6-3-工作负载分解" class="headerlink" title="6.3. 工作负载分解"></a>6.3. 工作负载分解</h3><p>在这部分，我们会给出两个 GFS 集群的详细的工作负载分解，这两个 GFS 集群的工作负载和 6.2 中的相当，但不完全相同。</p>
+<p>集群 X 用于研发，而集群 Y 用于生产数据处理。</p>
+<h3 id="6-3-1-方法和注意事项"><a href="#6-3-1-方法和注意事项" class="headerlink" title="6.3.1. 方法和注意事项"></a>6.3.1. 方法和注意事项</h3><p>这些结果仅包括来自客户端的请求，因此它们反映了我们的应用程序为整个文件系统生成的工作负载。它们不包括执行客户端请求或内部后台活动的服务器间请求，例如转发写入或重新平衡。</p>
+<p>有关 I&#x2F;O 操作的统计信息基于从 GFS 服务器记录的实际 RPC 请求中以启发式方式重建的信息。举例来说，GFS 客户端代码可能会把读拆分进多个 RPC 中以提高并行性，我们从中推断出原始读取。由于我们的访问模式是高度程式化的，因此我们希望任何错误都会出现在噪声中。应用程序的显式日志记录可能会提供稍微更准确的数据，但从逻辑上讲，重新编译和重新启动数千个正在运行的客户端来这样做是不可能的，而且从尽可能多的机器收集结果也很麻烦。</p>
+<p>有一点应该小心，就是不要从我们的工作负载中过度概括。由于 GFS 和使用 GFS 的应用程序都由 Google 完全控制，所以应用程序往往会为了 GFS 做调整优化，反过来 GFS 也是为这些应用程序设计的。这些相互的影响可能也存在于广泛的应用程序和文件系统中，但是这种影响在我们的案例中可能更明显。</p>
+<h4 id="6-3-2-chunkserver-工作负载"><a href="#6-3-2-chunkserver-工作负载" class="headerlink" title="6.3.2. chunkserver 工作负载"></a>6.3.2. chunkserver 工作负载</h4><p><img src="https://gukaifeng.cn/posts/gfs-lun-wen-yue-du-bi-ji/GFS_Table_4.png" srcset="/img/loading.gif" lazyload alt="表 4 : 按大小(Size, %)划分操作。对于读(Read)，size 是实际读、传输的数据总量，而不是请求的数据总量。"></p>
+<p>表 4 : 按大小(Size, %)划分操作。对于读(Read)，size 是实际读、传输的数据总量，而不是请求的数据总量。</p>
+<p>表 4 显示了操作不同大小数据的操作的次数分布。</p>
+<p>读(Read)大小是一个双峰分布。小的读（小于 64 KB）来自在巨大的文件中查找数据的小片段的搜索密集型客户端。大的读（大于 512 KB）来自贯穿整个文件的长顺序读。</p>
+<p>集群 Y 中有大量的读根本没有返回数据。我们的应用程序，尤其是那些在生产系统中的，经常使用文件作为生产者消费者队列。生产者并发地 append 一个文件，同时一个消费者读这个文件的末尾。偶尔会有一种情况，即当消费者赶超了这些生产者时，就不会有数据返回了。集群 X 的这种情况要少一些，因为集群 X 一般用于短期数据分析任务，而不是长期的分布式应用程序。</p>
+<p>写(Write)大小也是一个双峰分布。大的写（大于 256 KB）往往起因于写者的大缓存。缓存较少的数据、检查点或更频繁地进行同步，或者只是生成较少数据的写者导致较小的写（小于 64 KB）。</p>
+<p>至于记录追加(Record Append)，集群 Y 的大型记录追加百分比比集群 X 高得多，因为我们使用集群 Y 的生产系统针对 GFS 进行了更积极的调整。</p>
+<p><img src="https://gukaifeng.cn/posts/gfs-lun-wen-yue-du-bi-ji/GFS_Table_5.png" srcset="/img/loading.gif" lazyload alt="表 5 : 按操作大小(Size, %)对传输字节数划分。对于读(Read)，size 是实际读、传输的数据总量，而不是请求的数据总量。如果读取尝试读取超过文件末尾的位置，则两者可能会有所不同，这在设计上在我们的工作负载中并不少见。"></p>
+<p>表 5 : 按操作大小(Size, %)对传输字节数划分。对于读(Read)，size 是实际读、传输的数据总量，而不是请求的数据总量。如果读取尝试读取超过文件末尾的位置，则两者可能会有所不同，这在设计上在我们的工作负载中并不少见。</p>
+<p>表 5 展示了在各种大小的操作中数据传输的总量划分。对于所有类型的操作，较大的操作（超过 256 KB）通常占传输的大部分字节。由于随机搜索负载，小读取（小于 64 KB）也确实会传输一小部分但重要的读取数据。</p>
+<h4 id="6-3-3-Append-vs-Writes"><a href="#6-3-3-Append-vs-Writes" class="headerlink" title="6.3.3. Append vs. Writes"></a>6.3.3. Append vs. Writes</h4><p>记录追加非常常用，尤其是在我们的产品系统中。对于集群 X，write 与 record append 的字节传输比例是 108:1，操作数是 8:1。对于集群 Y（我们的产品系统使用的），上述比例分别是 3.7:1 和 2.5:1。</p>
+<p>此外，这些比例表明在这两个集群中，record append 往往比 write 用的多得多。不过对于集群 X，在测量期间记录追加的总体使用率相当低，因此结果可能会受到具有特定缓冲区大小选择的一两个应用程序的影响。</p>
+<p>和预期一样，我们的数据修改工作负载中，相比覆写，append 操作占绝对大头。我们测量了 primary 副本上覆写的数据总量，这近似于客户端故意覆盖以前写入的数据而不是附加新数据的情况。对于集群 X，覆写的总字节数低于 0.0001%，覆写的操作次数低于 0.0003%。尽管这个数据很微小，但仍然比我们预期的要高。 事实证明，这些覆写中的大多数来自由于错误或超时而导致的客户端重试，它们本身不是工作负载的一部分，而是重试机制的结果。</p>
+<p>这里没理解，因为看数据好像是 write 多一些。。。</p>
+<h4 id="6-3-4-master-工作负载"><a href="#6-3-4-master-工作负载" class="headerlink" title="6.3.4. master 工作负载"></a>6.3.4. master 工作负载</h4><p><img src="https://gukaifeng.cn/posts/gfs-lun-wen-yue-du-bi-ji/GFS_Table_6.png" srcset="/img/loading.gif" lazyload alt="表 6 : 按类型划分(%)的 master 请求"></p>
+<p>表 6 : 按类型划分(%)的 master 请求</p>
+<p>表 6 显示了对 master 的请求类型的细分。</p>
+<p>大多数请求都要询问 chunk 位置 （FindLocation）用来读，和数据的租约持有者信息（FindLeaseLocker）用于数据修改。</p>
+<p>集群 X 和 Y 看到的删除请求数量明显不同，因为集群 Y 存储着定期重新生成并替换为较新版本的生产数据集。这种差异进一步隐藏在 Open 请求的差异中，因为旧版本的文件可能会通过从头开始写入而被隐式删除（Unix 开放术语中的 <code>mode &quot;w&quot;</code>）。</p>
+<p>FindMatchingFiles 是一个模式匹配请求，支持 <code>ls</code> 和类似的文件系统操作。FindMatchingFiles 与其他对 master 的请求不同，它可能会处理大部分的命名空间，因此可能代价很高。集群 Y 能更频繁地看到 FindMatchingFiles，因为自动数据处理任务倾向于检查文件系统的某些部分以了解全局应用程序状态。相比之下，集群 X 的应用程序处于更明确的用户控制之下，并且通常提前知道所有需要的文件的名称。</p>
+<h2 id="7-经验"><a href="#7-经验" class="headerlink" title="7. 经验"></a>7. 经验</h2><p>在 GFS 的构建和部署过程中，Google 经历了各种各样的问题，有些事操作方面的，有些事技术方面的。</p>
+<p>最初，GFS 被设想为我们生产系统的后端文件系统。随着时间的推移，其用途演变为包括研究和开发任务。GFS 开始时对权限和配额等内容的支持很少，但现在包括这些的基本形式。虽然生产系统受到良好的纪律和控制，但用户有时却不是，需要更多的基础设施来防止用户相互干扰。</p>
+<p>我们最大的一些问题与磁盘和 Linux 有关。我们的许多磁盘都向 Linux 驱动程序声称它们支持一系列 IDE 协议版本，但实际上只对较新的版本做出可靠响应。由于协议版本非常相似，这些驱动器大部分都可以工作，但偶尔不匹配会导致驱动器和内核对驱动器的状态存在分歧。由于内核中的问题会默默地破坏数据，这个问题促使我们使用校验和来检测数据损坏，同时我们修改内核来处理这些协议不匹配。</p>
+<p>早些时候，由于 fsync() 的开销，我们在使用 Linux 2.2 内核时遇到了一些问题。 它的成本与文件的大小成正比，而不是与修改部分的大小成正比。 这对于我们的大型操作日志来说是一个问题，尤其是在我们实施检查点之前。 我们通过使用同步写入解决了一段时间，最终迁移到 Linux 2.4。</p>
+<p>另一个 Linux 问题是单个读者-写者锁，地址空间中的任何线程在从磁盘分页（读者锁）或在 <code>mmap()</code> 调用（写者锁）中修改地址空间时都必须持有该锁。 我们在低负载下看到我们系统中的短暂的超时，并努力寻找资源瓶颈或零星的硬件故障。 最终，我们发现这个单一的锁阻止了主网络线程将新数据映射到内存，而磁盘线程正在分页先前映射的数据。 由于我们主要受网络接口而不是内存复制带宽的限制，因此我们通过将 <code>mmap()</code> 替换为 <code>pread()</code> 来解决此问题，但代价是额外的副本。</p>
+<p>尽管偶尔会出现问题，但 Linux 代码的可用性已经一次又一次地帮助我们探索和理解系统行为。 在适当的时候，我们会改进内核并与开源社区分享更改。</p>
+<h2 id="8-总结"><a href="#8-总结" class="headerlink" title="8. 总结"></a>8. 总结</h2><p>Google 文件系统展示了在商品硬件上支持大规模数据处理工作负载所必需的品质。虽然一些设计决策是针对我们独特的环境的，但许多可能适用于具有相似规模和成本意识的数据处理任务。</p>
+<p>我们首先根据我们当前和预期的应用程序工作负载和技术环境重新检查传统的文件系统假设。我们的观察导致了设计空间中的根本不同点。我们将组件故障视为常态而不是例外，针对大部分附加（可能同时）然后读取（通常顺序）的大文件进行优化，并扩展和放松标准文件系统接口以改进整个系统。</p>
+<p>我们的系统通过持续监控、复制关键数据以及快速自动恢复来提供容错能力。Chunk 副本允许我们容忍 chunkserver 故障。 这些故障的频繁发生激发了一种新颖的在线修复机制，该机制定期透明地修复损坏并尽快补偿丢失的副本。此外，我们使用校验和来检测磁盘或 IDE 子系统级别的数据损坏，考虑到系统中的磁盘数量，这变得非常普遍。</p>
+<p>我们的设计为执行各种任务的许多并发读者和写者提供了高聚合吞吐量。我们通过将<strong>通过 master 的文件系统控制</strong>与<strong>直接在 chunkserver 和客户端之间传递的数据传输</strong>分离来实现这一点。通过大 chunk 大小和 chunk 租约，将权限委托给数据修改中的 primary 副本，可以最大限度地减少常见操作对 master 的涉及。这使得一个不会成为瓶颈的简单、集中的 master 成为可能。我们相信，我们网络堆栈的改进将解除当前对单个客户端看到的写入吞吐量的限制。</p>
+<p>GFS 成功满足了我们的存储需求，并在 Google 内部被广泛用作研发以及生产数据处理的存储平台。它是一个重要的工具，使我们能够在整个网络的规模上继续创新和解决问题。</p>
+<h2 id="9-FAQ"><a href="#9-FAQ" class="headerlink" title="9. FAQ"></a>9. FAQ</h2><p><strong>Q1. 为什么 record append 是原子的追加至少一次，而不是确定一次？</strong></p>
+<p>3.1 小节，步骤 7 中描述了，如果一个 write 在 secondaries 中之一失败了，客户端会重试这个写。这会导致在没有出错的副本中，数据被重复追加了超过一次。一个不同的设计可能会检测到任意故障（例如，原始请求和客户端重试之间的 primary 故障）导致的重复客户端请求，但可能会为复杂性和性能付出相当大的代价。</p>
+<p><strong>Q2. 应用程序如何知道一个 chunk 中哪些部分包含填充和重复记录？</strong></p>
+<p>为了检测填充，应用程序可以在有效数据的开头输出一个可预测的 magic number，或者包含一个检验和，该校验和可能仅在记录有效时才有效。</p>
+<p>应用程序可以通过在记录中包含唯一的 ID 来检测重复。如果应用程序读到一个与之前读到过的记录的 ID 相同的记录，就知道这个记录与前面的重复了。</p>
+<p>GFS 为应用程序提供了一个库以处理上述这些情况。</p>
+<p><strong>Q3. 鉴于原子记录追加将其写入文件中不可预测的偏移量，客户如何找到他们的数据？</strong></p>
+<p>Append（GFS 一般也是）主要用于顺序读整个文件的应用程序。这类应用程序扫描文件以寻找有效记录，所以客户端不需要提前知道记录的位置。例如，该文件可能包含一组并发网络爬虫遇到的一组链接 URL。任何给定 URL 的文件偏移量都无关紧要，读者只是希望能够阅读整个 URL 集。</p>
+<p><strong>Q4. 什么是校验和？</strong></p>
+<p>校验和算法将一个字节块作为输入，并返回一个数字，该数字是所有输入字节的函数。</p>
+<p>例如，一个简单的校验和可能是输入中所有字节的总和（mod some big number）。</p>
+<p>GFS 存储每个 chunk 以及他们的检验和。当一个 chunkserver 在它的磁盘上写入一个 chunk 时，它首先计算新 chunk 的校验和，并将校验和和 chunk 一起保存在磁盘上。当 chunkserver 从磁盘读取 chunk 时，它也会读取之前保存的校验和，从磁盘读取的 chunk 中重新计算校验和，并检查两个校验和是否匹配。 如果数据被磁盘损坏，校验和将不匹配，并且 chunkserver 将知道返回错误。另外，一些 GFS 应用程序通过应用程序定义的记录在 GFS 文件中存储自己的校验和，以区分正确的记录和填充。</p>
+<p>CRC32 是校验和算法的一个示例。</p>
+<p><strong>Q5. 论文中提到了“引用计数”，这是什么？</strong></p>
+<p>引用计数是为了快照(snapshots)的写时复制(copy-on-write)实现的一部分。</p>
+<p>当 GFS 创建一个快照时，GFS 不会拷贝这些 chunks，但是会增加每个 chunk 的引用计数，这使得创建一个快照变得成本很低。</p>
+<p>如果一个客户端写入一个 chunk 并且 master 注意到这个 chunk 的引用计数大于 1，master 首先会拷贝这个 chunk，然后客户端更新这个拷贝（而不是作为快照一部分的那个 chunk）。</p>
+<p>我们可以将此视为延迟复制，直到绝对必要为止。 这个策略使得在创建快照时，不是所有的 chunk 都会被修改，并且可以避免制作一些副本。</p>
+<p><strong>Q6. 如果一个应用程序使用标准 POSIX 文件 API，其是否需要修改以适应 GFS？</strong></p>
+<p>是的。</p>
+<p>但是 GFS 不适用于现存的应用程序。GFS 是为新编写的应用程序设计的，例如 MapReduce 程序。</p>
+<p><strong>Q7. GFS 如何确定最近的副本的位置？</strong></p>
+<p>GFS 论文中暗示了其基于存储了有效副本的服务器的 IP 地址来确定最近副本的位置。</p>
+<p>在 2003 年，Google 必须以下面的方式指定 IP 地址，即，如果两个 IP 地址在 IP 地址空间中彼此靠近，那么它们在机房中也很靠近。</p>
+<p><strong>Q8. 假设 S1 是一个 chunk 的 primary，在 master 和 S1 之间的网络故障了。master 将会注意到并制定一些其他的服务器作为 primary，叫做 S2。由于 S1 没有真的故障，那么此时同一个 chunk 是否有两个 primary？</strong></p>
+<p>如果同时存在两个 primaries 会是一个灾难，因为两个 primaries 可能会对同一个 chunk 应用不同的更新。</p>
+<p>幸运的是 GFS 租约机制预防了这种情况。master 给 S1 授予一个 60 秒的租约使 S1 成为 primary。S1 知道当其租约到期后就不再是 primary 了。在先前给 S1 授予的租约之前，master 不会给 S2 授予租约。所以在 S1 的租约到期之前，S2 不会作为 primary 开始活动。</p>
+<p><strong>Q9. 64 MB 大小的 chunk 是否听起来很尴尬？</strong></p>
+<p>64 MB 的 chunk 大小是 master 中的簿记(book-keeping)单位，以及文件在 chunkserver 上分片的粒度。</p>
+<p>客户端可以发出较小的读取和写入 —— 他们不必被迫处理整个 64 MB 的块。</p>
+<p>使用如此大的 chunk 大小的目的是减少 master 中元数据表的大小，并避免限制想要进行大量传输以减少开销的客户端。 另一方面，小于 64 MB 的文件不会获得太多的并行性。</p>
+<p><strong>Q10. Google 是否仍然在使用 GFS？（注：此问题问于 2020 年，GFS 论文发表于 2003 年）</strong></p>
+<p>有传言称 GFS 已被 Colossus 所取代，总体目标相同，但 master 性能和容错能力有所提高。</p>
+<p><strong>Q11. GFS 以正确性换取性能和简单性的接受程度如何？</strong></p>
+<p>这是分布式系统中的一个反复出现的主题。</p>
+<p>强一致性通常需要复杂的协议，并且需要机器之间的闲聊(chit-chat)。</p>
+<p>通过利用特定应用程序类可以容忍宽松一致性的方法，可以设计具有良好性能和足够一致性的系统。例如，GFS 为 MapReduce 应用程序进行了优化，这些应用程序需要对大文件的高读取性能，并且可以接受文件中的漏洞、记录显示多次和读取不一致的情况。另一方面，GFS 不适合在银行存储账户余额。</p>
+<p><strong>Q12. 如果 master 故障了怎么办？</strong></p>
+<p>有 master 的副本，此副本包含 master 状态的完全拷贝。该论文的设计需要人工干预才能在 master 故障后切换到其中一个副本（第 5.1.3 节）。</p>
+<p>我们可以使用 Raft 构建具有自动切换到备份的复制服务。</p>
+<p><strong>Q13. 只有一个 master 是好主意吗？</strong></p>
+<p>这个设计简化了一开始的部署，但对于长期运行的程序来说确实不太好。</p>
+<p><a target="_blank" rel="noopener" href="https://queue.acm.org/detail.cfm?id=1594206">https://queue.acm.org/detail.cfm?id=1594206</a> 一文中说过，随着岁月的流逝和 GFS 使用的增长，出现了一些问题。</p>
+<ul>
+<li>文件的数量增长到了足够大，以至于将所有文件的元数据存储在单个 master 的 RAM 中不再合理。</li>
+<li>客户端的数量增长到了足够大，以至于单个 master 没有足够的 CPU 能力为这些客户端服务。</li>
+<li>实际中，从一个故障的 master 切换到一个其备份，需要人类干预，这使得恢复过程很慢。</li>
+</ul>
+<p>Google 的 GFS 替代，Colossus，将 master 划分为了多个服务器，并且有更多的自动 master 故障恢复。</p>
+<h1 id="Consistent-Hash"><a href="#Consistent-Hash" class="headerlink" title="Consistent Hash"></a>Consistent Hash</h1><h2 id="如何分配请求"><a href="#如何分配请求" class="headerlink" title="如何分配请求"></a>如何分配请求</h2><p>单机的并发量和数据量有限，因此会用多台服务器构成集群来对外提供服务。</p>
+<p>那么有多个节点的时候如何分配客户端的请求呢？——负载均衡问题</p>
+<h3 id="采用加权轮询"><a href="#采用加权轮询" class="headerlink" title="采用加权轮询"></a>采用加权轮询</h3><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215145627420.png" srcset="/img/loading.gif" lazyload alt="image-20230215145627420" style="zoom:67%;" />
+
+<p>将硬件配置更好的节点的权重值设高，然后根据各个节点的权重值，按照一定比重分配在不同的节点上，让硬件配置更好的节点承担更多的请求，这种算法叫做<strong>加权轮询</strong>。</p>
+<p>加权轮询算法使用场景是建立在<strong>每个节点存储的数据都是相同</strong>的前提，但是这种算法无法应对分布式系统，因为在分布式系统中每个节点存储的数据不同。</p>
+<p>因此，我们要想一个能<strong>应对分布式系统的负载均衡算法</strong>。</p>
+<h2 id="使用哈希算法的问题"><a href="#使用哈希算法的问题" class="headerlink" title="使用哈希算法的问题"></a>使用哈希算法的问题</h2><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215150028313.png" srcset="/img/loading.gif" lazyload alt="image-20230215150028313" style="zoom:80%;" />
+
+<p>哈希算法最简单的做法就是进行取模运算，比如分布式系统中有 3 个节点，基于 hash(key) % 3 公式对数据进行了映射。</p>
+<p>但是这种方法有一种很致命的问题：</p>
+<p><strong>如果节点数量发生了变化，也就是在对系统做扩容或者缩容时，必须迁移改变了映射关系的数据</strong>，否则会出现查询不到数据的问题。</p>
+<h3 id="例子："><a href="#例子：" class="headerlink" title="例子："></a>例子：</h3><p>假设我们有一个由 A、B、C 三个节点组成分布式 KV 缓存系统，基于计算公式 hash(key) % 3 将数据进行了映射，每个节点存储了不同的数据：</p>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215150301066.png" srcset="/img/loading.gif" lazyload alt="image-20230215150301066" style="zoom:67%;" />
+
+<p>现在有 3 个查询 key 的请求，分别查询 key-01，key-02，key-03 的数据，这三个 key 分别经过 hash() 函数计算后的值为 hash( key-01) &#x3D; 6、hash( key-02) &#x3D; 7、hash(key-03) &#x3D; 8，然后再对这些值进行取模运算。</p>
+<p>通过这样的哈希算法，每个key都可以定位到对应的节点。</p>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215150347585.png" srcset="/img/loading.gif" lazyload alt="image-20230215150347585" style="zoom:67%;" />
+
+<p>当 3 个节点不能满足业务需求了，这时我们增加了一个节点，节点的数量从 3 变化为 4，意味取模哈希函数中基数的变化，这样会导致<strong>大部分映射关系改变</strong>，如下图：</p>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215150417801.png" srcset="/img/loading.gif" lazyload alt="image-20230215150417801" style="zoom:67%;" />
+
+<p>比如，之前的 hash(key-01) % 3 &#x3D; 0，就变成了 hash(key-01) % 4 &#x3D; 2，查询 key-01 数据时，寻址到了节点 C，而 key-01 的数据是存储在节点 A 上的，不是在节点 C，所以会查询不到数据。</p>
+<p>同样，<strong>如果我们对分布式系统进行缩容，也会因为取模哈希函数中基数的变化，可能出现查询不到数据的问题</strong>。</p>
+<p>因此，我们需要 <strong>迁移数据</strong>，如节点的数量从 3 变化为 4 时，<strong>要基于新的计算公式 hash(key) % 4 ，重新对数据和节点做映射</strong>。</p>
+<p>假设总数据条数为M，哈希算法在面对节点数量变化时，**最坏情况下所有数据都需要迁移，所以他的数据迁移规模为O(M)**，迁移成本太高。</p>
+<h2 id="使用一致性哈希算法"><a href="#使用一致性哈希算法" class="headerlink" title="使用一致性哈希算法"></a>使用一致性哈希算法</h2><p>一致性哈希算法就很好地解决了分布式系统在扩容或者缩容时，发生过多的数据迁移的问题。</p>
+<p>一致哈希算法也用了取模运算，但与哈希算法不同的是，哈希算法是对节点的数量进行取模运算，而<strong>一致哈希算法是对 2^32 进行取模运算，是一个固定的值</strong>。</p>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215150915139.png" srcset="/img/loading.gif" lazyload alt="image-20230215150915139" style="zoom:67%;" />
+
+<h3 id="一致性哈希的步骤"><a href="#一致性哈希的步骤" class="headerlink" title="一致性哈希的步骤"></a>一致性哈希的步骤</h3><ol>
+<li>对<strong>存储节点</strong>进行哈希计算，也就是对存储节点做哈希映射，比如根据节点的 IP 地址进行哈希；</li>
+<li>当对<strong>数据</strong>进行存储或访问时，对数据进行哈希映射。</li>
+</ol>
+<p>因此 <strong>一致性哈希是将 存储节点 和 数据 都映射到一个首尾相连的哈希环上</strong>。</p>
+<p>那么，对<strong>「数据」</strong>进行哈希映射得到一个结果要怎么找到存储该数据的<strong>节点</strong>呢</p>
+<p>映射的结果值往<strong>顺时针的方向的找到第一个节点</strong>，就是存储该数据的节点。</p>
+<p>举个例子，有 3 个节点经过哈希计算，映射到了如下图的位置：</p>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215151356977.png" srcset="/img/loading.gif" lazyload alt="image-20230215151356977" style="zoom:50%;" />
+
+<p>接着，对要查询的 key-01 进行哈希计算，确定此 key-01 映射在哈希环的位置，然后从这个位置往顺时针的方向找到第一个节点，就是存储该 key-01 数据的节点。</p>
+<p>比如，下图中的 key-01 映射的位置，往顺时针的方向找到第一个节点就是节点 A。</p>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215151501283.png" srcset="/img/loading.gif" lazyload alt="image-20230215151501283" style="zoom: 50%;" />
+
+<h3 id="因此，当需要对指定key的值进行读写的时候，通过下面两步进行寻址："><a href="#因此，当需要对指定key的值进行读写的时候，通过下面两步进行寻址：" class="headerlink" title="因此，当需要对指定key的值进行读写的时候，通过下面两步进行寻址："></a>因此，当需要对指定key的值进行读写的时候，通过下面两步进行寻址：</h3><ol>
+<li>首先，对 key 进行哈希计算，确定此 key 在环上的位置；</li>
+<li>然后，从这个位置沿着顺时针方向走，遇到的第一节点就是存储 key 的节点。</li>
+</ol>
+<h3 id="如果进行扩容或缩容不会发生大量的数据迁移"><a href="#如果进行扩容或缩容不会发生大量的数据迁移" class="headerlink" title="如果进行扩容或缩容不会发生大量的数据迁移"></a>如果进行扩容或缩容不会发生大量的数据迁移</h3><p>假设节点数量从 3 增加到了 4，新的节点 D 经过哈希计算后映射到了下图中的位置：</p>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215151829664.png" srcset="/img/loading.gif" lazyload alt="image-20230215151829664" style="zoom:50%;" />
+
+<p>可以看到，key-01、key-03 都不受影响，只有 key-02 需要被迁移节点 D。</p>
+<p>假设节点数量从 3 减少到了 2，比如将节点 A 移除：</p>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215151900976.png" srcset="/img/loading.gif" lazyload alt="image-20230215151900976" style="zoom:50%;" />
+
+<p>可以看到，key-02 和 key-03 不会受到影响，只有 key-01 需要被迁移节点 B。<br>因此，<strong>在一致哈希算法中，如果增加或者移除一个节点，仅影响该节点在哈希环上顺时针相邻的后继节点，其它数据也不会受到影响</strong>。</p>
+<h2 id="使用一致性哈希有什么问题"><a href="#使用一致性哈希有什么问题" class="headerlink" title="使用一致性哈希有什么问题"></a>使用一致性哈希有什么问题</h2><p>但是<strong>一致性哈希算法并不保证节点能够在哈希环上分布均匀</strong>，这样就会带来一个问题，会有大量的请求集中在一个节点上。</p>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215151949321.png" srcset="/img/loading.gif" lazyload alt="image-20230215151949321" style="zoom:50%;" />
+
+<p>如上图就是负载不均衡的情况，在这种节点分布不均衡的情况下，进行扩容或缩容时，哈希环上的相邻节点容易受到过大影响。</p>
+<p>如果节点 A 被移除了，当节点 A 宕机后，根据一致性哈希算法的规则，其上数据应该全部迁移到相邻的节点 B 上，这样，节点 B 的数据量、访问量都会迅速增加很多倍，一旦新增的压力超过了节点 B 的处理能力上限，就会导致节点 B 崩溃，进而形成雪崩式的连锁反应。</p>
+<p>所以，<strong>一致性哈希算法虽然减少了数据迁移量，但是存在节点分布不均匀的问题</strong>。</p>
+<h2 id="如何通过虚拟节点提高均衡度"><a href="#如何通过虚拟节点提高均衡度" class="headerlink" title="如何通过虚拟节点提高均衡度"></a>如何通过虚拟节点提高均衡度</h2><p>要想解决节点能在哈希环上分配不均匀的问题，就是要有大量的节点，节点数越多，哈希环上的节点分布的就越均匀。</p>
+<p>但问题是，实际中我们没有那么多节点。所以这个时候我们就加入<strong>虚拟节点</strong>，也就是对一个真实节点做多个副本。</p>
+<p>具体做法是，<strong>不再将真实节点映射到哈希环上，而是将虚拟节点映射到哈希环上，并将虚拟节点映射到实际节点，所以这里有「两层」映射关系。</strong></p>
+<p>比如对每个节点分别设置 3 个虚拟节点：</p>
+<ul>
+<li>对节点 A 加上编号来作为虚拟节点：A-01、A-02、A-03</li>
+<li>对节点 B 加上编号来作为虚拟节点：B-01、B-02、B-03</li>
+<li>对节点 C 加上编号来作为虚拟节点：C-01、C-02、C-03</li>
+</ul>
+<p>引入虚拟节点后，原本哈希环上只有 3 个节点的情况，就会变成有 9 个虚拟节点映射到哈希环上，哈希环上的节点数量多了 3 倍。</p>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215152938014.png" srcset="/img/loading.gif" lazyload alt="image-20230215152938014" style="zoom:50%;" />
+
+<p><strong>节点数量多了后，节点在哈希环上的分布就相对均匀了</strong>，这时候，如果有访问请求寻址到「A-01」这个<strong>虚拟节点</strong>，接着再通过「A-01」虚拟节点找到<strong>真实节点</strong> A，这样请求就能访问到真实节点 A 了。</p>
+<p>在实际工程中，虚拟节点的数量会大很多，比如Nginx的一致性哈希算法，每个权重为1的真实节点含有160个虚拟节点。</p>
+<p>此外，虚拟节点除了会提高节点的均衡度，还会提高系统的<strong>稳定性</strong>。<strong>当节点变化时，会有不同的节点共同分担系统的变化，因此稳定性更高</strong>。</p>
+<p>因此，<strong>带虚拟节点的一致性哈希方法不仅适合硬件配置不同的节点的场景，而且适合节点规模会发生变化的场景</strong>。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li>轮询只适用于每个节点的数据都是相同的场景，但是不适用于分布式系统</li>
+<li>哈希算法虽然能建立数据和节点之间的映射关系，但是在进行增容或缩容时，最坏情况下所有数据都要迁移</li>
+<li>为了减少迁移的数据量，使用一致性哈希</li>
+<li>但是一致性哈希不能均匀地分布节点，会出现大量请求都集中在一个节点的情况，在这种情况下进行增容或缩容时，容易出现连锁式的雪崩反应</li>
+<li>为了解决一致性哈希算法不能够均匀的分布节点的问题，就需要引入<strong>虚拟节点</strong>，对一个真实节点做多个副本。不再将真实节点映射到哈希环上，而是将虚拟节点映射到哈希环上，并将虚拟节点映射到实际节点，所以这里有「两层」映射关系。</li>
+<li>引入虚拟节点后，<strong>可以会提高节点的均衡度，还会提高系统的稳定性</strong>。所以，带虚拟节点的一致性哈希方法不仅适合硬件配置不同的节点的场景，而且适合节点规模会发生变化的场景。</li>
+</ul>
+<h1 id="Raft共识算法"><a href="#Raft共识算法" class="headerlink" title="Raft共识算法"></a>Raft共识算法</h1><h2 id="什么是raft"><a href="#什么是raft" class="headerlink" title="什么是raft"></a>什么是raft</h2><p>相比于Paxos，Raft最大的特性就是understandable，为了达到这两个目标，raft主要做了两方面的事情：</p>
+<ul>
+<li><strong>问题分解</strong>：把共识算法分成三个子问题，分别是 <strong>领导者选举（leader election）、日志复制（log replication）、安全性（safety）</strong></li>
+<li><strong>状态简化</strong>：对算法做出一些限制，减少状态数量或可能产生的变动。使一台服务器只在三种状态之间进行转换，并且服务器之间的通信只通过两类RPC来完成</li>
+</ul>
+<h2 id="复制状态机"><a href="#复制状态机" class="headerlink" title="复制状态机"></a>复制状态机</h2><p><strong>相同的初始状态+相同的输入&#x3D;相同的结束状态</strong></p>
+<p>多个节点上，从相同的初始状态开始，执行相同的一串命令，产生相同的最终状态。</p>
+<p>在Raft中, leader将客户端请求(command)封装到一个个log entry中，将这些log entries复制到所有follower节点，然后大家按相同顺序应用logentries中的command，根据复制状态机的理论，大家的结束状态肯定是一致的。</p>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215163139828.png" srcset="/img/loading.gif" lazyload alt="image-20230215163139828" style="zoom: 67%;" />
+
+<p>如上图，client给leader发送一个命令，leader生成log，并且发送给所有其他的follower结点，然后所有节点一起把log应用到自己的state machine中 ，并且生成一致的状态，这样，client无论查询哪个节点的状态机，只要这个节点正常应用了日志，那么查到的结果就是一样的。</p>
+<p>可以说，我们实现共识算法就是为了 <strong>实现复制状态机</strong>。一个分布式系统的各节点间，就是通过共识算法来保证命令序列的一致，从而始终保持它们的状态一致，从而实现高可用的 。</p>
+<h2 id="状态简化"><a href="#状态简化" class="headerlink" title="状态简化"></a>状态简化</h2><p>在任何时刻，每一个服务器节点都处于leader，follower和candidate三个状态之一</p>
+<p>相比于Paxos，这一点就极大简化了算法的实现，因为Raft只需考虑状态的切换，而不用像Paxos那样考虑状态之间的共存和互相影响。</p>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215163736046.png" srcset="/img/loading.gif" lazyload alt="image-20230215163736046" style="zoom:80%;" />
+
+<p>raft将时间分割成任意长度的 <strong>任期（term）</strong>，任期用连续的整数标记。</p>
+<p>每一段任期从一次选举开始。在某些情况下，一次选举无法选出leader (比如两个节点收到了相同的票数)，在这种情况下，这一任期会以没有leader结束;一个新的任期(包含一次新的选举）会很快重新开始。Raft保证在任意一个任期内，最多只有一个leader。</p>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215163936056.png" srcset="/img/loading.gif" lazyload alt="image-20230215163936056" style="zoom:80%;" />
+
+<p>任期的机制可以非常明确地标识集群的状态，并且通过任期的比较，可以帮助我们确认一台服务器历史的状态。</p>
+<h3 id="RPC"><a href="#RPC" class="headerlink" title="RPC"></a>RPC</h3><p>Raft算法中服务器节点之间使用RPC进行通信，并且Raft中只有两种主要的RPC：</p>
+<ul>
+<li>requestVote RPC(请求投票)：由candidate在选举期间发起</li>
+<li>appendEntries RPC(追加条目)：由leader发起，用来复制日志和提供一种心跳机制</li>
+</ul>
+<ol>
+<li>服务器之间通信的时候会交换当前任期号;如果一个服务器上的当前任期号比其他的小,该服务器会将自己的任期号更新为较大的那个值。</li>
+<li>如果一个candidate或者leader发现自己的任期号过期了，它会立即回到follower状态。</li>
+<li>如果一个节点接收到一个包含过期的任期号的请求，它会直接拒绝这个请求。</li>
+</ol>
+<h2 id="领导者选举"><a href="#领导者选举" class="headerlink" title="领导者选举"></a>领导者选举</h2><ul>
+<li>Raft内部有一种<strong>心跳机制</strong>，如果存在leader，那么它就会周期性地向所有follower发送心跳，来维持自己的地位。如果follower一段时间（图中的进度条）没有收到心跳，那么他就会认为系统中没有可用的leader了，然后开始进行选举。</li>
+<li>开始一个选举过程后, follower先<strong>增加自己的当前任期号</strong>，并转换到<strong>candidate</strong>状态。然后<strong>投票给自己</strong>，并且并行地向集群中的其他服务器节点发送投票请求**(RequestVote RPC) 。**</li>
+</ul>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215164911431.png" srcset="/img/loading.gif" lazyload alt="image-20230215164911431" style="zoom:80%;" />
+
+<p>一个leader 的投票选举最终会有三个结果：</p>
+<ul>
+<li>它获得 <strong>超过半数选票</strong>赢得了选举&#x3D;&gt;成为leader并开始发送心跳</li>
+<li>其他节点赢得了选举&#x3D;&gt;收到<strong>新leader的心跳</strong>后，如果<strong>新leader的任期号不小于自己当前的任期号</strong>，那么就从candidate回到follower状态。</li>
+<li>一段时间之后没有任何获胜者&#x3D;&gt;每个candidate都在一个自己的<strong>随机选举超时时间后</strong>增加任期号开始新一轮投票。</li>
+</ul>
+<p>为什么会没有获胜者？</p>
+<p>比如有多个follower同时成为candidate，得票太过分散，没有任何一个candidate得票超过半数</p>
+<p>论文中给出的随机选举超时时间为<strong>150~300ms</strong>。</p>
+<h3 id="请求投票RPC的具体内容"><a href="#请求投票RPC的具体内容" class="headerlink" title="请求投票RPC的具体内容"></a>请求投票RPC的具体内容</h3><p><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215211723041.png" srcset="/img/loading.gif" lazyload alt="image-20230215211723041"></p>
+<p>论文中把RPC的request称为arguments，response称为results</p>
+<p>不管是request还是response，都有一个任期号，这是因为raft的节点要通过任期号来确定自身的状态以及判断接不接收这个RPC。</p>
+<p>follower收到一个requestVoteRequest之后会先校验这个candidate是否符合条件：</p>
+<ul>
+<li>candidate的term是否比自己大</li>
+<li>lastLogIndex和lastLogTerm</li>
+</ul>
+<p>确认无误后follower就可以投票了，并且每个follower只有一张票，按照<strong>先来先得</strong>的原则投出</p>
+<p>raft集群启动时，所有的结点都是follower，然后第一个意识到集群中没有leader的节点会把自己变成candidate，他会给自己的任期号加一并发请求投票request给其他follower，通常来讲，这个新发优势使得它大概率会成为leader。</p>
+<p>在一个leader任期结束或失效后，也是同样会进入这样一个任期的循环</p>
+<h2 id="日志复制"><a href="#日志复制" class="headerlink" title="日志复制"></a>日志复制</h2><p>leader被选举出后，开始为客户端请求提供服务。</p>
+<h3 id="客户端怎么知道新leader是哪个节点呢？"><a href="#客户端怎么知道新leader是哪个节点呢？" class="headerlink" title="客户端怎么知道新leader是哪个节点呢？"></a>客户端怎么知道新leader是哪个节点呢？</h3><ul>
+<li>客户端随机向一个节点或者就是老leader发送请求，这时有三种情况：<ol>
+<li>这个节点正好为leader，直接执行指令</li>
+<li>这个节点为follower，那么它可以通过心跳得知leader的ID</li>
+<li>找到的这个节点正好宕机了，没有响应，那么client只能再去找另一个结点，重复此过程</li>
+</ol>
+</li>
+</ul>
+<p>Leader接收到客户端的指令后，会把指令作为一个新的条目追加到日志中去。</p>
+<h3 id="一条日志中需要有三个信息："><a href="#一条日志中需要有三个信息：" class="headerlink" title="一条日志中需要有三个信息："></a>一条日志中需要有三个信息：</h3><ul>
+<li>状态机指令，这个值通常是对某个值进行某个操作</li>
+<li>leader的任期号</li>
+<li>日志号（日志索引）</li>
+</ul>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215213143276.png" srcset="/img/loading.gif" lazyload alt="image-20230215213143276" style="zoom:80%;" />
+
+<p>(在上图中，只要有包括leader在内的3个节点复制了某条日志，日志就可以提交了）</p>
+<p>生成日志之后，leader就会把日志放到AppendEntries RPC中，并且<strong>并行</strong>地发送给follower，让他们复制该条目。</p>
+<p>当该条目被<strong>超过半数</strong>的follower复制后，leader就可以在本地执行该指令<strong>并将结果返回给客户端</strong></p>
+<p>我们把本地执行指令，也就是leader应用日志与状态机这一步，称作 <strong>提交</strong></p>
+<h3 id="作为一个共识算法，我们要让集群中每个节点都可用，也就是具备完整的日志"><a href="#作为一个共识算法，我们要让集群中每个节点都可用，也就是具备完整的日志" class="headerlink" title="作为一个共识算法，我们要让集群中每个节点都可用，也就是具备完整的日志"></a>作为一个共识算法，我们要让集群中每个节点都可用，也就是具备完整的日志</h3><h3 id="怎么让follower追上leader，并保证所有节点的日志都是完整且顺序一致的呢"><a href="#怎么让follower追上leader，并保证所有节点的日志都是完整且顺序一致的呢" class="headerlink" title="怎么让follower追上leader，并保证所有节点的日志都是完整且顺序一致的呢"></a>怎么让follower追上leader，并保证所有节点的日志都是完整且顺序一致的呢</h3><ul>
+<li><p>follower缓慢：</p>
+<p>leader会不断重发追加条目请求（AppendEntries RPC），<u>哪怕leader已经回复了客户端</u></p>
+</li>
+<li><p>follower崩溃后恢复：这时候Raft追加条目的<strong>一致性检查</strong>生效，保证follower能按顺序恢复崩溃后的缺失的日志</p>
+<ul>
+<li>一致性检查：<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215214159334.png" srcset="/img/loading.gif" lazyload alt="image-20230215214159334"></li>
+</ul>
+</li>
+<li><p>leader宕机</p>
+<p>崩溃的leader可能已经复制了日志到部分follower但还<strong>没有提交</strong>。而被选出的新leader又可能不具备这些日志，这样就有部分follower中的日志和新leader的日志不相同。</p>
+<p>Raft在这种情况下, leader通过<strong>强制follower复制它的日志</strong>来解决不一致的问题,这意味着<u>follower中跟leader冲突的日志条目会被新leader的日志条目覆盖</u>(因为没有提交，所以不违背外部一致性)。</p>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215214609630.png" srcset="/img/loading.gif" lazyload alt="image-20230215214609630" style="zoom:80%;" /></li>
+</ul>
+<h3 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h3><ul>
+<li>通过上述一致性检查的机制，leader在当权之后就 <strong>不需要任何特殊的操作</strong> 来使得日志恢复到一致状态</li>
+<li>Leader只需要进行正常的操作．然后日志就能在回复AppendEntries一致性检查失败的时候<strong>自动</strong>趋于一致。</li>
+<li>而leader从来不会覆盖或者删除自己的日志条目（append-Only）</li>
+<li>这样的<strong>日志复制机制</strong>，就可以保证<strong>一致性特性</strong>：<ul>
+<li>只要过半的服务器能正常运行，Raft就能够接受、复制并应用新的日志条目</li>
+<li>在正常情况下，新的日志条目可以在一个RPC来回中被复制给集群中的过半机器</li>
+<li>单个运行慢的follower不会影响整体的性能</li>
+</ul>
+</li>
+</ul>
+<h3 id="追加条目RPC的具体内容"><a href="#追加条目RPC的具体内容" class="headerlink" title="追加条目RPC的具体内容"></a>追加条目RPC的具体内容</h3><p><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215215114906.png" srcset="/img/loading.gif" lazyload alt="image-20230215215114906"></p>
+<p><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215215155301.png" srcset="/img/loading.gif" lazyload alt="image-20230215215155301"></p>
+<h2 id="安全性"><a href="#安全性" class="headerlink" title="安全性"></a>安全性</h2><p>领导者选举和日志复制两个子问题实际上已经涵盖了共识算法的全程，但这两点还不能完全保证<strong>每一个状态机会按照相同的顺序执行相同的命令。</strong></p>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215215459602.png" srcset="/img/loading.gif" lazyload alt="image-20230215215459602" style="zoom:67%;" />
+
+<p>所以Raft通过几个补充规则完善整个算法，使算法可以在各类<strong>宕机问题</strong>下都不出错。</p>
+<p>这些规则包括：</p>
+<ul>
+<li><strong>Leader宕机处理:选举限制</strong></li>
+<li><strong>Leader宕机处理:新leader是否提交之前任期内的日志条目</strong></li>
+<li><strong>Follower和Candidate宕机处理</strong></li>
+<li><strong>时间与可用性限制</strong></li>
+</ul>
+<h3 id="Leader宕机处理：选举限制"><a href="#Leader宕机处理：选举限制" class="headerlink" title="Leader宕机处理：选举限制"></a>Leader宕机处理：选举限制</h3><ul>
+<li>如果一个follower落后了leader若干条日志（但没有漏一<strong>整个任期</strong>)，那么下次选举中，按照领导者选举里的规则，它依旧有可能当选leader。它在当选新leader后就永远也无法补上之前缺失的那部分日志,从而造成状态机之间的不一致。</li>
+<li>所以需要对领导者选举增加一个*<u><strong>限制</strong></u>*，<strong>保证被选出来的leader一定包含了之前各任期的所有被提交的日志条目</strong>。</li>
+</ul>
+<h3 id="那么raft是如何实现这个限制的呢？"><a href="#那么raft是如何实现这个限制的呢？" class="headerlink" title="那么raft是如何实现这个限制的呢？"></a>那么raft是如何实现这个限制的呢？</h3><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215215945866.png" srcset="/img/loading.gif" lazyload alt="image-20230215215945866" style="zoom:67%;" />
+
+<p><strong>RequestVote RPC</strong>执行了这样的限制:RPC中包含了candidate的日志信息，如果投票者自己的日志比candidate的还<strong>新</strong>, 它会拒绝掉该投票请求。（Raft通过比较两份日志中最后一条日志条目的索引值和任期号来定义谁的日志比较新。）</p>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215220058395.png" srcset="/img/loading.gif" lazyload alt="image-20230215220058395" style="zoom:50%;" />
+
+
+
+<h3 id="Leader宕机处理-新leader是否提交之前任期内的日志条目"><a href="#Leader宕机处理-新leader是否提交之前任期内的日志条目" class="headerlink" title="Leader宕机处理:新leader是否提交之前任期内的日志条目"></a><strong>Leader宕机处理:新leader是否提交之前任期内的日志条目</strong></h3><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215220542890.png" srcset="/img/loading.gif" lazyload alt="image-20230215220542890" style="zoom:80%;" />
+
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215220727253.png" srcset="/img/loading.gif" lazyload alt="image-20230215220727253" style="zoom:80%;" />
+
+<h3 id="Follower和Candidate宕机处理"><a href="#Follower和Candidate宕机处理" class="headerlink" title="Follower和Candidate宕机处理"></a>Follower和Candidate宕机处理</h3><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215221035207.png" srcset="/img/loading.gif" lazyload alt="image-20230215221035207" style="zoom:80%;" />
+
+<h3 id="时间和可用性限制"><a href="#时间和可用性限制" class="headerlink" title="时间和可用性限制"></a>时间和可用性限制</h3><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230215221123828.png" srcset="/img/loading.gif" lazyload alt="image-20230215221123828" style="zoom:80%;" />
+
+<h1 id="拜占庭将军问题"><a href="#拜占庭将军问题" class="headerlink" title="拜占庭将军问题"></a>拜占庭将军问题</h1><p>拜占庭将军问题(The Byzantine Generals Problem)提供了对<strong>分布式共识问题</strong>的一种情景化描述, 由Leslie Lamport等人在1982年首次发表. 本文首先以插图的形式描述拜占庭将军问题, 最后在理解拜占庭将军问题的基础上对现有的分布式共识算法进行分类. Leslie Lamport等人的<a target="_blank" rel="noopener" href="https://www-inst.eecs.berkeley.edu/~cs162/sp16/static/readings/Original_Byzantine.pdf">论文</a>提供了两种解决拜占庭将军问题的算法：</p>
+<ul>
+<li>口信消息型解决方案(A solution with oral message);</li>
+<li>签名消息型解决方案(A solution with signed message).</li>
+</ul>
+<p>本文之后将详细讲述这两种算法. 事实上, 拜占庭将军问题是分布式系统领域最复杂的<strong>容错模型</strong>, 它描述了如何在存在恶意行为(如消息篡改或伪造)的情况下使分布式系统达成一致. 是我们理解分布式一致性协议和算法的重要基础.</p>
+<h2 id="拜占庭将军问题描述"><a href="#拜占庭将军问题描述" class="headerlink" title="拜占庭将军问题描述"></a>拜占庭将军问题描述</h2><p>拜占庭将军问题描述了这样一个场景:</p>
+<p><a target="_blank" rel="noopener" href="https://liebing.org.cn/2020/02/14/byzantine_generals_problem/bgp.png"><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/bgp.png" srcset="/img/loading.gif" lazyload alt="img" style="zoom:50%;" /></a></p>
+<p>图1. 拜占庭将军问题</p>
+<p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Byzantine_Empire">拜占庭帝国(Byzantine Empire)</a>军队的几个师驻扎在敌城外, 每个师都由各自的将军指挥. 将军们只能通过信使相互沟通. 在观察敌情之后, 他们必须制定一个共同的行动计划, 如<strong>进攻(Attack)<strong>或者</strong>撤退(Retreat)</strong>, 且只有当半数以上的将军共同发起进攻时才能取得胜利. 然而, 其中一些将军可能是叛徒, 试图阻止忠诚的将军达成一致的行动计划. 更糟糕的是, 负责消息传递的信使也可能是叛徒, 他们可能篡改或伪造消息, 也可能使得消息丢失.</p>
+<p>为了更加深入的理解拜占庭将军问题, 我们以<strong>三将军问题</strong>为例进行说明. 当三个将军都忠诚时, 可以通过投票确定一致的行动方案, 图2展示了一种场景, 即General A, B通过观察敌军军情并结合自身情况判断可以发起攻击, 而General C通过观察敌军军情并结合自身情况判断应当撤退. 最终三个将军经过投票表决得到结果为进攻:撤退&#x3D;2:1, 所以将一同发起进攻取得胜利. 对于三个将军, 每个将军都能执行两种决策(进攻或撤退)的情况下, 共存在6中不同的场景, 图2是其中一种, 对于其他5中场景可简单地推得, 通过投票三个将军都将达成一致的行动计划.</p>
+<p><a target="_blank" rel="noopener" href="https://liebing.org.cn/2020/02/14/byzantine_generals_problem/3_loyal.png"><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/3_loyal.png" srcset="/img/loading.gif" lazyload alt="img" style="zoom:50%;" /></a></p>
+<p>图2. 三个将军均为忠诚的场景</p>
+<p>当三个将军中存在一个叛徒时, 将可能扰乱正常的作战计划. 图3展示了General C为叛徒的一种场景, 他给General A和General B发送了不同的消息, 在这种场景下General A通过投票得到进攻:撤退&#x3D;1:2, 最终将作出撤退的行动计划; General B通过投票得到进攻:撤退&#x3D;2:1, 最终将作出进攻的行动计划. 结果只有General B发起了进攻并战败.</p>
+<p><a target="_blank" rel="noopener" href="https://liebing.org.cn/2020/02/14/byzantine_generals_problem/1_traitors.png"><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/1_traitors.png" srcset="/img/loading.gif" lazyload alt="img" style="zoom:50%;" /></a></p>
+<p>图3. 二忠一叛的场景</p>
+<p>事实上, 对于三个将军中存在一个叛徒的场景, 想要总能达到一致的行动方案是不可能的. 详细的证明可参看Leslie Lamport的论文. 此外, 论文中给出了一个更加普适的结论: 如果存在<em>m</em>个叛将, 那么至少需要<em>3m+1</em>个将军, 才能最终达到一致的行动方案.</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>Leslie Lamport在论文中给出了两种拜占庭将军问题的解决方案, 即口信消息型解决方案(A solution with oral message)和签名消息型解决方案(A solution with signed message).</p>
+<h3 id="口信消息型解决方案"><a href="#口信消息型解决方案" class="headerlink" title="口信消息型解决方案"></a>口信消息型解决方案</h3><p>首先, 对于口信消息(Oral message)的定义如下:</p>
+<ul>
+<li>A1. 任何已经发送的消息都将被正确传达;</li>
+<li>A2. 消息的接收者知道是谁发送了消息;</li>
+<li>A3. 消息的缺席可以被检测.</li>
+</ul>
+<p>基于口信消息的定义, 我们可以知道, 口信消息不能被篡改但是可以被伪造。基于对图3场景的推导, 我们知道存在一个叛将时, 必须再增加3个忠将才能达到最终的行动一致。为加深理解, 我们将利用3个忠将1个叛将的场景对口信消息型解决方案进行推导。在口信消息型解决方案中, 首先发送消息的将军称为指挥官, 其余将军称为副官。对于3忠1叛的场景需要进行两轮作战信息协商, 如果没有收到作战信息那么默认撤退。图4是指挥官为忠将的场景, 在第一轮作战信息协商中, 指挥官向3位副官发送了进攻的消息; 在第二轮中, 三位副官再次进行作战信息协商, 由于General A, B为忠将, 因此他们根据指挥官的消息向另外两位副官发送了进攻的消息, 而General C为叛将, 为了扰乱作战计划, 他向另外两位副官发送了撤退的消息。最终Commanding General, General A和B达成了一致的进攻计划, 可以取得胜利。</p>
+<p><a target="_blank" rel="noopener" href="https://liebing.org.cn/2020/02/14/byzantine_generals_problem/loyal_commander.png"><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/loyal_commander.png" srcset="/img/loading.gif" lazyload alt="img" style="zoom:50%;" /></a></p>
+<p>图4. 指挥官为忠将的场景</p>
+<p>图5是指挥官为叛将的场景, 在第一轮作战信息协商中, 指挥官向General A, B发送了撤退的消息, 但是为了扰乱General C的决定向其发送了进攻的消息. 在第二轮中, 由于所有副官均为忠将, 因此都将来自指挥官的消息正确地发送给其余两位副官. 最终所有忠将都能达成一致撤退的计划.</p>
+<p><a target="_blank" rel="noopener" href="https://liebing.org.cn/2020/02/14/byzantine_generals_problem/traitor_commander.png"><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/traitor_commander.png" srcset="/img/loading.gif" lazyload alt="img" style="zoom:50%;" /></a></p>
+<p>图5. 指挥官为叛将的场景</p>
+<p>如上所述, 对于口信消息型拜占庭将军问题, 如果叛将人数为<em>m</em>, 将军人数不少于<em>3m+1</em>, 那么最终能达成一致的行动计划. <strong>值的注意的是</strong>, 在这个算法中, 叛将人数<em>m</em>是已知的, 且叛将人数<em>m</em>决定了递归的次数, 即叛将数<em>m</em>决定了进行作战信息协商的轮数, 如果存在<em>m</em>个叛将, 则需要进行<em>m+1</em>轮作战信息协商. 这也是上述存在1个叛将时需要进行两轮作战信息协商的原因.</p>
+<h3 id="签名消息型解决方案"><a href="#签名消息型解决方案" class="headerlink" title="签名消息型解决方案"></a>签名消息型解决方案</h3><p>同样, 对签名消息的定义是在口信消息定义的基础上增加了如下两条:</p>
+<ul>
+<li>A4. 忠诚将军的签名无法伪造，而且对他签名消息的内容进行任何更改都会被发现;</li>
+<li>A5. 任何人都能验证将军签名的真伪.<br>基于签名消息的定义, 我们可以知道, 签名消息无法被伪造或者篡改. 为了深入理解签名消息型解决方案, 我们同样以3三将军问题为例进行推导. 图6是忠将率先发起作战协商的场景, General A率先向General B, C发送了进攻消息, 一旦叛将General C篡改了来自General A的消息, 那么General B将将发现作战信息被General C篡改, General B将执行General A发送的消息.</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://liebing.org.cn/2020/02/14/byzantine_generals_problem/signed_1.png"><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/signed_1.png" srcset="/img/loading.gif" lazyload alt="img" style="zoom:50%;" /></a></p>
+<p>图6. 忠将率先发起作战协商</p>
+<p>图7是叛将率先发起作战协商的场景, 叛将General C率先发送了误导的作战信息, 那么General A, B将发现General C发送的作战信息不一致, 因此判定其为叛将. 可对其进行处理后再进行作战信息协商.</p>
+<p><a target="_blank" rel="noopener" href="https://liebing.org.cn/2020/02/14/byzantine_generals_problem/signed_2.png"><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/signed_2.png" srcset="/img/loading.gif" lazyload alt="img" style="zoom:50%;" /></a></p>
+<p>图7. 叛将率先发起作战协商</p>
+<p>签名消息型解决方案可以处理任何数量叛将的场景。</p>
+<h2 id="论文简介"><a href="#论文简介" class="headerlink" title="论文简介"></a>论文简介</h2><p>Leslie Lamport等人的论文<em>‘The Byzantine Generals Problem’</em>的提纲如下:</p>
+<ul>
+<li>1.Introduction: 介绍了拜占庭将军问题;</li>
+<li>2.Impossibility Results: 通过反正法证明了, 三将军问题对于口信消息是无解的;</li>
+<li>3.A solution with oral message: 介绍了口信消息型拜占庭将军问题的解决方案;</li>
+<li>4.A solution with signed message: 介绍了签名消息型拜占庭将军问题的解决方案;</li>
+<li>5.Missing communication paths: 讲述了在通信小时情况下的拜占庭将军问题;</li>
+<li>6.Reliable systems: 讲述了如何通过拜占庭将军问题构建可靠的系统;</li>
+<li>7.Conclution: 总结.</li>
+</ul>
+<h2 id="总-结"><a href="#总-结" class="headerlink" title="总 结"></a>总 结</h2><p>在分布式系统领域, 拜占庭将军问题中的角色与计算机世界的对应关系如下:</p>
+<ul>
+<li>将军, 对应计算机节点;</li>
+<li>忠诚的将军, 对应运行良好的计算机节点;</li>
+<li>叛变的将军, 被非法控制的计算机节点;</li>
+<li>信使被杀, 通信故障使得消息丢失;</li>
+<li>信使被间谍替换, 通信被攻击, 攻击者篡改或伪造信息.</li>
+</ul>
+<p>如上文所述, 拜占庭将军问题提供了对<strong>分布式共识问题</strong>的一种情景化描述, 是分布式系统领域最复杂的模型. 此外, 它也为我们理解和分类现有的众多分布式一致性协议和算法提供了框架. 现有的分布式一致性协议和算法主要可分为两类:</p>
+<ul>
+<li>一类是<strong>故障容错算法(Crash Fault Tolerance, CFT)</strong>, 即非拜占庭容错算法, 解决的是分布式系统中存在故障, 但不存在恶意攻击的场景下的共识问题. 也就是说, 在该场景下可能存在消息丢失, 消息重复, 但不存在消息被篡改或伪造的场景. 一般用于局域网场景下的分布式系统, 如分布式数据库. 属于此类的常见算法有Paxos算法, Raft算法, ZAB协议等.</li>
+<li>一类是<strong>拜占庭容错算法</strong>, 可以解决分布式系统中既存在故障, 又存在恶意攻击场景下的共识问题. 一般用于互联网场景下的分布式系统, 如在数字货币的区块链技术中. 属于此类的常见算法有PBFT算法, PoW算法.</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://liebing.org.cn/2020/02/14/byzantine_generals_problem/overview.png"><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/overview-167647877108237.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<h2 id="区块链解决方案"><a href="#区块链解决方案" class="headerlink" title="区块链解决方案"></a>区块链解决方案</h2><p>我们知道，区块链最强的地方就在于它的一致性（了解区块链原理，可移步另一篇博客 <a target="_blank" rel="noopener" href="https://charlesliuyx.github.io/2017/09/24/%E4%B8%80%E6%96%87%E5%BC%84%E6%87%82%E5%8C%BA%E5%9D%97%E9%93%BE-%E4%BB%A5%E6%AF%94%E7%89%B9%E5%B8%81%E4%B8%BA%E4%BE%8B/">一文看懂区块链：一步一步发明比特币</a>），同时这正是拜占庭问题的核心</p>
+<h3 id="案例拆解"><a href="#案例拆解" class="headerlink" title="案例拆解"></a>案例拆解</h3><p>我们先假设你已经完全了解了比特币区块链的运行原理，那么我们一步一步<strong>建立一个场景</strong>看一看区块链是如何解决拜占庭将军问题？</p>
+<p>我们先假设信道一定是可靠的，传令兵死亡之类的事情我们不考虑，毕竟在一个非常复杂的网络中，还可以通过多条的方式连接任意两个节点，可靠性还是值得相信。<strong>主要破坏一致性的还是心怀不轨的【间谍】</strong>，或者总结为：如何防止【间谍】对整体决策（进攻还是撤退）进行破坏？</p>
+<p>我们按照区块链模型构造一个下图所示的系统</p>
+<p><img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/BlockChain.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>每个将军本地都存储一份【记录】：记录所有将军的决定，比如“1：1”代表1号将军决定进攻</p>
+<p>然后构造以下协议内容：</p>
+<ul>
+<li>使用数字签名保证身份可可信</li>
+<li>所有将军<strong>参与挖矿</strong>，国王以保证战役胜利为缘由，出资，奖励每一个挖到新区块俩的将军</li>
+<li>每一个将军当本地维护的<strong>最新确认【记录】</strong>中包含了所有1-9号将军的决定后，<strong>正式做出自己的决定</strong></li>
+</ul>
+<p>在这个案例中，抛弃了代币的设定，因为不存在交易行为，而是由国王出资（保证战争不被间谍影响，我认为国王应该愿意出这笔钱）。在拜占庭时期，因为没有网络，构造上述这样的系统，是完全不可能的。而现在网络链路速度，效率越来越高，让区块链解决一致性问题得以解决</p>
+<p>这里就引出了现在区块链的核心问题：应用场景与代价博弈。你要解决的痛点，到底值不值得这样的花费呢？无论是算力消耗，还是资源消耗，亦或是类似于上述案例中的国王出资（区块链代币价值为负数？），都是一种【代价】。完全的信任是不存在的，只有当造假（走捷径获得利润）的成本远远高于得到的利润，才能取得信任（一致性）</p>
+<p>必须强调，在传统的拜占庭问题构造的情景中，只能是一个例子，这个<strong>应用情景是完全没有没有必要使用区块链来解决的！</strong></p>
+<h3 id="总结-2"><a href="#总结-2" class="headerlink" title="总结"></a>总结</h3><p>互联网技术的存在，让传输过程中，基本没有延迟（或说延迟很小可以基本忽略），<strong>解决了通讯延迟的问题</strong></p>
+<p>区块链使用<strong>链型数据结构</strong> + <strong>算力互相制约</strong>使得<strong>作假的成本</strong>随着时间的加长<strong>呈指数上升</strong>，<strong>解决了一致性问题</strong>。当然非对称秘钥部分的密码学，解决了<strong>身份确认问题</strong></p>
+<p>至少这个系统解决的问题不仅仅是金融领域，去中心化银行系统的问题所在，交易，其实只是其中很小的一部分</p>
+<h2 id="区块链共识算法"><a href="#区块链共识算法" class="headerlink" title="区块链共识算法"></a>区块链共识算法</h2><p>因为技术还在不断发展，可能有其他的算法被建立，但是只要谈到共识这个问题，<strong>核心一定是【中心化】和【去中心化】的权衡（Trade-off）</strong>，而对应的就是效率，可以这么说，一致（信任）是需要成本的，这是本源法则，和线性向量空间的定义处在同一个层级</p>
+<p>中本聪很厉害的地方就在于，之前的分布式一致性算法（PBFT）对大体谅节点系统的支持非常差，效率上来说，基本和无法实现是等等同的</p>
+<p>下面的思维导图展示了现在基本的区块链共识算法总结</p>
+<img src="/images/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/CA.png" srcset="/img/loading.gif" lazyload alt="img" style="zoom:50%;" />
+
+
+
+<h3 id="分布式一致性算法"><a href="#分布式一致性算法" class="headerlink" title="分布式一致性算法"></a>分布式一致性算法</h3><p>即这篇文章前面提到的<strong>拜占庭容错</strong>。在此基础上，发展出的Paxos是理论上的高效算法，很难实现。而Raft是由Google牵头开发一个Paxos理论实现版本</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">非关系数据库</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93/">#非关系数据库</a>
+      
+        <a href="/tags/%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/">#期末复习</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>非关系数据库期末复习</div>
+      <div>http://example.com/2023/02/15/非关系数据库期末复习/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>ECNU_zhy</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>February 15, 2023</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>Licensed under</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/02/16/%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93PPT/" title="非关系数据库PPT">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">非关系数据库PPT</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/02/12/ooad%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0-grasp/" title="OOAD期末复习——GRASP">
+                        <span class="hidden-mobile">OOAD期末复习——GRASP</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.1/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

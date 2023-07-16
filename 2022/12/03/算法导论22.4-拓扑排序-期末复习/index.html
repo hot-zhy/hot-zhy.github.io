@@ -1,0 +1,718 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/xiaoxin.png">
+  <link rel="icon" href="/img/xiaoxin.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="ECNU_zhy">
+  <meta name="keywords" content="算法导论">
+  
+    <meta name="description" content="算法导论22.4-拓扑排序-期末复习 1234TOPOLOGICAL-SORT(G)	call DFS(G) to compute finishing times v.f for each vertex v	as each vertex is finished,insert it onto the front of a linked list	return the linked list of v">
+<meta property="og:type" content="article">
+<meta property="og:title" content="算法导论22.4-拓扑排序-期末复习">
+<meta property="og:url" content="http://example.com/2022/12/03/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA22.4-%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F-%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/index.html">
+<meta property="og:site_name" content="zhy-blog">
+<meta property="og:description" content="算法导论22.4-拓扑排序-期末复习 1234TOPOLOGICAL-SORT(G)	call DFS(G) to compute finishing times v.f for each vertex v	as each vertex is finished,insert it onto the front of a linked list	return the linked list of v">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA22.4-%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F-%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230119143110556.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA22.4-%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F-%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230119143129306.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA22.4-%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F-%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230119143141495.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA22.4-%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F-%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230119143152403.png">
+<meta property="og:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA22.4-%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F-%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230119143203274.png">
+<meta property="article:published_time" content="2022-12-03T08:36:50.215Z">
+<meta property="article:modified_time" content="2023-01-19T06:32:05.595Z">
+<meta property="article:author" content="ECNU_zhy">
+<meta property="article:tag" content="算法导论">
+<meta property="article:tag" content="深拓扑排序">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA22.4-%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F-%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230119143110556.png">
+  
+  
+  
+  <title>算法导论22.4-拓扑排序-期末复习 - zhy-blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ECNU-zhy</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                Links
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="算法导论22.4-拓扑排序-期末复习"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-12-03 16:36" pubdate>
+          December 3, 2022 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.3k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          19 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">算法导论22.4-拓扑排序-期末复习</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="算法导论22-4-拓扑排序-期末复习"><a href="#算法导论22-4-拓扑排序-期末复习" class="headerlink" title="算法导论22.4-拓扑排序-期末复习"></a>算法导论22.4-拓扑排序-期末复习</h1><p><img src="/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA22.4-%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F-%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230119143110556.png" srcset="/img/loading.gif" lazyload alt="image-20230119143110556"></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c">TOPOLOGICAL-SORT(G)<br>	call <span class="hljs-title function_">DFS</span><span class="hljs-params">(G)</span> to compute finishing times v.f <span class="hljs-keyword">for</span> each vertex v<br>	as each vertex is finished,insert it onto the front of a linked <span class="hljs-built_in">list</span><br>	<span class="hljs-keyword">return</span> the linked <span class="hljs-built_in">list</span> of verticles<br></code></pre></td></tr></table></figure>
+
+<p>拓扑排序的时间复杂度:<br>$$<br>\theta(V+E)<br>$$</p>
+<h2 id="拓扑排序算法的正确性"><a href="#拓扑排序算法的正确性" class="headerlink" title="拓扑排序算法的正确性"></a>拓扑排序算法的正确性</h2><p>证明时要用到有向无环图的特征<br>$$<br>一个有向图G&#x3D;(V,E)是无环的当且仅当对其进行的	深度优先搜索不产生后向边<br>$$<br>正确性：<br>$$<br>拓扑排序算法TOPOLOGICAL-SORT生成的是有向无环图的拓扑排序<br>$$</p>
+<h2 id="作业"><a href="#作业" class="headerlink" title="作业"></a>作业</h2><h2 id="22-4-2-拓扑排序计算有向无环图简单路径的条数"><a href="#22-4-2-拓扑排序计算有向无环图简单路径的条数" class="headerlink" title="22.4-2 拓扑排序计算有向无环图简单路径的条数"></a>22.4-2 拓扑排序计算有向无环图简单路径的条数</h2><p><img src="/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA22.4-%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F-%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230119143129306.png" srcset="/img/loading.gif" lazyload alt="image-20230119143129306"></p>
+<p>算法的实现思路为：</p>
+<p>令u.path_count属性表示u结点到v节点简单路径的条数</p>
+<ul>
+<li>如果u结点和v结点相同，则只有一条路径；</li>
+<li>如果u结点和v结点不相同，并且u.path_count&#x3D;NIL(这表示递归还未结束，递归结束时，这个值应该是一个Integer，而不是一个NIL)时，遍历u的邻接链表中的所有结点，递归调用SIMPLE-PATH-NUMBER函数，累加path_count，因为每一条从u到v的路径一定会经过u的邻接结点；</li>
+<li>如果u结点和v结点不相同并且u.path_count!&#x3D;NIL,表示递归已经调用结束，路径条数已经求出，可以return。</li>
+<li>该算法的时间复杂度是$O(V+E)$，是线性时间算法。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c">SIMPLE-PATH-NUMBER(u,v)<br>	<span class="hljs-keyword">if</span>(u==v) <br>		<span class="hljs-keyword">return</span> <span class="hljs-number">1</span><br>	<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(u.path_count!=NIL) <br>		<span class="hljs-keyword">return</span> u.path_count<br>	<span class="hljs-keyword">else</span><br>		<span class="hljs-keyword">for</span> each w ∈ Adj[u] <span class="hljs-keyword">do</span><br>			u.path_count=u.path_count+SIMPLE-PATH-NUMBER(w,v)<br>		<span class="hljs-keyword">return</span> u.path_count<br></code></pre></td></tr></table></figure>
+
+<h2 id="22-4-5-寻找入度为0的结点的方法实现拓扑排序"><a href="#22-4-5-寻找入度为0的结点的方法实现拓扑排序" class="headerlink" title="22.4-5 寻找入度为0的结点的方法实现拓扑排序"></a>22.4-5 寻找入度为0的结点的方法实现拓扑排序</h2><p><img src="/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA22.4-%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F-%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230119143141495.png" srcset="/img/loading.gif" lazyload alt="image-20230119143141495"></p>
+<p>找出入度为0的节点，删除该点并删除该点所有的出边，删除的顺序就是拓扑排序的顺序</p>
+<h4 id="实现思想："><a href="#实现思想：" class="headerlink" title="实现思想："></a>实现思想：</h4><ol>
+<li>遍历所有邻接链表，统计每个结点的入度，时间复杂度为O(E)</li>
+<li>找出一个入度为0的结点u，将u的所有出边(u,v)的目的点v的入读减一，时间复杂度为O(V+E)</li>
+<li>循环步骤1</li>
+</ol>
+<h4 id="如果G包含环路："><a href="#如果G包含环路：" class="headerlink" title="如果G包含环路："></a>如果G包含环路：</h4><ol>
+<li>若G中包含环路，则会找不到入度为0的结点，且G中仍然有结点不能删除（剩下的就是G的回路）。</li>
+</ol>
+<h1 id="23-1-11"><a href="#23-1-11" class="headerlink" title="23.1-11"></a>23.1-11</h1><p><img src="/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA22.4-%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F-%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230119143152403.png" srcset="/img/loading.gif" lazyload alt="image-20230119143152403"></p>
+<p>Consider edge E is the edge whose weight is decreased by one unit.</p>
+<p><strong>createUpdatedMST(MST T, edge E)</strong></p>
+<p>  <strong>Step 1 :</strong> Sort the edges in the MST  T in decreasing order by weight.</p>
+<p>  <strong>Step 2 :</strong> Select the <strong>maximum weight edge</strong> from the above sorted list which is not yet selected. Let this edge be <strong>e.</strong></p>
+<p>  <strong>Step 3 :</strong> If weight of edge <strong>E</strong> is more than weight of edge <strong>e</strong>, exit the algorithm as <strong>given MST T is the actual MST of the graph.</strong>(不做任何改变)</p>
+<p>   <strong>Step 4 :</strong> Else if weight of edge E is less than weight of edge e selected from the list, check if adding <strong>E</strong> to the MST and removing <strong>e</strong> from MST results in a cycle.</p>
+<p>   <strong>Step 5 :</strong> If a cycle is not formed return the new updated MST with edge <strong>E.</strong></p>
+<p>   <strong>Step 6 :</strong> If the cycle is formed, go to step 2 and check the next highest weight edge from the sorted list.</p>
+<h1 id="23-2-7"><a href="#23-2-7" class="headerlink" title="23.2-7"></a>23.2-7</h1><p><img src="/images/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA22.4-%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F-%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20230119143203274.png" srcset="/img/loading.gif" lazyload alt="image-20230119143203274"></p>
+<p>线性时间</p>
+<ol>
+<li><p>The greedy method works on the basis of this selection policy: <strong>choose the minimum-weight remaining edge.</strong> If that edge does not create a cycle in the evolving tree, add it to the tree.</p>
+</li>
+<li><p>For finding and deleting the min-weight edge, use a minheap where its nodes are the labels+weights of the graph edges.</p>
+</li>
+<li><p>For <strong>cycle detection</strong>, note that</p>
+</li>
+</ol>
+<ul>
+<li>T is a forest at any given time,</li>
+<li>adding an edge eliminates two trees from the forest and replaces them by a new tree containg the union of the nodes of the two old trees, and</li>
+<li>and edge $e&#x3D;(x,y)$ creates a cycle if both x and y belong to the same tree in the forest.</li>
+</ul>
+<p>Complexity: </p>
+<ul>
+<li>$O(|E|)$ to build the heap</li>
+<li>up to |E| calls to U and F, taking  $ O(|E|log n)$ time</li>
+</ul>
+<p>therefore, the total time is $O(|E|log |E|).$</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA/" class="category-chain-item">算法导论</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA/">#算法导论</a>
+      
+        <a href="/tags/%E6%B7%B1%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F/">#深拓扑排序</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>算法导论22.4-拓扑排序-期末复习</div>
+      <div>http://example.com/2022/12/03/算法导论22.4-拓扑排序-期末复习/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>ECNU_zhy</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>December 3, 2022</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>Licensed under</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/12/07/A%20New%20Journey%20to%20Handle%20the%20Variety%20of%20Data/" title="A new journey to handle the variety of data论文阅读笔记">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">A new journey to handle the variety of data论文阅读笔记</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/12/03/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA22.3-%E6%B7%B1%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2-%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/" title="算法导论22.3-深度优先搜索-期末复习">
+                        <span class="hidden-mobile">算法导论22.3-深度优先搜索-期末复习</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.1/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

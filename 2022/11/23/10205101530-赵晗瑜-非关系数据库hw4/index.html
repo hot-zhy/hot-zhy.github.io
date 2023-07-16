@@ -1,0 +1,782 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/xiaoxin.png">
+  <link rel="icon" href="/img/xiaoxin.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="ECNU_zhy">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="非关系数据库hw4 10205101530-赵晗瑜  1. RocksDB﻿是一种用于快速存储的嵌入式持久存储，请查阅官方网站或相关文献，完成以下两项工作：RocksDB简介：​			RocksDB是Facebook公司基于Google的LevelDB代码库创建的高性能、持久键值的嵌入式单机存储引擎。它针对固态存储驱动器（SSD）的某些特性做了优化，主要面向大规模（分布式）应用程序，并被设计为嵌入">
+<meta property="og:type" content="article">
+<meta property="og:title" content="zhy-blog">
+<meta property="og:url" content="http://example.com/2022/11/23/10205101530-%E8%B5%B5%E6%99%97%E7%91%9C-%E9%9D%9E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93hw4/index.html">
+<meta property="og:site_name" content="zhy-blog">
+<meta property="og:description" content="非关系数据库hw4 10205101530-赵晗瑜  1. RocksDB﻿是一种用于快速存储的嵌入式持久存储，请查阅官方网站或相关文献，完成以下两项工作：RocksDB简介：​			RocksDB是Facebook公司基于Google的LevelDB代码库创建的高性能、持久键值的嵌入式单机存储引擎。它针对固态存储驱动器（SSD）的某些特性做了优化，主要面向大规模（分布式）应用程序，并被设计为嵌入">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="c:/Users/zhy19/AppData/Roaming/Typora/typora-user-images/image-20221123151822339.png">
+<meta property="og:image" content="c:/Users/zhy19/AppData/Roaming/Typora/typora-user-images/image-20221123152112999.png">
+<meta property="og:image" content="c:/Users/zhy19/AppData/Roaming/Typora/typora-user-images/image-20221123152511645.png">
+<meta property="og:image" content="c:/Users/zhy19/AppData/Roaming/Typora/typora-user-images/image-20221123152549824.png">
+<meta property="og:image" content="c:/Users/zhy19/AppData/Roaming/Typora/typora-user-images/image-20221123152629660.png">
+<meta property="og:image" content="c:/Users/zhy19/AppData/Roaming/Typora/typora-user-images/image-20221123152736479.png">
+<meta property="og:image" content="c:/Users/zhy19/AppData/Roaming/Typora/typora-user-images/image-20221123153512020.png">
+<meta property="og:image" content="c:/Users/zhy19/AppData/Roaming/Typora/typora-user-images/image-20221123221145055.png">
+<meta property="article:published_time" content="2022-11-23T14:13:45.400Z">
+<meta property="article:modified_time" content="2022-12-01T01:53:25.392Z">
+<meta property="article:author" content="ECNU_zhy">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="c:/Users/zhy19/AppData/Roaming/Typora/typora-user-images/image-20221123151822339.png">
+  
+  
+  
+  <title>zhy-blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ECNU-zhy</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                Links
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text=""></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-11-23 22:13" pubdate>
+          November 23, 2022 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.5k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          46 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none"></h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 align="center">非关系数据库hw4</h1>
+<h2 align="right">10205101530-赵晗瑜</h2>
+
+<h2 id="1-RocksDB-是一种用于快速存储的嵌入式持久存储，请查阅官方网站或相关文献，完成以下两项工作："><a href="#1-RocksDB-是一种用于快速存储的嵌入式持久存储，请查阅官方网站或相关文献，完成以下两项工作：" class="headerlink" title="1. RocksDB﻿是一种用于快速存储的嵌入式持久存储，请查阅官方网站或相关文献，完成以下两项工作："></a>1. RocksDB﻿是一种用于快速存储的嵌入式持久存储，请查阅官方网站或相关文献，完成以下两项工作：</h2><h4 id="RocksDB简介："><a href="#RocksDB简介：" class="headerlink" title="RocksDB简介："></a>RocksDB简介：</h4><p>​			RocksDB是Facebook公司基于Google的LevelDB代码库创建的高性能、持久键值的嵌入式单机存储引擎。它针对固态存储驱动器（SSD）的某些特性做了优化，主要面向大规模（分布式）应用程序，并被设计为嵌入在更高级别应用程序中的组件。因此，每个RocksDB实例只管理单个服务器节点的存储设备上的数据；它不处理任何跨应用间操作，例如数据复制和负载均衡，也不执行高级操作，例如快照，检查点，它将这些操作的实现留给上层应用程序，但提供适当的备份还原、故障恢复等支持，以便它们可以更高效的执行和有效的控制。</p>
+<h4 id="1-理解并介绍RocksDB的数据模型和RocksDB的存储引擎（因为发现数据模型和存储引擎的关系比较紧密，所以就放在一起写了）"><a href="#1-理解并介绍RocksDB的数据模型和RocksDB的存储引擎（因为发现数据模型和存储引擎的关系比较紧密，所以就放在一起写了）" class="headerlink" title="(1)理解并介绍RocksDB的数据模型和RocksDB的存储引擎（因为发现数据模型和存储引擎的关系比较紧密，所以就放在一起写了）"></a>(1)理解并介绍RocksDB的数据模型和RocksDB的存储引擎（因为发现数据模型和存储引擎的关系比较紧密，所以就放在一起写了）</h4><p>RocksDB按照Key-Value形式存储数据，数据在内部根据Key进行排序</p>
+<ol>
+<li><h4 id="RocksDB按顺序组织所有数据，通用操作包括"><a href="#RocksDB按顺序组织所有数据，通用操作包括" class="headerlink" title="RocksDB按顺序组织所有数据，通用操作包括"></a>RocksDB按顺序组织所有数据，通用操作包括</h4><ul>
+<li>Get(key)</li>
+<li>Put(key)</li>
+<li>Delete(key)</li>
+<li>NewIterator(key)</li>
+</ul>
+</li>
+<li><h4 id="RocksDB的三种数据结构"><a href="#RocksDB的三种数据结构" class="headerlink" title="RocksDB的三种数据结构"></a>RocksDB的三种数据结构</h4><ul>
+<li>memtable<ol>
+<li>内存数据结构</li>
+<li>所有写入的请求都会进入memtable，选择性进入logfile</li>
+</ol>
+</li>
+<li>ssfile<ol>
+<li>当memtable被填满时，他会被刷到ssfile文件并存储起来，然后相关的logfile会在之后被安全地删除</li>
+<li>ssfile中的数据都是排序好的，以便根据key进行快速搜索</li>
+</ol>
+</li>
+<li>logfile<ol>
+<li>有序写数据结构</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><h4 id="RocksDB采用-Log-Structured-Merge（LSM）-trees作为基本的数据结构，整体数据模型如下图所示："><a href="#RocksDB采用-Log-Structured-Merge（LSM）-trees作为基本的数据结构，整体数据模型如下图所示：" class="headerlink" title="RocksDB采用 Log-Structured Merge（LSM） trees作为基本的数据结构，整体数据模型如下图所示："></a>RocksDB采用 <strong>Log-Structured Merge（LSM） trees</strong>作为基本的数据结构，整体数据模型如下图所示：</h4><img src="C:/Users/zhy19/AppData/Roaming/Typora/typora-user-images/image-20221123151822339.png" srcset="/img/loading.gif" lazyload alt="image-20221123151822339" style="zoom:67%;" />
+
+<ul>
+<li>为了保证数据的有序性，插入、搜索的高效性，MemTable基于 <strong>跳表</strong>实现</li>
+<li>WAL用于故障发生时的数据恢复，可选择关闭</li>
+<li>BlockCache：RocksDB 在内存中缓存数据以供读取的地方。一个Cache对象可以被同一个进程中的多个RocksDB实例共享，用户可以控制整体的缓存容量。有LRUCache和ClockCache两类</li>
+<li>除了第0层的SST文件，其余层的SST文件之间都是有序的</li>
+<li>将数据写入sst则是通过异步的flush和compaction 后台线程进行的</li>
+</ul>
+</li>
+<li><h4 id="RocksDB的LSM基本操作"><a href="#RocksDB的LSM基本操作" class="headerlink" title="RocksDB的LSM基本操作"></a>RocksDB的LSM基本操作</h4><img src="C:/Users/zhy19/AppData/Roaming/Typora/typora-user-images/image-20221123152112999.png" srcset="/img/loading.gif" lazyload alt="image-20221123152112999" style="zoom:80%;" />
+
+<ul>
+<li><h4 id="写数据"><a href="#写数据" class="headerlink" title="写数据"></a>写数据</h4><p>​		当发起一个<u><strong>写请求</strong></u>时，RocksDB首先会进行一个预写的操作，将数据首先以日志的形式写入到持久化存储中（主要是为了防止数据的不一致性），也就是说，为了数据的一致性，同时，也可以为后续故障恢复做一个记录。</p>
+<p>​		预写入时，采用的是连续写入的方式，这比随机写入的效率要高，尤其是针对持久化存储。接下来，RocksDB会将数据写入到内存中，RocksDB采用内存中一个叫做MemTable的数据结构。</p>
+<p>​		RocksDB采用跳表的数据结构主要是为了提高读写性能，当内存表写满之后，RocksDB会将Memtable内存表转化成只读状态（read-only），同时新建一个内存表保证后续的写入，只读内存表会通过flush的操作刷到磁盘上，也就意味着每一个只读内存表都会完完整整地写入到磁盘文件中，在RocksDB中文件的名称叫做SST。</p>
+</li>
+<li><h4 id="读数据"><a href="#读数据" class="headerlink" title="读数据"></a>读数据</h4><p>​		当外界发起一个**<u>读请求</u>**时，RocksDB会同时从内存表、只读内存表和持久化存储上同时去读取这些数据，主要是因为它查询的数据可能在任何一个地方，并且可能有多条记录</p>
+<p>​		<strong>那么所以RocksDB读到相同数据的时候，如何保证哪一个是最新的呢？即哪一个是用户想要的呢？</strong></p>
+<p>​		这就涉及到RocksDB的一个重要概念——版本机制，RocksDB会给每一个内存表记录一个<strong>递增的版本号</strong>，那么通过简单的对比我们就可以知道版本信息，即可得出哪一个是最新的</p>
+<p>​		与此同时，为了加速持久化存储数据结构的效率，SST的每一个文件都自带一个<strong>布隆过滤器</strong>，特点是节省空间，但是偶尔也会有一些误判，</p>
+</li>
+<li><h4 id="压缩"><a href="#压缩" class="headerlink" title="压缩"></a>压缩</h4><p>​		虽然LSM tree的顺序写入保证了写性能，但是其<strong>本身的存储结构却牺牲了读性能</strong>，所以需要通过compaction这样的机制随着IO的持续写入来不断调整数据存储系统的结构，来降低对读的影响。</p>
+<p>Rocksdb有多种compaction策略：</p>
+<ul>
+<li>size-tiered compaction：每层允许的SST文件<strong>最大数量</strong>都有个相同的阈值，随着memtable不断flush成SST，某层的SST数达到阈值时，就把<strong>该层所有SST全部合并成一个大的新SST</strong>，并放到较高一层去。</li>
+<li>leveled compaction：对于L1层及以上的数据，将size-tiered compaction中原本的大SST拆开，成为多个key互不相交的小SST的序列（L0层是从memtable flush过来的新SST，该层各个SST的key是可以相交的），并且其数量阈值单独控制。可见，leveled compaction与size-tiered compaction相比，每次做compaction时不必再选取一层内所有的数据，并且每层中SST的key区间都是不相交的，重复key减少了。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><h4 id="跳表（MemTable）："><a href="#跳表（MemTable）：" class="headerlink" title="跳表（MemTable）："></a>跳表（MemTable）：</h4><p>跳表（Skiplist）是一个特殊的链表，相比一般的链表，有更高的查找效率。平均期望的**查找、插入、删除时间复杂度都是O(logn)**。Redis中的有序集合zset；LevelDB、RocksDB、HBase中Memtable都采用跳表实现。</p>
+<p><img src="C:/Users/zhy19/AppData/Roaming/Typora/typora-user-images/image-20221123152511645.png" srcset="/img/loading.gif" lazyload alt="image-20221123152511645"></p>
+</li>
+<li><h4 id="演化思路："><a href="#演化思路：" class="headerlink" title="演化思路："></a>演化思路：</h4><p>对于单链表来说，即使数据是已经排好序的，想要查询其中的一个数据，只能从头开始遍历链表，这样效率很低，时间复杂度很高，是 O(n)。为了提高查询的效率，可以为链表建立一个“索引”。 （查找15的过程：1-&gt;7-&gt;14-&gt;14-&gt;14-&gt;15）</p>
+<p><img src="C:/Users/zhy19/AppData/Roaming/Typora/typora-user-images/image-20221123152549824.png" srcset="/img/loading.gif" lazyload alt="image-20221123152549824"></p>
+<p>​		每两个节点建立一个索引，跳表高度：log(n)。若在查询跳表的时，每一层都需要遍历 k 个结点，最终的时间复杂度为 O(k*log(n))。</p>
+<p>​		可以得到k&#x3D;2，原因如下：</p>
+<p>​		最高一级索引只有两个结点，每下一层索引在上一层索引两个结点之间增加了一个结点，也就是<strong>上一层索引两结点的中值</strong>。因此在搜索过程中，搜索指针pointer从顶层头结点开始，进行类似于二分查找的判断，并确定新的头结点的索引列。这样可以得到，在每一行最多遍历2个节点。</p>
+<p><img src="C:/Users/zhy19/AppData/Roaming/Typora/typora-user-images/image-20221123152629660.png" srcset="/img/loading.gif" lazyload alt="image-20221123152629660"></p>
+<p>可以看出，跳表的效率比链表高了，但是跳表需要额外存储多级索引，所以需要的更多的内存空间（空间换时间）。</p>
+</li>
+<li><h4 id="插入、删除"><a href="#插入、删除" class="headerlink" title="插入、删除"></a>插入、删除</h4><p>跳表的查询的时间复杂度为 O(log(n)），因为找到位置之后插入和删除的时间复杂度很低，为 O(1)，所以最终插入和删除的时间复杂度也为 O(log(n))。</p>
+<p>一些注意的点：删除时，可能需要将索引中的节点一并删除；不停插入之后，可能造成索引之间的结点过多，因此需要维护。</p>
+</li>
+<li><h4 id="SST"><a href="#SST" class="headerlink" title="SST"></a>SST</h4><p>LSM tree保证了数据是有序写入 (memtable – skiplist)，提高了写性能，但是因为其本身的分层结构，牺牲了读性能（一个key若存储在了低级别的level，从上到下每一层都要进行查找，代价极大）。所以，针对读的性能提升有了很多的优化：bloom filter(高效判断一个key是否不存在)，index-filter （二分查找，消耗低内存的情况下）索引key-value数据。这一些数据都需要存储在SST文件之中，用来进行k-v数据的有序管理。</p>
+<p>SST结构可以抽象为下图：</p>
+<img src="C:/Users/zhy19/AppData/Roaming/Typora/typora-user-images/image-20221123152736479.png" srcset="/img/loading.gif" lazyload alt="image-20221123152736479" style="zoom:67%;" />
+
+<ul>
+<li>Footer：主要是用来索引 meta index block 和 index block</li>
+<li>meta index block：主要是为了索引列出的多个meta block</li>
+<li>index block：是属于一种meta block，它是用来索引data block</li>
+<li>metablock：index block、filter block、range_del block，compression block，properties block<ol>
+<li>filter block：用来保存一些bloom filter用来加速查找;</li>
+<li>range_del block是保存客户端针对key有DeleteRange的操作而标记的一批key；</li>
+<li>compression block保存了通过字典压缩的key的前缀数据，也是为了加速读；</li>
+<li>properties block保存了当前SST文件内部的属性数据，像有多少个datablock，多少个index block，整个SST文件有多大等各维度的数据。</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><h5 id="WAL"><a href="#WAL" class="headerlink" title="WAL"></a>WAL</h5><p>WAL主要作用是用来恢复节点断电，死机时 memtable中的未commited中的数据。 所以WAL 的写入需要优先于memtable，且每一次写入都需要flush ，这也是write head的由来。</p>
+</li>
+</ol>
+<h2 id="2-阅读文献-Sanjay-Ghemawat-Howard-Gobioff-Shun-Tak-Leung-The-Google-file-system-In-Proceedings-of-the-nineteenth-ACM-symposium-on-Operating-systems-principles-October-2003-理解并介绍GFS的数据一致性策略。"><a href="#2-阅读文献-Sanjay-Ghemawat-Howard-Gobioff-Shun-Tak-Leung-The-Google-file-system-In-Proceedings-of-the-nineteenth-ACM-symposium-on-Operating-systems-principles-October-2003-理解并介绍GFS的数据一致性策略。" class="headerlink" title="2. 阅读文献:Sanjay Ghemawat, Howard Gobioff, Shun-Tak Leung. The Google file system. In Proceedings of the nineteenth ACM symposium on Operating systems principles October 2003.理解并介绍GFS的数据一致性策略。"></a>2. 阅读文献:Sanjay Ghemawat, Howard Gobioff, Shun-Tak Leung. The Google file system. In Proceedings of the nineteenth ACM symposium on Operating systems principles October 2003.理解并介绍GFS的数据一致性策略。</h2><h4 id="GFS的一致性模型"><a href="#GFS的一致性模型" class="headerlink" title="GFS的一致性模型"></a>GFS的一致性模型</h4><h4 id="概念定义"><a href="#概念定义" class="headerlink" title="概念定义"></a>概念定义</h4><ol>
+<li><p>客户端读取不同的 Replica 时可能会读取到不同的内容，那这部分文件是<strong>inconsistent</strong>的</p>
+</li>
+<li><p>所有客户端无论读取哪个 Replica 都会读取到相同的内容，那这部分文件就是<strong>consistent</strong></p>
+</li>
+<li><p>所有客户端都能看到上一次修改的所有完整内容，且这部分文件是一致的，那么我们说这部分文件是<strong>defined</strong></p>
+</li>
+</ol>
+<h5 id="保证："><a href="#保证：" class="headerlink" title="保证："></a>保证：</h5><ol>
+<li><h5 id="文件命名空间的修改（例如，文件创建）是原子性的。"><a href="#文件命名空间的修改（例如，文件创建）是原子性的。" class="headerlink" title="文件命名空间的修改（例如，文件创建）是原子性的。"></a>文件命名空间的修改（例如，文件创建）是<strong>原子性</strong>的。</h5></li>
+<li><h5 id="文件数据修改："><a href="#文件数据修改：" class="headerlink" title="文件数据修改："></a>文件数据修改：</h5><ul>
+<li><p>如果一次写入操作成功且没有与其他并发的写入操作发生重叠，那这部分的文件是defined</p>
+</li>
+<li><p>如果有若干个写入操作并发地执行成功，那么这部分文件会是consistent但会是undefined。在这种情况下，客户端所能看到的数据通常不能直接体现出其中的任何一次修改</p>
+</li>
+<li><p>失败的写入操作会让文件进入inconsistent的状态</p>
+<p><img src="C:/Users/zhy19/AppData/Roaming/Typora/typora-user-images/image-20221123153512020.png" srcset="/img/loading.gif" lazyload alt="image-20221123153512020"></p>
+</li>
+</ul>
+</li>
+<li><h5 id="随机写与追加写"><a href="#随机写与追加写" class="headerlink" title="随机写与追加写"></a>随机写与追加写</h5><ul>
+<li><p><strong>随机写</strong></p>
+<p>​			当写入时，指定的数据会被直接写入到客户端指定的偏移位置中，覆盖原有的数据。GFS 并未为该操作提供太多的一致性保证：如果不同的客户端并发地写入同一块文件区域，操作完成后这块区域的数据可能由各次写入的数据碎片所组成，即进入不确定的状态。</p>
+</li>
+<li><p><strong>追加写</strong></p>
+<p>​			所有的追加写入都会成功，<strong>但是有可能被执行了多次</strong>，而且每次追加的文件偏移量由GFS自己计算。</p>
+<p>​			GFS返回给客户端一个偏移量，表示了包含了写入记录的、已定义的region的起点。</p>
+</li>
+</ul>
+</li>
+<li><h5 id="Leases"><a href="#Leases" class="headerlink" title="Leases"></a>Leases</h5><p>​			每个mutation都要在一个chunk的所有replica上执行成功才能应答客户端，因此，从所有replica中选择一个作为<strong>primary</strong>，负责给mutation定序，其他replica按相同顺序执行mutation。</p>
+<p>​			primary由master选择，然后给primary授予lease（初始为60秒）。<strong>primary定期请求master延长lease</strong>（heartbeat请求中携带），一旦lease过期，master可以认为primary故障，选其他replica作为新的primary。</p>
+</li>
+<li><p><strong>GFS支持一个宽松的一致性模型</strong></p>
+<p>[GFS has a relaxed consistency model that supports our highly distributed applications well but remains relatively simple and efficient to implement.]: </p>
+<p>首先，文件命名空间的修改，如文件创建是原子性的，仅由master控制：命名空间锁提供了原子性和正确性、master操作日志定义了这些操作在全局的顺序。</p>
+<p>对于文件的数据修改，文件状态会进入以下三种状态之一：</p>
+<p>[The state of a file region after a data mutation depends on the type of mutation, whether it succeeds or fails, and whether there are concurrent mutations.]: </p>
+<ul>
+<li>一致的（consistent）：对于一个chunk，所有client看到的副本内容都是一样的</li>
+<li><strong>不一致的(Inconsistent)<strong>：客户端读取不同的 Replica 时可能会读取到不同的内容，那这部分文件是</strong>不一致</strong>的</li>
+<li>**定义的 (defined)**：数据修改后是一致的，且 <strong>client</strong> 可以看到写入操作的全部内容（ 换句话说，可以看到每步操作修改后的内容 ）</li>
+</ul>
+<p>一个文件的当前状态将取决于此次修改以及修改是否成功</p>
+<img src="C:/Users/zhy19/AppData/Roaming/Typora/typora-user-images/image-20221123221145055.png" srcset="/img/loading.gif" lazyload alt="image-20221123221145055" style="zoom:67%;" />
+
+<ul>
+<li>当一个数据写操作成功执行，且没有并发写入，那么影响的 <strong>region</strong> 就是 <strong>defined</strong>：所有 <strong>client</strong> 都能看到写入的内容。（ 隐含了 <strong>consistent</strong> ）</li>
+<li>当并行修改写完成之后，<strong>region</strong> 处于 <strong>consistent but undefined</strong> 状态：所有 <strong>client</strong> 看到同样的数据，但是无法读到任何一次写入操作写入的数据 （ 因为可能有并行写操作覆盖了同一区域 ）。</li>
+<li>失败的写操作导致 <strong>region</strong> 处于 <strong>inconsistent</strong> 状态（ 同时也是 <strong>undifined</strong> 的 ）：不同 <strong>client</strong> 在不同时间会看到不同的数据。</li>
+<li>当对文件进行追加操作，若追加操作成功，那么 <strong>region</strong> 处于 <strong>defined and consistent</strong> 状态；若某次追加操作失败，<strong>client</strong> 重新请求后会导致数据填充和重复数据的情况，此时 <strong>region</strong> 处于 <strong>defined but inconsistent</strong> 状态。</li>
+</ul>
+</li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div></div>
+      <div>http://example.com/2022/11/23/10205101530-赵晗瑜-非关系数据库hw4/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>ECNU_zhy</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>November 23, 2022</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>Licensed under</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/11/25/android-26.7-%E5%AE%9E%E7%8E%B0%E6%92%AD%E6%94%BE%E5%88%97%E8%A1%A8%E5%88%A0%E9%99%A4%E5%8A%9F%E8%83%BD/" title="android-26.7-实现播放列表删除功能">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">android-26.7-实现播放列表删除功能</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/11/20/%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95%E7%AC%AC%E4%BA%8C%E6%AC%A1%E6%9C%88%E8%80%83%E5%A4%8D%E4%B9%A0/" title="软件测试第二次月考复习笔记">
+                        <span class="hidden-mobile">软件测试第二次月考复习笔记</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.1/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

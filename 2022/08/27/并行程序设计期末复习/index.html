@@ -1,0 +1,855 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/xiaoxin.png">
+  <link rel="icon" href="/img/xiaoxin.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="ECNU_zhy">
+  <meta name="keywords" content="并行程序设计">
+  
+    <meta name="description" content="1.数据并行和任务并行任务必行是指将待解决问题所需要执行的各个任务分配到各个核上执行。 （如果一个程序是通过将任务划分，分配给各个进程或线程实现并行，则它是任务并行；） 数据并行是指将待解决问题所需要处理的数据分配给各个核，每个核在分配到的数据集上执行大致相似的操作 （通过将数据分配给多个处理器，然后让各个处理器执行相同的指令来操作数据子集实现并行化，这种并行称为数据并行。） SPMD（单程序多数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="并行程序设计期末复习">
+<meta property="og:url" content="http://example.com/2022/08/27/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/index.html">
+<meta property="og:site_name" content="zhy-blog">
+<meta property="og:description" content="1.数据并行和任务并行任务必行是指将待解决问题所需要执行的各个任务分配到各个核上执行。 （如果一个程序是通过将任务划分，分配给各个进程或线程实现并行，则它是任务并行；） 数据并行是指将待解决问题所需要处理的数据分配给各个核，每个核在分配到的数据集上执行大致相似的操作 （通过将数据分配给多个处理器，然后让各个处理器执行相同的指令来操作数据子集实现并行化，这种并行称为数据并行。） SPMD（单程序多数">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220825121250120.png">
+<meta property="og:image" content="http://example.com/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220825121341558-16614008224171.png">
+<meta property="og:image" content="http://example.com/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220825122119160.png">
+<meta property="og:image" content="http://example.com/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220825122939021.png">
+<meta property="og:image" content="http://example.com/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220825125041137-16614030414973.png">
+<meta property="og:image" content="http://example.com/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220825125226414.png">
+<meta property="og:image" content="http://example.com/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220825125855221.png">
+<meta property="og:image" content="http://example.com/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220825125907240.png">
+<meta property="og:image" content="http://example.com/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220825130248103.png">
+<meta property="og:image" content="http://example.com/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220825131642001.png">
+<meta property="og:image" content="http://example.com/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220825132326045.png">
+<meta property="og:image" content="http://example.com/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220825132618227.png">
+<meta property="og:image" content="http://example.com/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220825140338536.png">
+<meta property="og:image" content="http://example.com/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220825141153755.png">
+<meta property="og:image" content="http://example.com/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220827004130601.png">
+<meta property="og:image" content="http://example.com/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220827004211355.png">
+<meta property="og:image" content="http://example.com/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220827004428137.png">
+<meta property="og:image" content="http://example.com/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220827004751515.png">
+<meta property="og:image" content="http://example.com/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220827005420785.png">
+<meta property="og:image" content="http://example.com/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220827011125591.png">
+<meta property="og:image" content="http://example.com/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220827011657997.png">
+<meta property="og:image" content="http://example.com/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220827012142366.png">
+<meta property="og:image" content="http://example.com/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220827012214638.png">
+<meta property="og:image" content="http://example.com/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220827012239313.png">
+<meta property="og:image" content="http://example.com/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220827012358044.png">
+<meta property="og:image" content="http://example.com/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220827012300917.png">
+<meta property="og:image" content="http://example.com/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220827012312182.png">
+<meta property="og:image" content="http://example.com/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220827012440616.png">
+<meta property="article:published_time" content="2022-08-26T17:25:45.000Z">
+<meta property="article:modified_time" content="2022-08-26T17:25:46.390Z">
+<meta property="article:author" content="ECNU_zhy">
+<meta property="article:tag" content="期末复习">
+<meta property="article:tag" content="并行程序设计">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220825121250120.png">
+  
+  
+  
+  <title>并行程序设计期末复习 - zhy-blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ECNU-zhy</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                Links
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="并行程序设计期末复习"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-08-27 01:25" pubdate>
+          August 27, 2022 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          23k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          191 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">并行程序设计期末复习</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="1-数据并行和任务并行"><a href="#1-数据并行和任务并行" class="headerlink" title="1.数据并行和任务并行"></a>1.数据并行和任务并行</h1><p><strong>任务必行</strong>是指将待解决问题所需要执行的<strong>各个任务</strong>分配到各个核上执行。</p>
+<p><strong>（如果一个程序是通过将任务划分，分配给<u>各个进程或线程</u>实现并行，则它是任务并行；）</strong></p>
+<p><strong>数据并行</strong>是指将待解决问题所需要处理的数据分配给各个核，每个核在分配到的数据集上执行大致相似的操作</p>
+<p><strong>（通过将数据分配给<u>多个处理器</u>，然后让各个处理器执行相同的指令来操作数据子集实现并行化，这种并行称为数据并行。</strong>）</p>
+<p>SPMD（单程序多数据流）既可以实现任务并行，也可以实现数据并行。</p>
+<h1 id="2-负载均衡"><a href="#2-负载均衡" class="headerlink" title="2.负载均衡"></a>2.负载均衡</h1><p>需要在<strong>进程&#x2F;线程之间</strong>平均分配任务从而满足每个进程&#x2F;线程获得大致相等的工作量，这称为负载均衡</p>
+<p>负载不均衡是指系统中<strong>某些处理器空闲而某些处理器有大量待处理任务</strong></p>
+<p>每个<strong>核</strong>大致分配<strong>相同数目的数据</strong>进行计算</p>
+<h1 id="3-并行、分布式、并发"><a href="#3-并行、分布式、并发" class="headerlink" title="3.并行、分布式、并发"></a>3.并行、分布式、并发</h1><ul>
+<li>并发：一个程序的<strong>多个任务可以在一个时间段内同时执行</strong>（一个程序的多个任务）</li>
+<li>分布式：一个程序需要与<strong>其他程序</strong>协作来解决某个问题（多个程序）</li>
+<li>并行：一个程序通过<strong>多个任务紧密协作</strong>来解决某个问题（一个程序的多个任务）</li>
+</ul>
+<h1 id="4-MPI、OpenMP和Pthreads的区别"><a href="#4-MPI、OpenMP和Pthreads的区别" class="headerlink" title="4.  MPI、OpenMP和Pthreads的区别"></a>4.  MPI、OpenMP和Pthreads的区别</h1><ul>
+<li>MPI和Pthreads是<strong>C语言的扩展库</strong>，可以在C程序中使用<strong>扩展的类型定义、函数和宏</strong>；OpenMP包含了一个<strong>扩展库</strong>以及<strong>对C编译器的部分修改。</strong></li>
+<li>Pthreads和OpenMP是为共享内存系统的编程而设计的，它们提供访问共享内存的机制；MPI是为分布式内存系统的编程而设计的，它提供发送消息的机制。</li>
+<li><strong>OpenMP对C语言有更高层次的扩展</strong>。</li>
+<li>Pthreads提供了一些在OpenMP中不可用的协调构造。<strong>OpenMP更容易将程序并行化</strong>，<strong>而Pthreads提供的一些构造使得它并行化其他一些程序的能力更强。</strong></li>
+<li>尽管openmp和pthreads都是针对共享内存变成的API，但他们有许多本质的不同，pthreads要求程序员显式地明确每个线程的行为。相反，openmp有时允许程序员只需要简单地声明一块代码应该并行执行，而由编译器和运行时系统来决定哪个线程具体执行哪个任务</li>
+<li>pthreads（和MPI一样）是一个能够被链接到C程序的函数库，因此只要系统有pthreads库，pthreads程序就能够任意C编译器使用。相反，openmp要求编译器支持某些操作，所以完全有可能你使用的编译器无法把openmp程序编译成并行程序。</li>
+<li>pthreads更底层，并且提供了虚拟地编写任何可知线程行为地能力。然而，这个功能有一定的代价：<strong>每个线程行为的每一个细节都得由我们自己来定义</strong>。相反，openmp允许编译器和运行时系统来决定线程行为的一些细节。因此使用openmp来编写一些并行行为更容易。但代价是<strong>很难对一些底层的线程交互进行编程。</strong></li>
+</ul>
+<h1 id="5-冯诺依曼架构-哈佛结构"><a href="#5-冯诺依曼架构-哈佛结构" class="headerlink" title="5.冯诺依曼架构         哈佛结构"></a>5.冯诺依曼架构         哈佛结构</h1><p><u>哈佛结构</u>是一种将<strong>程序指令</strong>储存和<strong>数据储存</strong>分开的存储器结构。</p>
+<p><u>冯·诺伊曼结构</u>是一种将<strong>程序指令存储器</strong>和<strong>数据存储器合并在一起</strong>的电脑设计概念结构。</p>
+<p>经典的冯诺依曼结构包括主存，中央处理单元处理器或核以及主存和CPU之间的互联结构。主存中由许多区域，每个区域都可以存储指令和数据。每个区域都有一个地址，可以通过这个地址来访问相应的区域及区域中存储的数据和指令。</p>
+<h1 id="6-进程和线程"><a href="#6-进程和线程" class="headerlink" title="6.进程和线程"></a>6.进程和线程</h1><p>线程间的切换比进程间的切换更快。线程相对于进程而言是“<strong>轻量级</strong>”的。线程包含在进程中，所以线程可以使用<strong>相同的可执行代码</strong>，共享<strong>相同的内存</strong>和<strong>相同的I&#x2F;O设备</strong>。线程各自需要一个私有的<strong>程序计数器和函数调用栈</strong></p>
+<h1 id="7-一个进程为什么要有fork和join"><a href="#7-一个进程为什么要有fork和join" class="headerlink" title="7.一个进程为什么要有fork和join"></a>7.一个进程为什么要有fork和join</h1><p>Fork&#x2F;Join它可以将一个大任务拆分成多个子任务进行并行处理，最后将子任务结果合并成最后的计算结果，并输出。Fork&#x2F;Join 框架要完成两件事情：</p>
+<ul>
+<li>Fork：把一个复杂任务进行拆分，大事化小。</li>
+<li>Join：把拆分的结果进行合并。</li>
+</ul>
+<p>为了实现并行，通过fork函数利用主线程派生出多个线程，以将数据或任务并行地执行在各个线程上，通过join将主从线程合并，合并成最后的计算结果。</p>
+<h1 id="8-为什么要用缓存-缓存有哪些替换策略"><a href="#8-为什么要用缓存-缓存有哪些替换策略" class="headerlink" title="8.为什么要用缓存 缓存有哪些替换策略"></a>8.为什么要用缓存 缓存有哪些替换策略</h1><p>主存与CPU之间的分离称为冯诺依曼瓶颈，而缓存是解决冯诺依曼瓶颈而最广泛使用的方法之一。CPU cache是一组相对于主存，CPU能更快速地访问的内存区域</p>
+<p>缓存的访问时间比其他存储区域的访问时间短。</p>
+<p>基于局部性原理，程序接下来可能会用到的指令和数据与最近访问过的指令和数据在物理上是邻近存放的。</p>
+<p>为了利用局部性原理，系统采用更宽的互联结构来访问数据和指令。也就是：一次内存访问能存取一整块代码和数据，而不只是单条指令和单条数据。这些块称为高速缓存块或高速缓存行</p>
+<p>在访问完一个内存区域后，程序会在不久的将来（时间局部性）访问邻近的区域（空间局部性）</p>
+<ol>
+<li>最不经常使用（LFU）算法</li>
+<li>近期最少使用（LRU）算法</li>
+<li>随机替换</li>
+<li>自适应缓存替换（ARC）算法</li>
+<li>最近最常使用算法（MRU）</li>
+</ol>
+<h1 id="9-什么叫-Cache命中和Cache缺失"><a href="#9-什么叫-Cache命中和Cache缺失" class="headerlink" title="9.什么叫 Cache命中和Cache缺失"></a>9.什么叫 Cache命中和Cache缺失</h1><p>当向cache查询信息时，如果cache中有信息，则称为cache命中或命中；如果信息不存在，则称cache缺失或缺失</p>
+<h1 id="10-缓存的三个种类"><a href="#10-缓存的三个种类" class="headerlink" title="10.缓存的三个种类"></a>10.缓存的三个种类</h1><ul>
+<li>直接映射：每个高速缓存行在Cache中仅有唯一的位置</li>
+<li>全相连：每个高速缓存行能够放置在Cache中的任意位置</li>
+<li>n路组相连：每个高速缓存行都能放置到Cache中n个不同区域位置中的一个4</li>
+</ul>
+<h1 id="11-什么叫虚拟内存"><a href="#11-什么叫虚拟内存" class="headerlink" title="11. 什么叫虚拟内存"></a>11. 什么叫虚拟内存</h1><p>虚拟内存是计算机系统内存管理的一种技术。它使得应用程序认为它拥有连续的可用的内存（一个连续完整的地址空间），而实际上，它通常是被分隔成多个物理内存碎片，还有部分暂时存储在外部磁盘存储器上，在需要时进行数据交换。在主存中存放当前执行程序所需要用到的部分，来利用时间和空间局部性；那些暂时用不到的部分存储在辅存的快中，称为交换空间</p>
+<p>利用虚拟内存，使得主存可以作为辅存的缓存。它通过<strong>在主存中存放当前执行程序所需要用到的部分，来利用时间和空间局部性</strong>；那些<strong>暂时用不到的部分存储在辅存的块中，称为交换空间</strong>。与CPU cache类似，虚拟存储其也是对数据块和指令块进行操作，这些块通常称为页。因为访问辅存比访问内存要慢几十万倍，所以页通常比较大。</p>
+<p>虚拟存储技术的基本思想是利用大容量外存来扩充内存，产生一个比有限的实际内存空间大得多的、逻辑的虚拟空间，简称虚存，以便能够有效地支持多道程序系统的实现和大型程序运行的需要，从而增强系统的处理能力。</p>
+<h1 id="12-为什么要有虚拟内存"><a href="#12-为什么要有虚拟内存" class="headerlink" title="12.为什么要有虚拟内存"></a>12.为什么要有虚拟内存</h1><p>电脑中所运行的程序均需经由内存执行，若执行的程序占用内存很大或很多，则会导致内存消耗殆尽。</p>
+<p>如果运行一个大型的程序，或者程序需要访问大型数据集，那么所有的指令或者数据可能在主存中放不下。这种情况在操作系统中时常发生。为了在程序间切换并且造成一种多个程序能同时运行的错觉，下一个时间片运行所需的指令和数据必须在内存中</p>
+<h1 id="13-什么是页表"><a href="#13-什么是页表" class="headerlink" title="13.什么是页表"></a>13.什么是页表</h1><p>页表是一种特殊的数据结构，存放着虚拟地址和物理地址的对应关系</p>
+<h1 id="14-什么叫页面失效（page-fault）"><a href="#14-什么叫页面失效（page-fault）" class="headerlink" title="14.什么叫页面失效（page fault）"></a>14.什么叫页面失效（page fault）</h1><p>想要访问的页不在内存中，即页表中该页没有合法的物理地址，该页只存储在磁盘上，那么这次访问称为页面失效。</p>
+<p>当查询的地址和虚拟页号在TLB中，称为TLB命中；如果不在TLB中，称为TLB缺失。</p>
+<h1 id="15-什么是TLB"><a href="#15-什么是TLB" class="headerlink" title="15.什么是TLB"></a>15.什么是TLB</h1><p>处理器有一种专门用于地址转换的缓存，来解决“<strong>使用页表会增加程序总体的运行时间</strong>”问题，它叫做<strong>转译后备缓冲区</strong>（Translation-Lookaside Buffer， TLB），即快表。</p>
+<h1 id="16-什么叫SMT"><a href="#16-什么叫SMT" class="headerlink" title="16.什么叫SMT"></a>16.什么叫SMT</h1><p>同步多线程是<strong>细粒度</strong>多线程的变种。<strong>它通过允许多个线程同时使用多个功能单元来利用超标量处理器的性能</strong>。如果我们指定”优先“线程，那么能够在一定程度上减轻线程减速的问题。优先线程是指有多条指令就绪的线程。</p>
+<p>TLP（Thread-Level Parallelism）线程级并行：<strong>尝试通过执行不同线程来提供并行性。</strong>与ILP相比，TLP提供的是粗粒度的并行性，即同时执行的程序基本单元（线程）比细粒度的程序单元（指令）更大或更粗。</p>
+<h1 id="17-硬件多线程"><a href="#17-硬件多线程" class="headerlink" title="17.硬件多线程"></a>17.硬件多线程</h1><p>当前执行的任务被阻塞时，系统能够继续其他有用的工作。为了使这种机制有效，系统必须支持线程间的快速切换。</p>
+<h1 id="18-Flynn分类-SISD-SIMD-MIMD-之间的区别"><a href="#18-Flynn分类-SISD-SIMD-MIMD-之间的区别" class="headerlink" title="18.Flynn分类 SISD SIMD MIMD 之间的区别"></a>18.Flynn分类 SISD SIMD MIMD 之间的区别</h1><ul>
+<li>SISD：冯诺依曼系统，一次执行一条指令，一次存取一个数据项</li>
+<li>SIMD：对多个数据执行相同的指令从而实现在多个数据流上的操作，向量处理器和GPU，SIMD系统适合于对处理大型数组的简单循环实行并行化。通过将数据分配给多个处理器，然后让各个处理器使用相同的指令来操作数据子集实现并行化，这种并行称为数据并行。</li>
+<li>MIMD：支持同时<strong>多个指令流在多个数据流</strong>上操作，通常是<strong>异步</strong>的，分为两种类型—<strong>共享内存系统</strong>和<strong>分布式内存系统。</strong></li>
+</ul>
+<h1 id="19-什么叫-共享内存系统和分布式内存系统"><a href="#19-什么叫-共享内存系统和分布式内存系统" class="headerlink" title="19. 什么叫 共享内存系统和分布式内存系统"></a>19. 什么叫 共享内存系统和分布式内存系统</h1><p>共享内存系统，一组自治的处理器通过互连网络与内存系统相互连接，<strong>每个处理器能够访问每个内存区域。处理器通过访问共享的数据结构来隐式地通信。</strong></p>
+<p>分布式内存系统，<strong>每个处理器有自己私有的内存空间</strong>，处理器-内存对之间通过互连网络相互通信。处理器之间通过发送消息或者使用特殊的函数来访问其他处理器的内存，这是一种显式的通信。</p>
+<h1 id="20-什么叫缓存一致性-监听缓存一致性协议和基于目录的缓存一致性协议"><a href="#20-什么叫缓存一致性-监听缓存一致性协议和基于目录的缓存一致性协议" class="headerlink" title="20.什么叫缓存一致性 监听缓存一致性协议和基于目录的缓存一致性协议"></a>20.什么叫缓存一致性 监听缓存一致性协议和基于目录的缓存一致性协议</h1><ul>
+<li><strong>缓存一致性</strong>：相同变量可以存储在两个不同核的缓存中。如果一个核更新了变量值，另一个核却不知道该变量已经被改变了。单核处理系统的cache对如下情况没有提供保证：在多核系统中，各个核的cache存储相同变量的副本，当一个处理器更新cache中该变量的副本时，其他处理器应该知道该变量已经更新，<strong>即其他处理器中cache的副本也应该更新</strong>，这称为cache一致性问题</li>
+<li><strong>监听缓存一致性协议</strong>：当多个核共享总线时，总线上传递的信号都能被连接到总线的所有核看到。因此，当核0更新它cache中x的副本时，如果它也将这个更新信息在总线上广播，并且假如核1正在监听总线，那么它会知道x已经更新了，并将自己cache中x的副本标记为非法的。这就是监听cache一致性协议大致的工作原理</li>
+<li><strong>基于目录的cache一致性协议：</strong>基于目录的cache一致性协议通过使用一个叫做目录的数据结构解决在大型网络上广播昂贵的问题。目录存储每个内存行的状态。一般的，这个数据结构是分布式的，每个核&#x2F;内存对负责存储一部分的目录。<strong>这部分目录标识局部内存对应高速缓存行的状态</strong>。因此，当一个高速缓存行被读入时，如核0的cache，与这个高速缓存行相对应的目录项就会更新，标识核0有这个行的副本。当一个变量需要更新时，就会查询目录，<strong>并将所有包含该变量高速缓存行置为非法</strong>。显然目录需要大量额外的存储空间</li>
+</ul>
+<h1 id="21-什么叫伪共享-它和共享的区别"><a href="#21-什么叫伪共享-它和共享的区别" class="headerlink" title="21.什么叫伪共享 它和共享的区别"></a>21.什么叫伪共享 它和共享的区别</h1><p>CPU的缓存是以缓存行(cache line)为单位进行缓存的，当多个线程修改不同变量，而这些变量<strong>又处于同一个缓存行时</strong>就会影响彼此的<strong>性能</strong>。例如：线程1和线程2共享一个缓存行，线程1只读取缓存行中的变量1，线程2修改缓存行中的变量2，虽然线程1和线程2操作的是不同的变量，由于变量1和变量2同处于一个缓存行中，当变量2被修改后，缓存行失效<strong>，线程1要重新从主存中读取，因此导致缓存失效</strong>，从而产生<strong>性能</strong>问题</p>
+<p>可以通过在线程或进程中临时存储数据，再把临时存储的数据更新到共享存储来降低伪共享带来的影响。</p>
+<p>False sharing可以避免，但是true sharing不可避免</p>
+<h1 id="22-什么叫-动态线程和静态线程"><a href="#22-什么叫-动态线程和静态线程" class="headerlink" title="22. 什么叫 动态线程和静态线程"></a>22. 什么叫 动态线程和静态线程</h1><p>动态线程在<strong>有工作请求到达</strong>的时候会派生出一个工作线程来<strong>执行该请求</strong>。当工作线程完成任务，就会终止执行再合并到主线程中。这种模式充分利用了系统的资源，因为线程需要的资源只在线程实际运行时使用。在许多情况下，共享内存程序使用的是动态线程。</p>
+<p>静态线程则是<strong>直接派生出所有的线程</strong>，<strong>并在所有的线程合并到主线程后</strong>，<strong>主线程需要做一些清理工作</strong>。它更加接近于分布式内存编程中最广泛使用的模式。既然静态线程范式适用于一种系统，也适用于另一种系统，因此，我们会经常使用静态线程范式</p>
+<h1 id="23-什么叫-非确定性"><a href="#23-什么叫-非确定性" class="headerlink" title="23.什么叫 非确定性"></a>23.什么叫 非确定性</h1><p>给定的输入能产生不同的输出。</p>
+<h1 id="24-什么叫-线程安全性"><a href="#24-什么叫-线程安全性" class="headerlink" title="24.什么叫 线程安全性"></a>24.什么叫 线程安全性</h1><p><strong>如果一个代码块能够被多个线程同时执行而不引起问题，那么它是线程安全的</strong>。当一段代码不是线程安全的，通常是因为不同的线程在访问共享的数据</p>
+<h1 id="25-设计多线程和多进程的时候-输入和输出要考虑什么"><a href="#25-设计多线程和多进程的时候-输入和输出要考虑什么" class="headerlink" title="25.设计多线程和多进程的时候 输入和输出要考虑什么"></a>25.设计多线程和多进程的时候 输入和输出要考虑什么</h1><ul>
+<li>在分布式内存系统中，只有<strong>进程0</strong>能够访问stdin。在共享内存系统中，只有<strong>主线程或线程0</strong>能够访问stdin</li>
+<li>在分布式内存和共享内存系统中，<strong>所有进程&#x2F;线程</strong>都能够访问stdout和stderr</li>
+<li>但是，因为输出到stdout的非确定性顺序，大多数情况下，只有一个进程&#x2F;线程会及格过输出到stdout。但输出调试结果是个例外，在这种情况下，<strong>允许多个进程&#x2F;线程写stdout</strong></li>
+<li>只有一个进程&#x2F;线程会尝试访问一个除了stdin，stdout，stderr外的文件。所以，例如，每个进程&#x2F;线程能够打开自己私有的文件进行读，写，<strong>但是没有两个进程&#x2F;线程能够打开相同的文件</strong></li>
+<li>调试程序输出在生成输出结果时，应该包括<strong>进程&#x2F;线程的序号或进程标识符。</strong></li>
+</ul>
+<h1 id="26-什么叫-加速比和效率-物理含义是什么"><a href="#26-什么叫-加速比和效率-物理含义是什么" class="headerlink" title="26.什么叫 加速比和效率 物理含义是什么"></a>26.什么叫 加速比和效率 物理含义是什么</h1><p><img src="/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220825121250120.png" srcset="/img/loading.gif" lazyload alt="image-20220825121250120"></p>
+<p><img src="/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220825121341558-16614008224171.png" srcset="/img/loading.gif" lazyload alt="image-20220825121341558"></p>
+<h1 id="27-什么叫-阿姆达尔定律"><a href="#27-什么叫-阿姆达尔定律" class="headerlink" title="27. 什么叫 阿姆达尔定律"></a>27. 什么叫 阿姆达尔定律</h1><p>除非一个串行程序的执行几乎全部都并行化，否则，不论有多少可以利用的<strong>核</strong>，通过并行化所产生的加速比都会是受限的。</p>
+<p><img src="/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220825122119160.png" srcset="/img/loading.gif" lazyload alt="image-20220825122119160"></p>
+<h1 id="28-什么叫-可扩展性-强可扩展性和弱可扩展性"><a href="#28-什么叫-可扩展性-强可扩展性和弱可扩展性" class="headerlink" title="28.什么叫 可扩展性 强可扩展性和弱可扩展性"></a>28.什么叫 可扩展性 强可扩展性和弱可扩展性</h1><p><strong>增加一个程序的进程&#x2F;线程数</strong>，如果在<strong>输入规模也以相应增长率增加的情况</strong>下，该程序的<strong>效率值一直都是E</strong>，那么这个程序就是可扩展的。</p>
+<p>强可扩展，在<strong>增加进程&#x2F;线程的个数</strong>时，可以<strong>维持固定的效率</strong>，却<strong>不增加问题的规模。</strong></p>
+<p>弱可扩展，在<strong>增加进程&#x2F;线程个数</strong>的同时，只有<strong>以相同倍率增加问题的规模</strong>才能使<strong>效率值</strong>保持不变。</p>
+<h1 id="29-什么叫-通信子-为什么要有通信子"><a href="#29-什么叫-通信子-为什么要有通信子" class="headerlink" title="29.什么叫 通信子 为什么要有通信子"></a>29.什么叫 通信子 为什么要有通信子</h1><p>通信子是指一组可以互相发送消息的进程集合。</p>
+<p><img src="/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220825122939021.png" srcset="/img/loading.gif" lazyload alt="image-20220825122939021"></p>
+<h1 id="30-什么叫-集合通信"><a href="#30-什么叫-集合通信" class="headerlink" title="30.什么叫 集合通信"></a>30.什么叫 集合通信</h1><p>涉及通信子中所有进程的通信函数称为集合通信</p>
+<h1 id="31-MPI-Send和MPI-Recv有什么样的优点和缺点"><a href="#31-MPI-Send和MPI-Recv有什么样的优点和缺点" class="headerlink" title="31. MPI_Send和MPI_Recv有什么样的优点和缺点"></a>31. MPI_Send和MPI_Recv有什么样的优点和缺点</h1><p>MPI_Recv的语义会导致MPI编程中的一个潜在陷阱：如果一个进程试图接受消息，但没有相匹配的消息，那么该进程将会永远阻塞在那里，即进程悬挂。如果标签不匹配，或者目标进程的进程号与源进程的进程号不相同，那么接受与发送就无法匹配了，这会导致一个进程悬挂起来，或者可能更严重的，接收端可能会匹配另一个发送端。</p>
+<p>如果调用MPI_Send发生了阻塞，并且没有相匹配的接收，那么发送进程就悬挂起来。另一方面，如果MPI_Send被缓冲，但没有相匹配的接收，那么消息将丢失。</p>
+<p><img src="/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220825125041137-16614030414973.png" srcset="/img/loading.gif" lazyload alt="image-20220825125041137"></p>
+<h1 id="32-MPI-Send中type的作用"><a href="#32-MPI-Send中type的作用" class="headerlink" title="32.MPI_Send中type的作用"></a>32.MPI_Send中type的作用</h1><p>因为C语言中的类型不能作为参数传递给函数，所以MPI定义了一个特殊的类型：MPI_Datatype，用于msg_type</p>
+<p><img src="/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220825125226414.png" srcset="/img/loading.gif" lazyload alt="image-20220825125226414"></p>
+<h1 id="33-什么叫-MPI派生数据类型-为什么要用派生数据类型"><a href="#33-什么叫-MPI派生数据类型-为什么要用派生数据类型" class="headerlink" title="33.什么叫 MPI派生数据类型 为什么要用派生数据类型"></a>33.什么叫 MPI派生数据类型 为什么要用派生数据类型</h1><p>在几乎所有的分布式系统中，通信比本地计算开销大很多。用多条消息发送一定数量的数据，明显比只用一条消息发送等量数据耗时</p>
+<p>MPI提供了三个基本手段来整合可能需要多条消息的数据：不同通信函数中的count参数，派生数据类型，以及MPI_Pack和MPI_Unpack函数</p>
+<p>派生数据类型可以表示内存中数据项的任意集合。如果发送数据的函数知道数据项的类型以及在内存中数据项集合的相对位置，就可以在数据项被发送出去之前在内存中将数据项聚集起来。接收数据的函数可以在数据项被接收后将数据项分发到它们在内存中正确的目标地址上。</p>
+<p><img src="/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220825125855221.png" srcset="/img/loading.gif" lazyload alt="image-20220825125855221"></p>
+<p><img src="/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220825125907240.png" srcset="/img/loading.gif" lazyload alt="image-20220825125907240"></p>
+<h1 id="34"><a href="#34" class="headerlink" title="34."></a>34.</h1><p><img src="/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220825130248103.png" srcset="/img/loading.gif" lazyload alt="image-20220825130248103"></p>
+<h1 id="35"><a href="#35" class="headerlink" title="35."></a>35.</h1><p><img src="/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220825131642001.png" srcset="/img/loading.gif" lazyload alt="image-20220825131642001"></p>
+<h1 id="36"><a href="#36" class="headerlink" title="36."></a>36.</h1><p><img src="/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220825132326045.png" srcset="/img/loading.gif" lazyload alt="image-20220825132326045"></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><code class="hljs C"><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string.h&gt;</span></span><br><br><span class="hljs-type">void</span> <span class="hljs-title function_">Read_vector</span><span class="hljs-params">(<span class="hljs-type">char</span> prompt[], <span class="hljs-type">double</span> vect[], <span class="hljs-type">int</span> n)</span>;<br><span class="hljs-type">void</span> <span class="hljs-title function_">Print_vector</span><span class="hljs-params">(<span class="hljs-type">char</span> title[], <span class="hljs-type">double</span> vect[], <span class="hljs-type">int</span> n)</span>;<br><span class="hljs-type">void</span> <span class="hljs-title function_">Compute_prefix_sums</span><span class="hljs-params">(<span class="hljs-type">double</span> vect[], <span class="hljs-type">double</span> prefix_sums[], <span class="hljs-type">int</span> n)</span>;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span>* argv[])</span> &#123;<br>   <span class="hljs-type">double</span> *vect, *prefix_sums;<br>   <span class="hljs-type">int</span> n;<br><br>   <span class="hljs-keyword">if</span> (argc != <span class="hljs-number">2</span>) &#123;<br>      <span class="hljs-built_in">fprintf</span>(<span class="hljs-built_in">stderr</span>, <span class="hljs-string">&quot;usage:  %s &lt;order of vector&gt;\n&quot;</span>, argv[<span class="hljs-number">0</span>]);<br>      <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>   &#125;<br>   n = strtol(argv[<span class="hljs-number">1</span>], <span class="hljs-literal">NULL</span>, <span class="hljs-number">10</span>);<br>   vect = <span class="hljs-built_in">malloc</span>(n*<span class="hljs-keyword">sizeof</span>(<span class="hljs-type">double</span>));<br>   prefix_sums = <span class="hljs-built_in">malloc</span>(n*<span class="hljs-keyword">sizeof</span>(<span class="hljs-type">double</span>));<br><br>   Read_vector(<span class="hljs-string">&quot;Enter the vector&quot;</span>, vect, n);<br>   Print_vector(<span class="hljs-string">&quot;Input vector&quot;</span>, vect, n);<br>   Compute_prefix_sums(vect, prefix_sums, n);<br>   Print_vector(<span class="hljs-string">&quot;Prefix sums&quot;</span>, prefix_sums, n);<br><br>   <span class="hljs-built_in">free</span>(vect);<br>   <span class="hljs-built_in">free</span>(prefix_sums);<br>   <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;  <span class="hljs-comment">/* main */</span><br><br><span class="hljs-comment">/*-------------------------------------------------------------------*/</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">Read_vector</span><span class="hljs-params">(<span class="hljs-type">char</span> prompt[], <span class="hljs-type">double</span> vect[], <span class="hljs-type">int</span> n)</span> &#123;<br>   <span class="hljs-type">int</span> i;<br><br>   <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%s\n&quot;</span>, prompt);<br>   <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; n; i++)<br>      <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%lf&quot;</span>, &amp;vect[i]);<br>&#125;  <span class="hljs-comment">/* Read_vector */</span><br><br><span class="hljs-comment">/*-------------------------------------------------------------------*/</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">Print_vector</span><span class="hljs-params">(<span class="hljs-type">char</span> title[], <span class="hljs-type">double</span> vect[], <span class="hljs-type">int</span> n)</span> &#123;<br>   <span class="hljs-type">int</span> i;<br><br>   <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%s\n   &quot;</span>, title);<br>   <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; n; i++)<br>      <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%.2f &quot;</span>, vect[i]);<br>   <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;\n&quot;</span>);<br>&#125;  <span class="hljs-comment">/* Print_vector */</span><br><br><span class="hljs-comment">/*-------------------------------------------------------------------*/</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">Compute_prefix_sums</span><span class="hljs-params">(<span class="hljs-type">double</span> vect[], <span class="hljs-type">double</span> prefix_sums[], <span class="hljs-type">int</span> n)</span> &#123;<br>   <span class="hljs-type">int</span> i;<br><br>   prefix_sums[<span class="hljs-number">0</span>] = vect[<span class="hljs-number">0</span>];<br>   <span class="hljs-keyword">for</span> (i = <span class="hljs-number">1</span>; i &lt; n; i++)<br>      prefix_sums[i] = prefix_sums[i<span class="hljs-number">-1</span>] + vect[i];<br>&#125;  <span class="hljs-comment">/* Compute_prefix_sums */</span><br><br></code></pre></td></tr></table></figure>
+
+<p><img src="/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220825132618227.png" srcset="/img/loading.gif" lazyload alt="image-20220825132618227"></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;mpi.h&gt;</span></span><br><br><span class="hljs-type">void</span> <span class="hljs-title function_">Check_for_error</span><span class="hljs-params">(<span class="hljs-type">int</span> local_ok, <span class="hljs-type">char</span> fname[], <span class="hljs-type">char</span> message[])</span>;<br><span class="hljs-type">void</span> <span class="hljs-title function_">Get_n</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span>* argv[], <span class="hljs-type">int</span>* n_p, <span class="hljs-type">int</span>* local_n_p)</span>;<br><span class="hljs-type">void</span> <span class="hljs-title function_">Read_vector</span><span class="hljs-params">(<span class="hljs-type">char</span> prompt[], <span class="hljs-type">double</span> loc_vect[], <span class="hljs-type">int</span> n, <span class="hljs-type">int</span> loc_n)</span>;<br><span class="hljs-type">void</span> <span class="hljs-title function_">Print_vector</span><span class="hljs-params">(<span class="hljs-type">char</span> title[], <span class="hljs-type">double</span> loc_vect[], <span class="hljs-type">int</span> n, <span class="hljs-type">int</span> loc_n)</span>;<br><span class="hljs-type">void</span> <span class="hljs-title function_">Compute_prefix_sums</span><span class="hljs-params">(<span class="hljs-type">double</span> loc_vect[], <span class="hljs-type">double</span> loc_prefix_sums[], </span><br><span class="hljs-params">      <span class="hljs-type">int</span> n, <span class="hljs-type">int</span> loc_n)</span>;<br><br><span class="hljs-type">int</span> my_rank, comm_sz;<br>MPI_Comm comm;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span>* argv[])</span> &#123;<br>   <span class="hljs-type">double</span> *loc_vect, *loc_prefix_sums;<br>   <span class="hljs-type">int</span> n, loc_n;<br><br>   MPI_Init(&amp;argc, &amp;argv);<br>   comm = MPI_COMM_WORLD;<br>   MPI_Comm_rank(comm, &amp;my_rank);<br>   MPI_Comm_size(comm, &amp;comm_sz);<br><br>   Get_n(argc, argv, &amp;n, &amp;loc_n);<br>   loc_vect = <span class="hljs-built_in">malloc</span>(loc_n*<span class="hljs-keyword">sizeof</span>(<span class="hljs-type">double</span>));<br>   loc_prefix_sums = <span class="hljs-built_in">malloc</span>(loc_n*<span class="hljs-keyword">sizeof</span>(<span class="hljs-type">double</span>));<br><br>   Read_vector(<span class="hljs-string">&quot;Enter the vector&quot;</span>, loc_vect, n, loc_n);<br>   Print_vector(<span class="hljs-string">&quot;Input vector&quot;</span>, loc_vect, n, loc_n);<br>   Compute_prefix_sums(loc_vect, loc_prefix_sums, n, loc_n);<br>   Print_vector(<span class="hljs-string">&quot;Prefix sums&quot;</span>, loc_prefix_sums, n, loc_n);<br><br>   <span class="hljs-built_in">free</span>(loc_vect);<br>   <span class="hljs-built_in">free</span>(loc_prefix_sums);<br><br>   MPI_Finalize();<br>   <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;  <span class="hljs-comment">/* main */</span><br><br><span class="hljs-comment">/*-------------------------------------------------------------------*/</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">Check_for_error</span><span class="hljs-params">(</span><br><span class="hljs-params">                <span class="hljs-type">int</span>       local_ok   <span class="hljs-comment">/* in */</span>, </span><br><span class="hljs-params">                <span class="hljs-type">char</span>      fname[]    <span class="hljs-comment">/* in */</span>,</span><br><span class="hljs-params">                <span class="hljs-type">char</span>      message[]  <span class="hljs-comment">/* in */</span>)</span> &#123;<br>   <span class="hljs-type">int</span> ok;<br>   <br>   MPI_Allreduce(&amp;local_ok, &amp;ok, <span class="hljs-number">1</span>, MPI_INT, MPI_MIN, comm);<br>   <span class="hljs-keyword">if</span> (ok == <span class="hljs-number">0</span>) &#123;<br>      <span class="hljs-type">int</span> my_rank;<br>      MPI_Comm_rank(comm, &amp;my_rank);<br>      <span class="hljs-keyword">if</span> (my_rank == <span class="hljs-number">0</span>) &#123;<br>         <span class="hljs-built_in">fprintf</span>(<span class="hljs-built_in">stderr</span>, <span class="hljs-string">&quot;Proc %d &gt; In %s, %s\n&quot;</span>, my_rank, fname, <br>               message);<br>         fflush(<span class="hljs-built_in">stderr</span>);<br>      &#125;<br>      MPI_Finalize();<br>      <span class="hljs-built_in">exit</span>(<span class="hljs-number">-1</span>);<br>   &#125;<br>&#125;  <span class="hljs-comment">/* Check_for_error */</span><br><br><span class="hljs-comment">/*-------------------------------------------------------------------*/</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">Get_n</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span>* argv[], <span class="hljs-type">int</span>* n_p, <span class="hljs-type">int</span>* local_n_p)</span> &#123;<br>   <span class="hljs-type">int</span> local_ok = <span class="hljs-number">1</span>;<br>   <br>   <span class="hljs-keyword">if</span> (my_rank == <span class="hljs-number">0</span>)&#123;<br>      <span class="hljs-keyword">if</span> (argc != <span class="hljs-number">2</span>)<br>         *n_p = <span class="hljs-number">0</span>;<br>      <span class="hljs-keyword">else</span><br>         *n_p = strtol(argv[<span class="hljs-number">1</span>], <span class="hljs-literal">NULL</span>, <span class="hljs-number">10</span>);<br>   &#125;<br>   <br>   MPI_Bcast(n_p, <span class="hljs-number">1</span>, MPI_INT, <span class="hljs-number">0</span>, comm);<br>   <span class="hljs-keyword">if</span> (*n_p &lt;= <span class="hljs-number">0</span> || *n_p % comm_sz != <span class="hljs-number">0</span>) local_ok = <span class="hljs-number">0</span>;<br>   Check_for_error(local_ok, <span class="hljs-string">&quot;Get_n&quot;</span>, <br>         <span class="hljs-string">&quot;n should be &gt; 0 and evenly divisible by comm_sz&quot;</span>);<br>   <br>   *local_n_p = *n_p / comm_sz;<br>&#125;  <span class="hljs-comment">/* Get_n */</span><br><br><br><span class="hljs-comment">/*-------------------------------------------------------------------*/</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">Read_vector</span><span class="hljs-params">(<span class="hljs-type">char</span> prompt[], <span class="hljs-type">double</span> loc_vect[], <span class="hljs-type">int</span> n, <span class="hljs-type">int</span> loc_n)</span> &#123;<br>   <span class="hljs-type">int</span> i;<br>   <span class="hljs-type">double</span>* tmp = <span class="hljs-literal">NULL</span>;<br><br>   <span class="hljs-keyword">if</span> (my_rank == <span class="hljs-number">0</span>) &#123;<br>      tmp = <span class="hljs-built_in">malloc</span>(n*<span class="hljs-keyword">sizeof</span>(<span class="hljs-type">double</span>));<br>      <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%s\n&quot;</span>, prompt);<br>      <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; n; i++)<br>         <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%lf&quot;</span>, &amp;tmp[i]);<br>      MPI_Scatter(tmp, loc_n, MPI_DOUBLE, loc_vect, loc_n, MPI_DOUBLE, <span class="hljs-number">0</span>,<br>            comm);<br>      <span class="hljs-built_in">free</span>(tmp);<br>   &#125; <span class="hljs-keyword">else</span> &#123;<br>      MPI_Scatter(tmp, loc_n, MPI_DOUBLE, loc_vect, loc_n, MPI_DOUBLE, <span class="hljs-number">0</span>,<br>            comm);<br>   &#125;<br>&#125;  <span class="hljs-comment">/* Read_vector */</span><br><br><span class="hljs-comment">/*-------------------------------------------------------------------*/</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">Print_vector</span><span class="hljs-params">(<span class="hljs-type">char</span> title[], <span class="hljs-type">double</span> loc_vect[], <span class="hljs-type">int</span> n, <span class="hljs-type">int</span> loc_n)</span> &#123;<br>   <span class="hljs-type">int</span> i;<br>   <span class="hljs-type">double</span>* tmp = <span class="hljs-literal">NULL</span>;<br><br>   <span class="hljs-keyword">if</span> (my_rank == <span class="hljs-number">0</span>) &#123;<br>      tmp = <span class="hljs-built_in">malloc</span>(n*<span class="hljs-keyword">sizeof</span>(<span class="hljs-type">double</span>));<br>      MPI_Gather(loc_vect, loc_n, MPI_DOUBLE, tmp, loc_n, MPI_DOUBLE, <span class="hljs-number">0</span>,<br>            comm);<br>      <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%s\n   &quot;</span>, title);<br>      <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; n; i++)<br>         <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%.2f &quot;</span>, tmp[i]);<br>      <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;\n&quot;</span>);<br>      <span class="hljs-built_in">free</span>(tmp);<br>   &#125; <span class="hljs-keyword">else</span> &#123;<br>      MPI_Gather(loc_vect, loc_n, MPI_DOUBLE, tmp, loc_n, MPI_DOUBLE, <span class="hljs-number">0</span>,<br>            comm);<br>   &#125;<br>&#125;  <span class="hljs-comment">/* Print_vector */</span><br><br><span class="hljs-type">void</span> <span class="hljs-title function_">Compute_prefix_sums</span><span class="hljs-params">(<span class="hljs-type">double</span> loc_vect[], <span class="hljs-type">double</span> loc_prefix_sums[], <span class="hljs-type">int</span> n, </span><br><span class="hljs-params">      <span class="hljs-type">int</span> loc_n)</span> &#123;<br>   <span class="hljs-type">int</span> loc_i, src, dest;<br>   <span class="hljs-type">double</span> sum_of_preceding;<br><br>   <span class="hljs-comment">/* First compute prefix sums of my local vector */</span><br>   loc_prefix_sums[<span class="hljs-number">0</span>] = loc_vect[<span class="hljs-number">0</span>];<br>   <span class="hljs-keyword">for</span> (loc_i = <span class="hljs-number">1</span>; loc_i &lt; loc_n; loc_i++)<br>      loc_prefix_sums[loc_i] = loc_prefix_sums[loc_i<span class="hljs-number">-1</span>] + loc_vect[loc_i];<br><br>   <span class="hljs-comment">/* Now figure which process precedes me and which process succeeds me */</span><br>   src = my_rank - <span class="hljs-number">1</span>;<br>   dest = my_rank + <span class="hljs-number">1</span>;<br><br>   <span class="hljs-keyword">if</span> (my_rank != <span class="hljs-number">0</span>) &#123;<br>      <span class="hljs-comment">/* If I&#x27;m not 0 receive sum of preceding components */</span><br>      MPI_Recv(&amp;sum_of_preceding, <span class="hljs-number">1</span>, MPI_DOUBLE, src, <span class="hljs-number">0</span>, comm,<br>            MPI_STATUS_IGNORE);<br>      <span class="hljs-comment">/* Add in sum of preceding components to my prefix sums */</span><br>      <span class="hljs-keyword">for</span> (loc_i = <span class="hljs-number">0</span>; loc_i &lt; n; loc_i++)<br>         loc_prefix_sums[loc_i] += sum_of_preceding;<br>   &#125;<br><br><br>   <span class="hljs-comment">/* Now send my last element to the next process */</span><br>   <span class="hljs-keyword">if</span> (my_rank != comm_sz - <span class="hljs-number">1</span>) &#123;<br>      MPI_Send(&amp;loc_prefix_sums[loc_n<span class="hljs-number">-1</span>], <span class="hljs-number">1</span>, MPI_DOUBLE, dest, <span class="hljs-number">0</span>, comm);<br>   &#125;<br>&#125;  <span class="hljs-comment">/* Compute_prefix_sums */</span><br><br></code></pre></td></tr></table></figure>
+
+<p><img src="/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220825140338536.png" srcset="/img/loading.gif" lazyload alt="image-20220825140338536"></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br></pre></td><td class="code"><pre><code class="hljs c"><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;mpi.h&gt;</span></span><br><br><span class="hljs-type">void</span> <span class="hljs-title function_">Check_for_error</span><span class="hljs-params">(<span class="hljs-type">int</span> local_ok, <span class="hljs-type">char</span> fname[], <span class="hljs-type">char</span> message[])</span>;<br><span class="hljs-type">void</span> <span class="hljs-title function_">Get_n</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span>* argv[], <span class="hljs-type">int</span>* n_p, <span class="hljs-type">int</span>* local_n_p)</span>;<br><span class="hljs-type">void</span> <span class="hljs-title function_">Read_vector</span><span class="hljs-params">(<span class="hljs-type">char</span> prompt[], <span class="hljs-type">double</span> loc_vect[], <span class="hljs-type">int</span> n, <span class="hljs-type">int</span> loc_n)</span>;<br><span class="hljs-type">void</span> <span class="hljs-title function_">Print_vector</span><span class="hljs-params">(<span class="hljs-type">char</span> title[], <span class="hljs-type">double</span> loc_vect[], <span class="hljs-type">int</span> n, <span class="hljs-type">int</span> loc_n)</span>;<br><span class="hljs-type">void</span> <span class="hljs-title function_">Compute_prefix_sums</span><span class="hljs-params">(<span class="hljs-type">double</span> loc_vect[], <span class="hljs-type">double</span> loc_prefix_sums[], </span><br><span class="hljs-params">      <span class="hljs-type">int</span> n, <span class="hljs-type">int</span> loc_n)</span>;<br><br><span class="hljs-type">int</span> my_rank, comm_sz;<br>MPI_Comm comm;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span>* argv[])</span> &#123;<br>   <span class="hljs-type">double</span> *loc_vect, *loc_prefix_sums;<br>   <span class="hljs-type">int</span> n, loc_n;<br><br>   MPI_Init(&amp;argc, &amp;argv);<br>   comm = MPI_COMM_WORLD;<br>   MPI_Comm_rank(comm, &amp;my_rank);<br>   MPI_Comm_size(comm, &amp;comm_sz);<br><br>   Get_n(argc, argv, &amp;n, &amp;loc_n);<br>   loc_vect = <span class="hljs-built_in">malloc</span>(loc_n*<span class="hljs-keyword">sizeof</span>(<span class="hljs-type">double</span>));<br>   loc_prefix_sums = <span class="hljs-built_in">malloc</span>(loc_n*<span class="hljs-keyword">sizeof</span>(<span class="hljs-type">double</span>));<br><br>   Read_vector(<span class="hljs-string">&quot;Enter the vector&quot;</span>, loc_vect, n, loc_n);<br>   Print_vector(<span class="hljs-string">&quot;Input vector&quot;</span>, loc_vect, n, loc_n);<br>   Compute_prefix_sums(loc_vect, loc_prefix_sums, n, loc_n);<br>   Print_vector(<span class="hljs-string">&quot;Prefix sums&quot;</span>, loc_prefix_sums, n, loc_n);<br><br>   <span class="hljs-built_in">free</span>(loc_vect);<br>   <span class="hljs-built_in">free</span>(loc_prefix_sums);<br><br>   MPI_Finalize();<br>   <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;  <span class="hljs-comment">/* main */</span><br><br><span class="hljs-comment">/*-------------------------------------------------------------------*/</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">Check_for_error</span><span class="hljs-params">(</span><br><span class="hljs-params">                <span class="hljs-type">int</span>       local_ok   <span class="hljs-comment">/* in */</span>, </span><br><span class="hljs-params">                <span class="hljs-type">char</span>      fname[]    <span class="hljs-comment">/* in */</span>,</span><br><span class="hljs-params">                <span class="hljs-type">char</span>      message[]  <span class="hljs-comment">/* in */</span>)</span> &#123;<br>   <span class="hljs-type">int</span> ok;<br>   <br>   MPI_Allreduce(&amp;local_ok, &amp;ok, <span class="hljs-number">1</span>, MPI_INT, MPI_MIN, comm);<br>   <span class="hljs-keyword">if</span> (ok == <span class="hljs-number">0</span>) &#123;<br>      <span class="hljs-type">int</span> my_rank;<br>      MPI_Comm_rank(comm, &amp;my_rank);<br>      <span class="hljs-keyword">if</span> (my_rank == <span class="hljs-number">0</span>) &#123;<br>         <span class="hljs-built_in">fprintf</span>(<span class="hljs-built_in">stderr</span>, <span class="hljs-string">&quot;Proc %d &gt; In %s, %s\n&quot;</span>, my_rank, fname, <br>               message);<br>         fflush(<span class="hljs-built_in">stderr</span>);<br>      &#125;<br>      MPI_Finalize();<br>      <span class="hljs-built_in">exit</span>(<span class="hljs-number">-1</span>);<br>   &#125;<br>&#125;  <span class="hljs-comment">/* Check_for_error */</span><br><br><span class="hljs-comment">/*-------------------------------------------------------------------*/</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">Get_n</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span>* argv[], <span class="hljs-type">int</span>* n_p, <span class="hljs-type">int</span>* local_n_p)</span> &#123;<br>   <span class="hljs-type">int</span> local_ok = <span class="hljs-number">1</span>;<br>   <br>   <span class="hljs-keyword">if</span> (my_rank == <span class="hljs-number">0</span>)&#123;<br>      <span class="hljs-keyword">if</span> (argc != <span class="hljs-number">2</span>)<br>         *n_p = <span class="hljs-number">0</span>;<br>      <span class="hljs-keyword">else</span><br>         *n_p = strtol(argv[<span class="hljs-number">1</span>], <span class="hljs-literal">NULL</span>, <span class="hljs-number">10</span>);<br>   &#125;<br>   <br>   MPI_Bcast(n_p, <span class="hljs-number">1</span>, MPI_INT, <span class="hljs-number">0</span>, comm);<br>   <span class="hljs-keyword">if</span> (*n_p &lt;= <span class="hljs-number">0</span> || *n_p % comm_sz != <span class="hljs-number">0</span>) local_ok = <span class="hljs-number">0</span>;<br>   Check_for_error(local_ok, <span class="hljs-string">&quot;Get_n&quot;</span>, <br>         <span class="hljs-string">&quot;n should be &gt; 0 and evenly divisible by comm_sz&quot;</span>);<br>   <br>   *local_n_p = *n_p / comm_sz;<br>&#125;  <span class="hljs-comment">/* Get_n */</span><br><br><br><span class="hljs-comment">/*-------------------------------------------------------------------*/</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">Read_vector</span><span class="hljs-params">(<span class="hljs-type">char</span> prompt[], <span class="hljs-type">double</span> loc_vect[], <span class="hljs-type">int</span> n, <span class="hljs-type">int</span> loc_n)</span> &#123;<br>   <span class="hljs-type">int</span> i;<br>   <span class="hljs-type">double</span>* tmp = <span class="hljs-literal">NULL</span>;<br><br>   <span class="hljs-keyword">if</span> (my_rank == <span class="hljs-number">0</span>) &#123;<br>      tmp = <span class="hljs-built_in">malloc</span>(n*<span class="hljs-keyword">sizeof</span>(<span class="hljs-type">double</span>));<br>      <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%s\n&quot;</span>, prompt);<br>      <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; n; i++)<br>         <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%lf&quot;</span>, &amp;tmp[i]);<br>      MPI_Scatter(tmp, loc_n, MPI_DOUBLE, loc_vect, loc_n, MPI_DOUBLE, <span class="hljs-number">0</span>,<br>            comm);<br>      <span class="hljs-built_in">free</span>(tmp);<br>   &#125; <span class="hljs-keyword">else</span> &#123;<br>      MPI_Scatter(tmp, loc_n, MPI_DOUBLE, loc_vect, loc_n, MPI_DOUBLE, <span class="hljs-number">0</span>,<br>            comm);<br>   &#125;<br>&#125;  <span class="hljs-comment">/* Read_vector */</span><br><br><span class="hljs-comment">/*-------------------------------------------------------------------*/</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">Print_vector</span><span class="hljs-params">(<span class="hljs-type">char</span> title[], <span class="hljs-type">double</span> loc_vect[], <span class="hljs-type">int</span> n, <span class="hljs-type">int</span> loc_n)</span> &#123;<br>   <span class="hljs-type">int</span> i;<br>   <span class="hljs-type">double</span>* tmp = <span class="hljs-literal">NULL</span>;<br><br>   <span class="hljs-keyword">if</span> (my_rank == <span class="hljs-number">0</span>) &#123;<br>      tmp = <span class="hljs-built_in">malloc</span>(n*<span class="hljs-keyword">sizeof</span>(<span class="hljs-type">double</span>));<br>      MPI_Gather(loc_vect, loc_n, MPI_DOUBLE, tmp, loc_n, MPI_DOUBLE, <span class="hljs-number">0</span>,<br>            comm);<br>      <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%s\n   &quot;</span>, title);<br>      <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; n; i++)<br>         <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%.2f &quot;</span>, tmp[i]);<br>      <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;\n&quot;</span>);<br>      <span class="hljs-built_in">free</span>(tmp);<br>   &#125; <span class="hljs-keyword">else</span> &#123;<br>      MPI_Gather(loc_vect, loc_n, MPI_DOUBLE, tmp, loc_n, MPI_DOUBLE, <span class="hljs-number">0</span>,<br>            comm);<br>   &#125;<br>&#125;  <span class="hljs-comment">/* Print_vector */</span><br><br><span class="hljs-type">void</span> <span class="hljs-title function_">Compute_prefix_sums</span><span class="hljs-params">(<span class="hljs-type">double</span> loc_vect[], <span class="hljs-type">double</span> loc_prefix_sums[], <span class="hljs-type">int</span> n,  <span class="hljs-type">int</span> loc_n)</span> &#123;<br>   <span class="hljs-type">int</span> loc_i, partner;<br>   <span class="hljs-type">unsigned</span> mask;<br>   <span class="hljs-type">double</span> sum, tmp;<br><br>   <span class="hljs-comment">/* First compute prefix sums of my local vector */</span><br>   loc_prefix_sums[<span class="hljs-number">0</span>] = loc_vect[<span class="hljs-number">0</span>];<br>   <span class="hljs-keyword">for</span> (loc_i = <span class="hljs-number">1</span>; loc_i &lt; loc_n; loc_i++)<br>      loc_prefix_sums[loc_i] = loc_prefix_sums[loc_i<span class="hljs-number">-1</span>] + loc_vect[loc_i];<br><br>   <span class="hljs-comment">/* Now use butterfly structured communications */</span><br>   sum = loc_prefix_sums[loc_n<span class="hljs-number">-1</span>];<br>   mask = <span class="hljs-number">1</span>;<br>   <span class="hljs-keyword">while</span> (mask &lt; comm_sz) &#123;<br>      partner = my_rank ^ mask;<br>      MPI_Sendrecv(&amp;sum, <span class="hljs-number">1</span>, MPI_DOUBLE, partner, <span class="hljs-number">0</span>,<br>            &amp;tmp, <span class="hljs-number">1</span>, MPI_DOUBLE, partner, <span class="hljs-number">0</span>,<br>            comm, MPI_STATUS_IGNORE);<br>      sum += tmp;<br>      <span class="hljs-keyword">if</span> (my_rank &gt; partner) <br>         <span class="hljs-keyword">for</span> (loc_i = <span class="hljs-number">0</span>; loc_i &lt; loc_n; loc_i++)<br>            loc_prefix_sums[loc_i] += tmp;<br>      mask &lt;&lt;= <span class="hljs-number">1</span>;<br>   &#125;<br><br>&#125;  <span class="hljs-comment">/* Compute_prefix_sums */</span><br><br></code></pre></td></tr></table></figure>
+
+<p><img src="/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220825141153755.png" srcset="/img/loading.gif" lazyload alt="image-20220825141153755"></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;mpi.h&gt;</span></span><br><br><span class="hljs-type">void</span> <span class="hljs-title function_">Check_for_error</span><span class="hljs-params">(<span class="hljs-type">int</span> local_ok, <span class="hljs-type">char</span> fname[], <span class="hljs-type">char</span> message[])</span>;<br><span class="hljs-type">void</span> <span class="hljs-title function_">Get_n</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span>* argv[], <span class="hljs-type">int</span>* n_p, <span class="hljs-type">int</span>* local_n_p)</span>;<br><span class="hljs-type">void</span> <span class="hljs-title function_">Gen_vector</span><span class="hljs-params">(<span class="hljs-type">double</span> loc_vect[], <span class="hljs-type">int</span> n, <span class="hljs-type">int</span> loc_n)</span>;<br><span class="hljs-type">void</span> <span class="hljs-title function_">Read_vector</span><span class="hljs-params">(<span class="hljs-type">char</span> prompt[], <span class="hljs-type">double</span> loc_vect[], <span class="hljs-type">int</span> n, <span class="hljs-type">int</span> loc_n)</span>;<br><span class="hljs-type">void</span> <span class="hljs-title function_">Print_vector</span><span class="hljs-params">(<span class="hljs-type">char</span> title[], <span class="hljs-type">double</span> loc_vect[], <span class="hljs-type">int</span> n, <span class="hljs-type">int</span> loc_n)</span>;<br><span class="hljs-type">void</span> <span class="hljs-title function_">Compute_prefix_sums</span><span class="hljs-params">(<span class="hljs-type">double</span> loc_vect[], <span class="hljs-type">double</span> loc_prefix_sums[], <span class="hljs-type">int</span> n, </span><br><span class="hljs-params">      <span class="hljs-type">int</span> loc_n)</span>;<br><br><span class="hljs-type">int</span> my_rank, comm_sz;<br>MPI_Comm comm;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span>* argv[])</span> &#123;<br>   <span class="hljs-type">double</span> *loc_vect, *loc_prefix_sums;<br>   <span class="hljs-type">int</span> n, loc_n;<br><br>   MPI_Init(&amp;argc, &amp;argv);<br>   comm = MPI_COMM_WORLD;<br>   MPI_Comm_rank(comm, &amp;my_rank);<br>   MPI_Comm_size(comm, &amp;comm_sz);<br><br>   Get_n(argc, argv, &amp;n, &amp;loc_n);<br>   loc_vect = <span class="hljs-built_in">malloc</span>(loc_n*<span class="hljs-keyword">sizeof</span>(<span class="hljs-type">double</span>));<br>   loc_prefix_sums = <span class="hljs-built_in">malloc</span>(loc_n*<span class="hljs-keyword">sizeof</span>(<span class="hljs-type">double</span>));<br><br><span class="hljs-meta">#  <span class="hljs-keyword">ifndef</span> DEBUG</span><br>   Gen_vector(loc_vect, n, loc_n);<br><span class="hljs-meta">#  <span class="hljs-keyword">else</span></span><br>   Read_vector(<span class="hljs-string">&quot;Enter the vector&quot;</span>, loc_vect, n, loc_n);<br><span class="hljs-meta">#  <span class="hljs-keyword">endif</span></span><br>   Print_vector(<span class="hljs-string">&quot;Initial vector&quot;</span>, loc_vect, n, loc_n);<br>   Compute_prefix_sums(loc_vect, loc_prefix_sums, n, loc_n);<br>   Print_vector(<span class="hljs-string">&quot;Prefix sums&quot;</span>, loc_prefix_sums, n, loc_n);<br><br>   <span class="hljs-built_in">free</span>(loc_vect);<br>   <span class="hljs-built_in">free</span>(loc_prefix_sums);<br><br>   MPI_Finalize();<br>   <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;  <span class="hljs-comment">/* main */</span><br><br><span class="hljs-comment">/*-------------------------------------------------------------------*/</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">Check_for_error</span><span class="hljs-params">(</span><br><span class="hljs-params">                <span class="hljs-type">int</span>       local_ok   <span class="hljs-comment">/* in */</span>, </span><br><span class="hljs-params">                <span class="hljs-type">char</span>      fname[]    <span class="hljs-comment">/* in */</span>,</span><br><span class="hljs-params">                <span class="hljs-type">char</span>      message[]  <span class="hljs-comment">/* in */</span>)</span> &#123;<br>   <span class="hljs-type">int</span> ok;<br>   <br>   MPI_Allreduce(&amp;local_ok, &amp;ok, <span class="hljs-number">1</span>, MPI_INT, MPI_MIN, comm);<br>   <span class="hljs-keyword">if</span> (ok == <span class="hljs-number">0</span>) &#123;<br>      <span class="hljs-type">int</span> my_rank;<br>      MPI_Comm_rank(comm, &amp;my_rank);<br>      <span class="hljs-keyword">if</span> (my_rank == <span class="hljs-number">0</span>) &#123;<br>         <span class="hljs-built_in">fprintf</span>(<span class="hljs-built_in">stderr</span>, <span class="hljs-string">&quot;Proc %d &gt; In %s, %s\n&quot;</span>, my_rank, fname, <br>               message);<br>         fflush(<span class="hljs-built_in">stderr</span>);<br>      &#125;<br>      MPI_Finalize();<br>      <span class="hljs-built_in">exit</span>(<span class="hljs-number">-1</span>);<br>   &#125;<br>&#125;  <span class="hljs-comment">/* Check_for_error */</span><br><br><span class="hljs-comment">/*-------------------------------------------------------------------*/</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">Get_n</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span>* argv[], <span class="hljs-type">int</span>* n_p, <span class="hljs-type">int</span>* local_n_p)</span> &#123;<br>   <span class="hljs-type">int</span> local_ok = <span class="hljs-number">1</span>;<br>   <br>   <span class="hljs-keyword">if</span> (my_rank == <span class="hljs-number">0</span>)&#123;<br>      <span class="hljs-keyword">if</span> (argc != <span class="hljs-number">2</span>)<br>         *n_p = <span class="hljs-number">0</span>;<br>      <span class="hljs-keyword">else</span><br>         *n_p = strtol(argv[<span class="hljs-number">1</span>], <span class="hljs-literal">NULL</span>, <span class="hljs-number">10</span>);<br>   &#125;<br>   <br>   MPI_Bcast(n_p, <span class="hljs-number">1</span>, MPI_INT, <span class="hljs-number">0</span>, comm);<br>   <span class="hljs-keyword">if</span> (*n_p &lt;= <span class="hljs-number">0</span> || *n_p % comm_sz != <span class="hljs-number">0</span>) local_ok = <span class="hljs-number">0</span>;<br>   Check_for_error(local_ok, <span class="hljs-string">&quot;Get_n&quot;</span>, <br>         <span class="hljs-string">&quot;n should be &gt; 0 and evenly divisible by comm_sz&quot;</span>);<br>   <br>   *local_n_p = *n_p / comm_sz;<br>&#125;  <span class="hljs-comment">/* Get_n */</span><br><br><br><span class="hljs-comment">/*-------------------------------------------------------------------*/</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">Gen_vector</span><span class="hljs-params">(<span class="hljs-type">double</span> loc_vect[], <span class="hljs-type">int</span> n, <span class="hljs-type">int</span> loc_n)</span> &#123;<br>   <span class="hljs-type">int</span> i;<br>   <span class="hljs-type">double</span>* tmp = <span class="hljs-literal">NULL</span>;<br><br>   <span class="hljs-keyword">if</span> (my_rank == <span class="hljs-number">0</span>) &#123;<br>      tmp = <span class="hljs-built_in">malloc</span>(n*<span class="hljs-keyword">sizeof</span>(<span class="hljs-type">double</span>));<br>      srandom(<span class="hljs-number">1</span>);<br>      <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; n; i++)<br>         tmp[i] = random()/((<span class="hljs-type">double</span>) RAND_MAX);<br>      MPI_Scatter(tmp, loc_n, MPI_DOUBLE, loc_vect, loc_n, MPI_DOUBLE, <span class="hljs-number">0</span>,<br>            comm);<br>      <span class="hljs-built_in">free</span>(tmp);<br>   &#125; <span class="hljs-keyword">else</span> &#123;<br>      MPI_Scatter(tmp, loc_n, MPI_DOUBLE, loc_vect, loc_n, MPI_DOUBLE, <span class="hljs-number">0</span>,<br>            comm);<br>   &#125;<br>&#125;  <span class="hljs-comment">/* Gen_vector */</span><br><br><span class="hljs-comment">/*-------------------------------------------------------------------*/</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">Read_vector</span><span class="hljs-params">(<span class="hljs-type">char</span> prompt[], <span class="hljs-type">double</span> loc_vect[], <span class="hljs-type">int</span> n, <span class="hljs-type">int</span> loc_n)</span> &#123;<br>   <span class="hljs-type">int</span> i;<br>   <span class="hljs-type">double</span>* tmp = <span class="hljs-literal">NULL</span>;<br><br>   <span class="hljs-keyword">if</span> (my_rank == <span class="hljs-number">0</span>) &#123;<br>      tmp = <span class="hljs-built_in">malloc</span>(n*<span class="hljs-keyword">sizeof</span>(<span class="hljs-type">double</span>));<br>      <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%s\n&quot;</span>, prompt);<br>      <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; n; i++)<br>         <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%lf&quot;</span>, &amp;tmp[i]);<br>      MPI_Scatter(tmp, loc_n, MPI_DOUBLE, loc_vect, loc_n, MPI_DOUBLE, <span class="hljs-number">0</span>,<br>            comm);<br>      <span class="hljs-built_in">free</span>(tmp);<br>   &#125; <span class="hljs-keyword">else</span> &#123;<br>      MPI_Scatter(tmp, loc_n, MPI_DOUBLE, loc_vect, loc_n, MPI_DOUBLE, <span class="hljs-number">0</span>,<br>            comm);<br>   &#125;<br>&#125;  <span class="hljs-comment">/* Read_vector */</span><br><br><span class="hljs-comment">/*-------------------------------------------------------------------*/</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">Print_vector</span><span class="hljs-params">(<span class="hljs-type">char</span> title[], <span class="hljs-type">double</span> loc_vect[], <span class="hljs-type">int</span> n, <span class="hljs-type">int</span> loc_n)</span> &#123;<br>   <span class="hljs-type">int</span> i;<br>   <span class="hljs-type">double</span>* tmp = <span class="hljs-literal">NULL</span>;<br><br>   <span class="hljs-keyword">if</span> (my_rank == <span class="hljs-number">0</span>) &#123;<br>      tmp = <span class="hljs-built_in">malloc</span>(n*<span class="hljs-keyword">sizeof</span>(<span class="hljs-type">double</span>));<br>      MPI_Gather(loc_vect, loc_n, MPI_DOUBLE, tmp, loc_n, MPI_DOUBLE, <span class="hljs-number">0</span>,<br>            comm);<br>      <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%s\n   &quot;</span>, title);<br>      <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; n; i++)<br>         <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%.2f &quot;</span>, tmp[i]);<br>      <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;\n&quot;</span>);<br>      <span class="hljs-built_in">free</span>(tmp);<br>   &#125; <span class="hljs-keyword">else</span> &#123;<br>      MPI_Gather(loc_vect, loc_n, MPI_DOUBLE, tmp, loc_n, MPI_DOUBLE, <span class="hljs-number">0</span>,<br>            comm);<br>   &#125;<br>&#125;  <span class="hljs-comment">/* Print_vector */</span><br><br><span class="hljs-type">void</span> <span class="hljs-title function_">Compute_prefix_sums</span><span class="hljs-params">(<span class="hljs-type">double</span> loc_vect[], <span class="hljs-type">double</span> loc_prefix_sums[], <span class="hljs-type">int</span> n, </span><br><span class="hljs-params">      <span class="hljs-type">int</span> loc_n)</span> &#123;<br>   <span class="hljs-type">int</span> loc_i;<br>   <span class="hljs-type">double</span> my_sum, pred_sum;<br><br>   <span class="hljs-comment">/* First compute prefix sums of my local vector */</span><br>   loc_prefix_sums[<span class="hljs-number">0</span>] = loc_vect[<span class="hljs-number">0</span>];<br>   <span class="hljs-keyword">for</span> (loc_i = <span class="hljs-number">1</span>; loc_i &lt; loc_n; loc_i++)<br>      loc_prefix_sums[loc_i] = loc_prefix_sums[loc_i<span class="hljs-number">-1</span>] + loc_vect[loc_i];<br><br>   <span class="hljs-comment">/* Now use MPI_Scan to find prefix sums of last elements in</span><br><span class="hljs-comment">    *   loc_prefix_sums */</span><br>   my_sum = loc_prefix_sums[loc_n<span class="hljs-number">-1</span>];<br>   MPI_Scan(&amp;my_sum, &amp;pred_sum, <span class="hljs-number">1</span>, MPI_DOUBLE, MPI_SUM, comm);<br><br>   <span class="hljs-comment">/* Add pred_sum-my_sum to each element of loc_prefix_sums */</span><br>   pred_sum -= my_sum;<br>   <span class="hljs-keyword">for</span> (loc_i = <span class="hljs-number">0</span>; loc_i &lt; loc_n; loc_i++)<br>      loc_prefix_sums[loc_i] += pred_sum;<br><br>&#125;  <span class="hljs-comment">/* Compute_prefix_sums */</span><br><br></code></pre></td></tr></table></figure>
+
+<h1 id="37-为什么要有join操作"><a href="#37-为什么要有join操作" class="headerlink" title="37.为什么要有join操作"></a>37.为什么要有join操作</h1><p>主线程处理完其他的事物后，<strong>需要用到子线程的处理结果</strong>，也就是<strong>主线程需要等待子线程执行完成之后结束</strong>，这个时候需要pthread_join来实现。</p>
+<p>即pthread_join()的作用可以这样理解：主线程等待子线程的终止。也就是在子线程调用了pthread_join()方法后面的代码，只有等到子线程结束了才能执行。</p>
+<p><strong>当 pthread_join() 函数返回后，被调用线程才算真正意义上的结束，它的内存空间也会被释放</strong></p>
+<p>因此pthread_join函数有两个作用：</p>
+<ul>
+<li>等待其他线程结束</li>
+<li>对线程的资源进行回收</li>
+</ul>
+<h1 id="38-什么叫临界区-为什么要有临界区"><a href="#38-什么叫临界区-为什么要有临界区" class="headerlink" title="38. 什么叫临界区 为什么要有临界区"></a>38. 什么叫临界区 为什么要有临界区</h1><p>一个更新<strong>共享资源</strong>的代码段，<strong>一次只允许一个线程执行该代码段。</strong></p>
+<p>防止<strong>数据竞争</strong></p>
+<p>当多个线程都要访问共享变量或共享文件这样的共享资源时，如果至少其中一个访问是更新操作，那么这些访问就可能导致某种错误，我们称之为竞争条件。</p>
+<h1 id="39-什么叫共享变量-优点和缺点是什么"><a href="#39-什么叫共享变量-优点和缺点是什么" class="headerlink" title="39.什么叫共享变量 优点和缺点是什么"></a>39.什么叫共享变量 优点和缺点是什么</h1><p>全局变量thread_count。在pthreads程序中，全局变量被所有线程所共享，而在函数中声明的局部变量则由执行该函数的线程所私有。</p>
+<p>全局变量可能会在程序中引发令人困惑的错误。例如，我们写一个有全局变量int x的程序，函数f内也有一个名为x的局部变量，但我们却忘了在函数中声明这个局部变量x。编译时是不会有错误和警告的，因为函数f有权访问全局变量x。然而在运行时，程序却输出了奇怪的结果，这是由全局变量x引起的。过了几天，我们才发现导致全局变量有奇怪值的原因出自函数f，应该限制使用全局变量，除了确实需要用到的情况之外，比如线程之间共享变量。</p>
+<h2 id="全局变量的优点"><a href="#全局变量的优点" class="headerlink" title="全局变量的优点"></a>全局变量的优点</h2><p>1）全局变量顾名思义全局可见的变量，全局变量生命周期长，自开始时创建直到全部函数运行结束后才被释放<br>2）任何 一个函数或线程都可以读写全局变量，在一定程度上使得函数之间变量的同步变得更为简单。<br>3）对于初学者较为友好，定义和使用起来都较为简单，且在项目只包含单个或少数几个源文件和头文件时弊端并不明显。<br>4）全局变量内存地址固定，读写效率比较高。<br>5）可以减少变量的个数，减少由于实际参数和形式参数的数据传递带来的时间消耗。</p>
+<h2 id="全局变量的缺点"><a href="#全局变量的缺点" class="headerlink" title="全局变量的缺点"></a>全局变量的缺点</h2><h4 id="1）长期占用内存"><a href="#1）长期占用内存" class="headerlink" title="1）长期占用内存"></a>1）长期占用内存</h4><p>由于之前提到的全局变量生命周期长，这使得在整个程序运行的过程中全局变量一直存在，始终占有那块存储区，难以被释放</p>
+<h4 id="2）难以定位修改"><a href="#2）难以定位修改" class="headerlink" title="2）难以定位修改"></a>2）难以定位修改</h4><p>由于全局变量定义在函数之外，使得全局变量是公共的，即全部函数都可以访问，难以定位全局变量在哪里被修改，加大了调试的难度</p>
+<h4 id="3）不利于后期的维护"><a href="#3）不利于后期的维护" class="headerlink" title="3）不利于后期的维护"></a>3）不利于后期的维护</h4><p>在前期编写全局变量时确实是一种“快捷通道”，但是在后期维护程序时哪怕仅是增加修改删除小功能，往往要从上到下掘地三尺地修改，涉及大多数模块，而原有的代码注释却忘了更新修改，而这对于后来的维护者，就像一团迷雾一样。</p>
+<h4 id="4）降低函数的可读性"><a href="#4）降低函数的可读性" class="headerlink" title="4）降低函数的可读性"></a>4）降低函数的可读性</h4><p>使用全局变量的函数，需要关注全局变量的值，增加了理解的难度</p>
+<h4 id="5）破坏函数的封装性能"><a href="#5）破坏函数的封装性能" class="headerlink" title="5）破坏函数的封装性能"></a>5）破坏函数的封装性能</h4><p>函数类似于一个黑匣子，一般是通过函数参数和返回值进行输入输出，函数内部实现相对独立。但函数中如果使用了全局变量，那么函数体内的语句就可以绕过函数参数和返回值进行存取，这种情况增加了耦合性，也破坏了函数的独立性，使函数对全局变量产生依赖。同时，也降低了该函数的可移植性。</p>
+<h4 id="6）降低函数的可移植性"><a href="#6）降低函数的可移植性" class="headerlink" title="6）降低函数的可移植性"></a>6）降低函数的可移植性</h4><p>原因与上一条差不多，破坏了函数的封装性能以及增加了函数对全局变量的依赖的同时，也就使得将函数移植到可操作性降低。</p>
+<h4 id="7）增加程序之间的耦合性"><a href="#7）增加程序之间的耦合性" class="headerlink" title="7）增加程序之间的耦合性"></a>7）增加程序之间的耦合性</h4><p>使用全局变量会修改全部变量会影响所有用到它的模块，不利于调试，这种弊端在初学时仅有单个源程序和头文件的情况不明显，但是在以后代码量上来了之后，可能会被相互间错的全局变量的使用搞到头秃。</p>
+<h1 id="40-哪些方法实现临界区"><a href="#40-哪些方法实现临界区" class="headerlink" title="40.哪些方法实现临界区"></a>40.哪些方法实现临界区</h1><p>忙等待  互斥锁 信号量 条件变量</p>
+<h1 id="41-互斥锁和信号量的区别"><a href="#41-互斥锁和信号量的区别" class="headerlink" title="41.互斥锁和信号量的区别"></a>41.互斥锁和信号量的区别</h1><p>互斥量最大的区别在于信号量没有个体拥有权，主线程信号量初始化，<strong>所有线程</strong>都可以通过调用sem_post 和sem_wait 函数更新信号量的值</p>
+<p>① <strong>互斥量</strong>用于线程的<strong>互斥</strong>，<strong>信号量</strong>用于线程的<strong>同步</strong>。这是互斥量和信号量的根本区别，也就是<strong>互斥和同步</strong>之间的区别。</p>
+<p>② <strong>互斥量值只能为0&#x2F;1，信号量值可以为非负整数</strong>。也就是说，一个互斥量只能用于一个资源的互斥访问，它不能实现多个资源的多线程互斥问题。信号量可以实现多个同类资源的多线程互斥和同步。当信号量为二元信号量时，也可以完成一个资源的互斥访问。</p>
+<p>③ <strong>互斥量的加锁和解锁必须由同一线程分别对应使用，信号量可以由一个线程释放，另一个线程得到</strong>。</p>
+<h1 id="42-信号量的操作-wait-post"><a href="#42-信号量的操作-wait-post" class="headerlink" title="42.信号量的操作 wait post"></a>42.信号量的操作 wait post</h1><p><img src="/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220827004130601.png" srcset="/img/loading.gif" lazyload alt="image-20220827004130601"></p>
+<p><img src="/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220827004211355.png" srcset="/img/loading.gif" lazyload alt="image-20220827004211355"></p>
+<p><img src="/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220827004428137.png" srcset="/img/loading.gif" lazyload alt="image-20220827004428137"></p>
+<p><img src="/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220827004751515.png" srcset="/img/loading.gif" lazyload alt="image-20220827004751515"></p>
+<p><img src="/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220827005420785.png" srcset="/img/loading.gif" lazyload alt="image-20220827005420785"></p>
+<h1 id="43-读写锁-为什么-优点-原理"><a href="#43-读写锁-为什么-优点-原理" class="headerlink" title="43.读写锁 为什么 优点 原理"></a>43.读写锁 为什么 优点 原理</h1><p><img src="/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220827011125591.png" srcset="/img/loading.gif" lazyload alt="image-20220827011125591"></p>
+<h1 id="44-openmp和pthread相比-优缺点是什么"><a href="#44-openmp和pthread相比-优缺点是什么" class="headerlink" title="44. openmp和pthread相比 优缺点是什么"></a>44. openmp和pthread相比 优缺点是什么</h1><ul>
+<li>Pthreads提供了一些在OpenMP中不可用的协调构造。<strong>OpenMP更容易将程序并行化</strong>，<strong>而Pthreads提供的一些构造使得它并行化其他一些程序的能力更强。</strong></li>
+<li>尽管openmp和pthreads都是针对共享内存变成的API，但他们有许多本质的不同，pthreads要求程序员显式地明确每个线程的行为。相反，openmp有时允许程序员只需要简单地声明一块代码应该并行执行，而由<strong>编译器和运行时系统</strong>来决定哪个线程具体执行哪个任务</li>
+<li>pthreads（和MPI一样）是一个能够被链接到C程序的函数库，因此只要系统有pthreads库，pthreads程序就能够任意C编译器使用。相反，openmp要求编译器支持某些操作，所以完全有可能你使用的编译器无法把openmp程序编译成并行程序。</li>
+<li>pthreads更底层，并且提供了虚拟地编写任何可知线程行为地能力。然而，这个功能有一定的代价：<strong>每个线程行为的每一个细节都得由我们自己来定义</strong>。相反，openmp允许编译器和运行时系统来决定线程行为的一些细节。因此使用openmp来编写一些并行行为更容易。但代价是<strong>很难对一些底层的线程交互进行编程。</strong></li>
+</ul>
+<h1 id="45-什么是pragma"><a href="#45-什么是pragma" class="headerlink" title="45.什么是pragma"></a>45.什么是pragma</h1><p>一个预处理器指令，它指示使每个编译程序在保留C和C++语言的整体兼容性时<strong>提供不同机器和操作系统特定的功能。</strong></p>
+<p>在系统中加入预处理器指令一般是用来允许不是基本C语言规范部分的行为。不支持pragma的编译器就会忽略pragma指令提示的那些语句</p>
+<h1 id="46-在openmp里面-变量的可视范围"><a href="#46-在openmp里面-变量的可视范围" class="headerlink" title="46. 在openmp里面 变量的可视范围"></a>46. 在openmp里面 变量的可视范围</h1><p><img src="/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220827011657997.png" srcset="/img/loading.gif" lazyload alt="image-20220827011657997"></p>
+<h1 id="47-openmp为什么要有归约子句-归约子句的基本写法-怎么实现的-可以避免什么问题"><a href="#47-openmp为什么要有归约子句-归约子句的基本写法-怎么实现的-可以避免什么问题" class="headerlink" title="47.  openmp为什么要有归约子句 归约子句的基本写法 怎么实现的 可以避免什么问题"></a>47.  openmp为什么要有归约子句 归约子句的基本写法 怎么实现的 可以避免什么问题</h1><p><img src="/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220827012142366.png" srcset="/img/loading.gif" lazyload alt="image-20220827012142366"></p>
+<h1 id="48-循环调度的类型"><a href="#48-循环调度的类型" class="headerlink" title="48.循环调度的类型"></a>48.循环调度的类型</h1><p><img src="/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220827012214638.png" srcset="/img/loading.gif" lazyload alt="image-20220827012214638"></p>
+<p><img src="/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220827012239313.png" srcset="/img/loading.gif" lazyload alt="image-20220827012239313"></p>
+<p><img src="/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220827012358044.png" srcset="/img/loading.gif" lazyload alt="image-20220827012358044"></p>
+<p><img src="/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220827012300917.png" srcset="/img/loading.gif" lazyload alt="image-20220827012300917"></p>
+<p><img src="/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220827012312182.png" srcset="/img/loading.gif" lazyload alt="image-20220827012312182"></p>
+<h1 id="49-openmp中实现临界区-critical、atomic、lock"><a href="#49-openmp中实现临界区-critical、atomic、lock" class="headerlink" title="49.openmp中实现临界区 critical、atomic、lock"></a>49.openmp中实现临界区 critical、atomic、lock</h1><p><img src="/images/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/image-20220827012440616.png" srcset="/img/loading.gif" lazyload alt="image-20220827012440616"></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/" class="category-chain-item">并行程序设计</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/">#期末复习</a>
+      
+        <a href="/tags/%E5%B9%B6%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/">#并行程序设计</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>并行程序设计期末复习</div>
+      <div>http://example.com/2022/08/27/并行程序设计期末复习/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>ECNU_zhy</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>August 27, 2022</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>Licensed under</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/09/28/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E9%A2%98%E7%9B%AE/" title="数据库系统概念查询处理题目">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">数据库系统概念查询处理题目</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/08/21/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E7%AC%AC4%E7%AB%A0%20SQL%20%E9%A2%98%E7%9B%AE/" title="数据库系统概念 第4章 SQL题目">
+                        <span class="hidden-mobile">数据库系统概念 第4章 SQL题目</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.1/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
